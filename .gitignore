@@ -1,0 +1,17 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Python (build-manifest.py)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Scratch / preview files not meant for the live site
+ch-sims/palette-compare.html
+
+# Node, if tooling is ever added
+node_modules/

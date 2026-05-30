@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  About — New Tripoli / Cognitive Husbandry Sim Catalogue companion
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — New Tripoli Sim Catalogue</title>
+<meta name="description" content="About the Cognitive Husbandry interactive companion: what it is, how to read its canon / speculative / narrative labels, what's inside, and its ground rules.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--deep:#080d0c;--panel:#0c1311;--panel-2:#101a16;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#23ff88;--green-glow:#7dffb8;--teal:#34e6e0;--teal-glow:#86f6f2;
+  --amber:#ffc24d;--plum:#b69cff;--border:rgba(35,255,136,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(35,255,136,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.025) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.10) 3px,rgba(0,0,0,0) 4px),
+  radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.45) 100%)}
+.wrap{position:relative;z-index:3}
+a{color:var(--green-glow);text-decoration:none;transition:color .15s}
+a:hover{color:var(--teal-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14;letter-spacing:.01em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+.nav-inner{max-width:1180px;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13.5px;letter-spacing:.06em;color:var(--text);display:flex;align-items:center;gap:9px}
+.nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.4s steps(1) infinite}
+@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.35}}
+.nav-brand span{color:var(--green)}
+.nav-links{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
+.nav-links a:hover{color:var(--green-glow)}
+.container{max-width:920px;margin:0 auto;padding:54px 28px 40px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);display:inline-flex;align-items:center;gap:10px;margin-bottom:16px}
+h1.title{font-size:clamp(1.9rem,4vw,2.6rem);text-transform:uppercase;letter-spacing:.02em;margin-bottom:14px}
+h1.title .accent{color:var(--green)}
+.lede{color:var(--body);font-size:16px;max-width:70ch;margin-bottom:14px}
+.statusline{display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--muted);margin-top:18px}
+.statusline b{color:var(--green-glow);font-weight:500}
+.sec{margin-top:40px}
+.sec h2{font-size:1.4rem;text-transform:uppercase;letter-spacing:.02em;margin-bottom:6px}
+.sec .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:500}
+.sec p{color:var(--body);font-size:15px;max-width:72ch;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+.box{border:1px solid var(--border);border-radius:11px;background:linear-gradient(180deg,var(--panel),var(--deep));padding:18px 20px}
+.box .bt{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--green-glow);margin-bottom:7px}
+.box p{color:var(--body);font-size:13.5px;line-height:1.6;margin:0}
+.labels{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.label-row{display:flex;gap:13px;align-items:flex-start;border:1px solid var(--border);border-radius:10px;background:var(--deep);padding:14px 16px}
+.label-row .sym{font-size:16px;line-height:1.2;flex-shrink:0;width:20px;text-align:center}
+.sym.canon{color:var(--green)}.sym.spec{color:var(--amber)}.sym.narr{color:var(--plum)}
+.label-row .lt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--text);display:block;margin-bottom:3px}
+.label-row p{margin:0;font-size:13.5px;color:var(--body);line-height:1.55}
+.metaline{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:14px}
+.backbar{margin-top:44px;border-top:1px solid var(--border);padding-top:22px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--void,#05080a);background:var(--green);border-radius:9px;padding:10px 16px;font-weight:600}
+.btn:hover{background:var(--green-glow);color:#05080a}
+footer{max-width:1180px;margin:48px auto 0;padding:28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-brand{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--text)}
+.foot-copy{font-size:12.5px;color:var(--muted);max-width:46ch;margin-top:6px}
+.foot-links{display:flex;flex-direction:column;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px}
+@media(max-width:680px){.container{padding:36px 18px 30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><span class="dot"></span>NEW <span>TRIPOLI</span> :: SIM_CATALOGUE</a>
+    <div class="nav-links">
+      <a href="index.html#instruments">Instruments</a>
+      <a href="index.html#walkthrough">Walkthrough</a>
+      <a href="index.html#sims">Sims</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <span class="eyebrow">Cognitive Husbandry · interactive companion</span>
+  <h1 class="title">About this <span class="accent">companion</span></h1>
+  <p class="lede">An interactive companion to the <strong style="color:var(--text)">Cognitive Husbandry</strong> series. After the Intake, every resident of New Tripoli wakes into a vast catalogue of <em>sims</em> — worlds to live in, at whatever speed they choose. This site makes that catalogue browsable and pairs it with working instruments that let you operate the real ideas underneath the fiction.</p>
+  <div class="statusline">
+    <span>◆ <b>canon-grounded</b></span><span>▸ <b>client-side</b></span><span>▸ <b>zero PII</b></span><span>▸ <b>no network</b></span><span>▸ <b>CC&nbsp;BY&nbsp;4.0</b></span>
+  </div>
+
+  <section class="sec">
+    <div class="kicker">What's inside</div>
+    <h2>Three kinds of thing</h2>
+    <p>The catalogue mixes described worlds with tools you can actually drive. They fall into three buckets.</p>
+    <div class="grid">
+      <div class="box">
+        <div class="bt">Instruments</div>
+        <p>Interactive tools that compute the actual numbers — time dilation, feasibility, the bootstrap tech-tree, the molecular assembler, and more. The math behind the world, made operable.</p>
+      </div>
+      <div class="box">
+        <div class="bt">Sims</div>
+        <p>The in-world catalogue itself: described worlds from the series — Jurassic, the Sovereign Sea Platform, Thalassa's Rise, the Azure Janus chain — presented as the residents would browse them.</p>
+      </div>
+      <div class="box">
+        <div class="bt">Demos</div>
+        <p>Short, focused explainers of the core mechanics — quick reads that unpack a single idea before you dive into the full instruments.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">How to read it</div>
+    <h2>The three labels</h2>
+    <p>Every card and tool is tagged so you always know what kind of claim you're looking at.</p>
+    <div class="labels">
+      <div class="label-row"><span class="sym canon">◆</span><div><span class="lt">In-world canon</span><p>Figures and rules taken directly from the series bible — the established facts of New Tripoli.</p></div></div>
+      <div class="label-row"><span class="sym spec">✦</span><div><span class="lt">Speculative feasibility</span><p>Real-world physics and engineering estimates, labelled as such — what the science actually says, separate from the fiction.</p></div></div>
+      <div class="label-row"><span class="sym narr">▣</span><div><span class="lt">Narrative sim</span><p>A described in-world experience from the catalogue, not a playable build.</p></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">Ground rules</div>
+    <h2>How it runs</h2>
+    <p>Everything here runs entirely in your browser. Nothing you do is recorded or sent anywhere: there is no analytics, no account, no server round-trip. The only outbound request is to a font CDN for the typefaces; disable it and the pages still work.</p>
+    <p class="metaline">Code MIT · Prose CC BY 4.0 · A fan/companion work for the Cognitive Husbandry series · No PII · No runtime network calls (fonts excepted).</p>
+  </section>
+
+  <div class="backbar">
+    <a class="btn" href="index.html">← Back to the catalogue</a>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="foot-brand">NEW TRIPOLI :: SIM_CATALOGUE</div>
+    <div class="foot-copy">An interactive companion to the Cognitive Husbandry series. Client-side, zero PII, no runtime network calls.</div>
+  </div>
+  <div class="foot-links">
+    <a href="sims/time-dilation.html">Time Dilation Instrument</a>
+    <a href="index.html#sims">Sim catalogue</a>
+    <a href="about.html">About this companion</a>
+  </div>
+</footer>
+</div>
+</body>
+</html>

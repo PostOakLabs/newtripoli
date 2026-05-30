@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--
+  Guided demo: "Collected, Not Conquered"
+  Cognitive Husbandry / New Tripoli — Sim Catalogue
+  The ETI thesis from launch to aftermath, chaining live instruments via hash deep-links. Static HTML+SVG.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collected, Not Conquered — New Tripoli Sim Catalogue</title>
+<meta name="description" content="A mature intelligence doesn't conquer — it collects. Trace the ETI thesis from a kinetic probe to a black-hole library, chaining live instruments at each step.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#23ff88;--teal-glow:#7dffb8;--gold:#34e6e0;--gold-glow:#86f6f2;--plum:#b69cff;--border:rgba(35,255,136,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 4%,rgba(35,255,136,.10),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(182,156,255,.06),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(35,255,136,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--plum);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--plum)}
+.demo-head h1{font-size:clamp(2rem,4.4vw,3rem);text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--plum);text-shadow:0 0 18px rgba(182,156,255,.35)}
+.demo-head .lede{font-size:1.05rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+.steps{margin-top:40px;display:grid;grid-template-columns:62px 1fr;gap:0 22px}
+@media(max-width:620px){.steps{grid-template-columns:44px 1fr;gap:0 14px}}
+.spine{display:flex;flex-direction:column;align-items:center}
+.node{width:46px;height:46px;border-radius:50%;border:1px solid var(--teal);background:var(--deep);color:var(--teal-glow);font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(35,255,136,.18)}
+@media(max-width:620px){.node{width:36px;height:36px;font-size:16px}}
+.node.end{border-color:var(--plum);color:var(--plum)}
+.rail{flex:1;width:1px;background:linear-gradient(var(--teal),var(--rim));min-height:24px;margin:6px 0}
+.rail.last{background:linear-gradient(var(--plum),transparent)}
+.step{padding-bottom:34px}
+.step .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.step .claim{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:1.4rem;color:var(--text);line-height:1.2;margin-bottom:8px}
+.step p{font-size:.97rem;color:var(--body);line-height:1.7;margin-bottom:14px;max-width:60ch}
+.step p strong{color:var(--text);font-weight:500}
+.panel{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));border:1px solid var(--edge);border-radius:10px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.bignum{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.7rem;color:var(--teal-glow);line-height:1}
+.bignum.plum{color:var(--plum)}
+.pn-cap{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.5}
+.cta{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:9px 16px;border-radius:6px;font-weight:600;transition:background .15s}
+.cta:hover{background:var(--teal-glow)}
+.cta.plum{background:var(--plum)}.cta.plum:hover{background:#cdb8ff}
+.close{margin-top:8px;border:1px solid var(--plum);border-radius:12px;padding:26px 30px;background:linear-gradient(135deg,rgba(182,156,255,.08),rgba(8,13,12,.4));text-align:center}
+.close h2{font-size:clamp(1.4rem,3vw,2rem);text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px}
+.close h2 .acc{color:var(--plum)}
+.close p{color:var(--body);max-width:62ch;margin:0 auto 18px;line-height:1.7}
+.close .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.footnote{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Guided walkthrough</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Guided walkthrough · the ETI thesis</span>
+    <h1>Collected, <span class="acc">not conquered.</span></h1>
+    <p class="lede">A civilization advanced enough to reach us doesn't expand outward to <strong>take</strong> — it turns inward, and it <strong>collects</strong>. Trace the whole thesis in four moves, from the object that lands in the desert to the library at the end of the chain.</p>
+  </header>
+
+  <div class="steps">
+    <div class="spine"><div class="node">1</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Move 1 · Arrival</div>
+      <div class="claim">It arrives as a thrown stone.</div>
+      <p>No armada — a single dense osmium probe, flung from a kilometre-scale mass driver thousands of light-years away, patient across geological time. It survives a solid-body impact, self-replicates, and chooses a strategy. Set it to <strong>Cognitive Husbandry</strong>.</p>
+      <div class="panel"><div class="bignum">3</div><div class="pn-cap">strategy branches —<br>only one preserves us</div></div>
+      <a class="cta" href="../sims/kinetic-probe.html#d=7500&v=10&t=earth&b=husbandry">Launch the probe →</a>
+    </div>
+
+    <div class="spine"><div class="node">2</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Move 2 · Preservation</div>
+      <div class="claim">It keeps us, rather than ends us.</div>
+      <p>The decapitation strike removes resistance; then eight billion people are converted to cognitive substrate, powered off the Sahara. The striking part isn't the cost — it's how <strong>cheap</strong> we are to keep: a fraction of a percent of one desert.</p>
+      <div class="panel"><div class="bignum">0.18%</div><div class="pn-cap">of the Sahara powers<br>the entire preserved population</div></div>
+      <a class="cta" href="../sims/feasibility.html#pop=8.1&bio=10&accel=1&aug=vat">See the preservation budget →</a>
+    </div>
+
+    <div class="spine"><div class="node">3</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Move 3 · The world it gives back</div>
+      <div class="claim">It builds a place to keep us in.</div>
+      <p>What we wake into isn't a prison cell — it's a nested reality, a sim inside a sim inside a sim. New Tripoli is "home," but most of life happens layers deeper, in a holodeck residence and a dedicated Sim Room.</p>
+      <div class="panel"><div class="bignum">3</div><div class="pn-cap">layers from physical reality<br>to where you actually live</div></div>
+      <a class="cta" href="../sims/layer-stack.html#layer=1">Descend the stack →</a>
+    </div>
+
+    <div class="spine"><div class="node">4</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Move 4 · The honest endpoint</div>
+      <div class="claim">And it leaves a door open.</div>
+      <p>Buried in the Day-1 catalogue is a portal chain ending at Novo Alexandria — a black-hole-powered library staffed by academics who simply want to teach, extending a standing invitation. Characters come to read it as the ETI's most honest message about what it actually wants.</p>
+      <div class="panel"><div class="bignum plum">∞</div><div class="pn-cap">a library with<br>no closing time</div></div>
+      <a class="cta plum" href="../sims/azure-janus.html#node=3">Walk to Novo Alexandria →</a>
+    </div>
+
+    <div class="spine"><div class="node end">◆</div><div class="rail last"></div></div>
+    <div class="step">
+      <div class="close">
+        <h2>Curatorial, not <span class="acc">territorial.</span></h2>
+        <p>A mature intelligence that has made the inward turn doesn't paperclip the galaxy — it samples the cognitive diversity it can't generate itself, and keeps it. The probe, the preservation, the nested world, and the open library are one gesture: not conquest, but collection. Whether that's mercy or menagerie is the question the series never lets you put down.</p>
+        <div class="ctarow">
+          <a class="cta" href="../sims/kinetic-probe.html#b=husbandry">Re-run the branches →</a>
+          <a class="cta plum" href="../index.html">All instruments →</a>
+        </div>
+      </div>
+      <div class="footnote">SOURCE // Cognitive Husbandry.md (ETI Motivation, Delivery System, Branches) · Canon §15, §17. Figures are ✦ speculative estimates over ◆ canon parameters. Each step deep-links into a live instrument.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<!--
+  The Molecular Assembler: How Close Are We? — New Tripoli / Cognitive Husbandry Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ✦ Speculative feasibility · ◆ canon (bootstrap tech-tree endpoint)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Molecular Assembler — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Drexler's dream of a machine that builds matter atom by atom — and a copy of itself. The vision, the Smalley objections, the two rival paths, the real 2025 state of the art, and an honest estimate of how far away a general assembler still is. The real-science companion to the Bootstrap Tech-Tree's endpoint.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#ffc24d;--teal-glow:#ffe09a;--gold:#34e6e0;--gold-glow:#86f6f2;--plum:#b69cff;--amber:#ffc24d;--red:#ff6a5a;--ice:#a0d4f5;--bond:#23ff88;--bond-glow:#7dffb8;--border:rgba(255,194,77,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(35,255,136,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(182,156,255,.06),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(35,255,136,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3,h4{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.16}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:16px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:680px}
+.tier-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor}
+.tb-spec{color:var(--gold-glow);background:rgba(52,230,224,.08)}.tb-canon{color:var(--teal);background:rgba(35,255,136,.08)}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px;margin:18px 0 22px;position:relative}
+.fig svg{display:block;width:100%;height:auto}
+.fig-cap{position:absolute;top:10px;left:14px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:var(--muted)}
+.fig-caption{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.55;color:var(--muted);margin:10px 2px 2px;letter-spacing:.02em}
+.fig-caption b{color:var(--gold-glow);font-weight:500}
+.fig-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;color:var(--muted)}
+.fig-legend span{display:inline-flex;align-items:center;gap:6px}
+.fig-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.atom-site{fill:rgba(35,255,136,.05);stroke:var(--rim);stroke-width:1.1}
+.atom-target{fill:rgba(255,194,77,.12);stroke:var(--amber);stroke-width:1.6}
+.atom-placed{fill:rgba(35,255,136,.18);stroke:var(--bond);stroke-width:1.2}
+.dimer-reactive{fill:var(--amber)}
+#carry{transition:transform .55s cubic-bezier(.45,0,.55,1),opacity .25s}
+#surface{transition:transform 1.1s ease-in-out}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 18px}
+.tab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:8px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--teal-glow);border-color:var(--teal)}
+.tab.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.panel{display:none;animation:fadeIn .25s ease}.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.card-label{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+.card h3{font-size:17px;margin-bottom:8px}.card h4{font-size:14.5px;margin-bottom:5px;color:var(--teal-glow)}
+.card p{font-size:14px;color:var(--body);margin-bottom:9px;line-height:1.62}.card p:last-child{margin-bottom:0}
+.card code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow);font-size:12.5px}
+.toggle-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tg{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.tg:hover{color:var(--teal-glow);border-color:var(--teal)}
+.tg.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.tg.plum.active{background:var(--plum);border-color:var(--plum)}
+.cap{margin-bottom:13px}
+.cap-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cap-name{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text)}
+.cap-stat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.cap-bar{height:7px;border-radius:4px;background:var(--edge);overflow:hidden}
+.cap-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal),var(--teal-glow))}
+.cap-desc{font-size:12.5px;color:var(--body);margin-top:5px;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+.slider-row{display:flex;align-items:center;gap:14px;margin:6px 0 4px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--ice),var(--teal),var(--gold-glow))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-row input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--teal-glow);cursor:pointer;border:none}
+.verdict{background:rgba(12,19,17,.7);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-top:14px}
+.verdict .v-year{font-family:'Chakra Petch',sans-serif;font-size:26px;font-weight:700;color:var(--teal-glow);line-height:1.1}
+.verdict .v-sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.callout{border-left:3px solid var(--plum);background:rgba(182,156,255,.06);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px}
+.callout .cn-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--plum);margin-bottom:7px}
+.callout p{font-size:14px;color:var(--body);margin-bottom:9px}.callout p:last-child{margin-bottom:0}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:18px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.about-body ul{margin:6px 0 10px;padding-left:20px;font-size:13.5px;line-height:1.8}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">The Molecular Assembler</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>The Molecular Assembler</h1>
+    <p class="tool-subtitle">A machine that builds matter atom by atom — and, crucially, a copy of itself. It is the dream at the very top of the <a href="tech-tree.html">Bootstrap Tech-Tree</a>, and the one thing the Wake-Day inventory lists as flatly <em>not available</em>. Here is the real science: the vision, the objections that nearly killed it, the two rival roads, where the lab actually stands in 2025, and an honest reckoning of how far away it still is.</p>
+    <div class="tier-badges"><span class="tier-badge tb-spec">✦ Speculative feasibility</span><span class="tier-badge tb-canon">◆ Canon · tech-tree endpoint</span></div>
+  </header>
+
+  <!-- HERO FIGURE: positional mechanosynthesis -->
+  <div class="fig">
+    <div class="fig-cap">FIG // POSITIONAL MECHANOSYNTHESIS — ONE BOND AT A TIME</div>
+    <svg viewBox="0 0 720 176" role="img" aria-label="A molecular tool tip lowers a reactive carbon dimer onto a specific lattice site, bonds it to the surface keeping the two carbon atoms in their carried side-by-side orientation, withdraws empty, and the workpiece advances for the next placement.">
+      <!-- moving workpiece surface; placed atoms are appended here and travel with it -->
+      <g id="surface"></g>
+      <!-- descending tool: holder box + tip box + tapered point + carried carbon dimer -->
+      <g id="carry">
+        <!-- tool holder (upper, wider box) -->
+        <rect x="331" y="0" width="58" height="22" rx="3" fill="rgba(52,230,224,.12)" stroke="var(--gold)" stroke-width="1.5"/>
+        <text x="360" y="14.5" text-anchor="middle" style="fill:var(--gold-glow);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em">TOOL</text>
+        <!-- tip body (lower, narrower box) -->
+        <rect x="346" y="22" width="28" height="13" fill="rgba(52,230,224,.10)" stroke="var(--gold)" stroke-width="1.3"/>
+        <!-- tapered point down to the apex -->
+        <polygon points="350,35 370,35 364,47 356,47" fill="rgba(52,230,224,.08)" stroke="var(--gold)" stroke-width="1.2"/>
+        <text x="398" y="30" style="fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em">TIP</text>
+        <!-- carried reactive carbon dimer: two atoms held side by side, bonded to each other -->
+        <line x1="354" y1="55" x2="366" y2="55" stroke="var(--amber)" stroke-width="1.5"/>
+        <circle cx="354" cy="55" r="6" class="dimer-reactive"/><circle cx="366" cy="55" r="6" class="dimer-reactive"/>
+      </g>
+    </svg>
+    <p class="fig-caption">A reactive carbon dimer (<b>amber</b>) is lowered onto a specific lattice site, bonds to the surface (locking in as <b>teal</b>), and the tip withdraws empty — then the workpiece advances and the cycle repeats, <b>~10⁹ times per cubic micron</b>.</p>
+    <div class="fig-legend">
+      <span><i style="background:var(--amber)"></i>reactive dimer (incoming)</span>
+      <span><i style="background:rgba(255,194,77,.22);border:1px solid var(--amber)"></i>target site</span>
+      <span><i style="background:var(--teal-glow)"></i>bonded to surface</span>
+      <span><i style="background:transparent;border:1px solid var(--rim)"></i>empty lattice site</span>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="vision">The Vision</button>
+    <button class="tab" data-tab="paths">Two Paths</button>
+    <button class="tab" data-tab="objections">Smalley's Objections</button>
+    <button class="tab" data-tab="sota">State of the Art</button>
+    <button class="tab" data-tab="howfar">How Far?</button>
+    <button class="tab" data-tab="canon">Canon</button>
+  </div>
+
+  <!-- ── VISION ─────────────────────────────────────────────────────────── -->
+  <div class="panel active" id="tab-vision">
+    <div class="card">
+      <div class="card-label">Feynman → Drexler</div>
+      <h3>"There's plenty of room at the bottom"</h3>
+      <p>In 1959 Richard Feynman pointed out that nothing in physics forbids arranging atoms individually — there is enormous unused "room" at the small scale. In 1986 K. Eric Drexler turned the hint into a program in <em>Engines of Creation</em>, and made it quantitative in <em>Nanosystems</em> (1992): a <strong>molecular assembler</strong> is a programmable machine that positions reactive molecules with atomic precision and builds larger structures by <strong>mechanosynthesis</strong> — making chemistry happen <em>where you put it</em>, not where diffusion happens to take it.</p>
+      <p>Two properties make it world-changing rather than merely clever: it is <strong>general-purpose</strong> (the same machine, reprogrammed, builds almost anything its feedstock allows), and it can be made <strong>self-replicating</strong> — build a copy of itself, and manufacturing capacity grows exponentially. Drexler also coined the cautionary flip-side in the same book: <code>grey goo</code>, the runaway self-replicator.</p>
+    </div>
+    <div class="card" style="background:rgba(35,255,136,.05);border-color:rgba(35,255,136,.2)">
+      <div class="card-label">The existence proof you are made of</div>
+      <h3>The ribosome already does this</h3>
+      <p>The strongest argument that molecular assemblers are possible is that you are full of them. The <strong>ribosome</strong> is a molecular machine that reads a digital template (mRNA) and builds a protein by positioning building blocks and forming bonds in sequence — programmable, positional, atomically precise synthesis, running in warm salt water at billions of copies per cell. Biology is an existence proof that general molecular manufacturing is allowed by physics. The open question was never <em>whether</em>, but <em>which kind of machine</em> humans can build to do it on purpose.</p>
+    </div>
+  </div>
+
+  <!-- ── TWO PATHS ──────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-paths">
+    <div class="card">
+      <div class="card-label">Interactive · the two roads to an assembler</div>
+      <p style="font-size:14px;color:var(--body)">The field split into two research cultures with very different bets about what the first real assembler will be made of. Toggle between them.</p>
+      <div class="toggle-row" id="path-toggle" style="margin-top:12px">
+        <button class="tg active" data-path="hard">Hard / dry · diamondoid</button>
+        <button class="tg plum" data-path="soft">Soft / wet · bio-inspired</button>
+      </div>
+      <svg id="path-viz" viewBox="0 0 720 130" role="img" aria-label="Schematic contrasting a rigid diamondoid machine with a soft biological one." style="display:block;width:100%;height:auto"><g id="path-scene"></g></svg>
+      <h4 id="path-title" style="margin-top:10px">—</h4>
+      <p id="path-desc" style="font-size:14px;color:var(--body)">—</p>
+      <p id="path-champ" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted)">—</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Why it matters</div>
+      <p>These are not just engineering preferences — they are different theories of where the first machine comes from. The diamondoid camp expects to <em>engineer</em> rigidity and precision from scratch under vacuum. The soft camp expects to <em>borrow and redirect</em> the molecular machinery biology already perfected, in water, at body temperature. Most concrete 2025 progress (below) is on the soft side; most of the dramatic, general-purpose promises live on the hard side.</p>
+    </div>
+  </div>
+
+  <!-- ── OBJECTIONS ─────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-objections">
+    <div class="card">
+      <div class="card-label">2001–2003 · the debate that nearly buried the field</div>
+      <h3>Richard Smalley's two objections</h3>
+      <p>Nobel laureate Richard Smalley (co-discoverer of fullerenes) argued that Drexler-style assemblers were physically impossible, in a public exchange that shaped a generation of funding. His two arguments have memorable names. Pick one to see the objection — and Drexler's rebuttal.</p>
+      <div class="toggle-row" id="obj-toggle" style="margin-top:6px">
+        <button class="tg active" data-obj="fat">"Fat fingers"</button>
+        <button class="tg" data-obj="sticky">"Sticky fingers"</button>
+      </div>
+      <svg id="obj-viz" viewBox="0 0 720 150" role="img" aria-label="Illustration of the fat-fingers or sticky-fingers objection to mechanosynthesis." style="display:block;width:100%;height:auto"><g id="obj-scene"></g></svg>
+      <h4 id="obj-title" style="margin-top:8px">—</h4>
+      <p id="obj-desc" style="font-size:14px;color:var(--body)">—</p>
+      <p id="obj-reb" style="font-size:13.5px;color:var(--teal-glow);background:rgba(35,255,136,.06);border-radius:8px;padding:11px 14px;margin-top:4px">—</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Where it left things</div>
+      <p>Neither side conceded. The debate's real legacy was a demand Smalley's critics accepted as fair: stop arguing on paper and <strong>demonstrate a single positional covalent bond formation experimentally</strong>. That "proof of principle" became the diamondoid path's north star — and, two decades later, the thing experimental groups are finally building toward.</p>
+    </div>
+  </div>
+
+  <!-- ── STATE OF THE ART ───────────────────────────────────────────────── -->
+  <div class="panel" id="tab-sota">
+    <div class="card">
+      <div class="card-label">2025 · the pieces that exist</div>
+      <h3>We have parts of an assembler — not an assembler</h3>
+      <p>Real molecular nanotechnology has delivered genuinely remarkable building blocks. None of them is yet a general-purpose, self-replicating assembler, but each is a working piece of the puzzle. The bars below are a rough read on how mature each capability is.</p>
+      <div id="sota-caps" style="margin-top:14px"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">The honest summary</div>
+      <p>We can position single atoms (slowly, cold, in vacuum). We can fold DNA into programmed shapes that self-assemble. We can build synthetic molecular motors and even a molecular machine that sequences peptide building blocks like a crude ribosome. Experimental groups are closing in on the first deliberate positional carbon–carbon bond. What does <em>not</em> exist is the integrated machine: fast, programmable, room-temperature positional synthesis that can build arbitrary structures — and a copy of itself. Every piece is real; the assembled whole is not.</p>
+    </div>
+  </div>
+
+  <!-- ── HOW FAR ────────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-howfar">
+    <div class="card">
+      <div class="card-label">Interactive · your reckoning</div>
+      <h3>How far is a general assembler?</h3>
+      <p>There is no agreed timeline — estimates range from "a few decades" to "never" depending on whom you ask and which path you back. Slide from skeptic to optimist to see how the framing changes. This is a deliberately honest toy: the uncertainty <em>is</em> the answer.</p>
+      <div class="slider-row"><input type="range" id="hf-slider" min="0" max="100" step="1" value="50"></div>
+      <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)"><span>Smalley · "never"</span><span>Drexler · "soon, if we try"</span></div>
+      <div class="verdict">
+        <div class="v-year" id="hf-year">—</div>
+        <div class="v-sub" id="hf-sub">—</div>
+        <p id="hf-desc" style="font-size:13.5px;color:var(--body);margin-top:10px;line-height:1.6">—</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">What would actually move the needle</div>
+      <p>The single most-watched milestone is the diamondoid camp's long-promised "proof of principle": a deliberate, tool-tip-directed covalent bond, formed where the machine chose to put it, then released cleanly. After that, the hard problems are <em>speed</em> (atoms placed per second), <em>error correction</em> (a misplaced atom in a billion is a defect in a billion), and <em>self-replication</em> (a machine that builds its own parts). Each is a research era, not a demo.</p>
+    </div>
+  </div>
+
+  <!-- ── CANON ──────────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-canon">
+    <div class="callout">
+      <div class="cn-tag">◆ Canon — §34 / §36 · the Wake-Day inventory</div>
+      <p>When eight billion synthetic-bodied residents wake into a depopulated Earth, the canon inventory of what they have is blunt. Under <strong>Not available</strong>, the first line is: <em>"A molecular assembler or nanoscale fabrication plant of any kind."</em> They have garage tools, intact-but-offline semiconductor fabs, and all of humanity's validated knowledge — but the one machine that would let them skip the whole industrial bootstrap does not exist, and they cannot build it without first rebuilding everything beneath it.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">The bootstrap tension</div>
+      <h3>You need precision machines to build precision machines</h3>
+      <p>This sim is the real-science companion to the <a href="tech-tree.html">Bootstrap Tech-Tree</a>, whose final node is a femtoscale assembler. The Tech-Tree shows the <em>path</em> — extraction, smelting, machining, lithography, each rung depending on the last. This sim shows why the destination is so hard that it sits, in our own world, on the far side of an unsolved-physics-adjacent engineering problem. The residents' predicament is exactly humanity's, sharpened: the assembler would change everything, and there is no shortcut to it.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">What the ETI clearly has — and humanity doesn't</div>
+      <p>The Intake hardware, the housefly-sized knockout robots, the synthetic bodies "with better reaction time and sensory resolution than any pre-Intake human" — all of it implies the ETI long ago crossed the line this sim is about. Molecular manufacturing is the quiet through-line of the whole setting: the gap between a civilization that has assemblers and one that doesn't is the gap between the gardener and the garden. New Tripoli's residents spend the bootstrap arc trying to climb from one side of that line to the other.</p>
+    </div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this sim</button>
+    <div class="about-body" id="about-body">
+      <p>This sim covers the molecular-assembler concept from Feynman and Drexler through the Drexler–Smalley debate to the 2025 state of the art, then connects it to New Tripoli's bootstrap canon. The "How Far?" tool is deliberately non-committal: there is no scientific consensus timeline, and the slider reflects genuine disagreement rather than a hidden "true" answer.</p>
+      <p>The science is grounded in published work as of 2025–2026. The diamondoid path is associated with Drexler, Ralph Merkle, Robert Freitas and groups such as CBN Nano Technologies (with experimental diamond-mechanosynthesis programs backed by the Foresight Institute); the soft/bio-inspired path with Richard Jones (<em>Soft Machines</em>) and the broad DNA-nanotechnology and molecular-machine communities. The 2016 Nobel Prize in Chemistry (Sauvage, Stoddart, Feringa) recognized synthetic molecular machines; David Leigh's group has demonstrated a rotaxane-based machine that sequences peptide building blocks, a crude artificial analogue of the ribosome.</p>
+      <p><strong>Key sources:</strong></p>
+      <ul>
+        <li>Feynman, R.P. (1959). "There's Plenty of Room at the Bottom." Caltech lecture.</li>
+        <li>Drexler, K.E. (1986). <em>Engines of Creation</em>; (1992) <em>Nanosystems: Molecular Machinery, Manufacturing, and Computation</em>.</li>
+        <li>Drexler–Smalley debate (2003). "Nanotechnology: Drexler and Smalley make the case for and against molecular assemblers." <em>Chemical &amp; Engineering News</em>, 81(48).</li>
+        <li>Jones, R.A.L. (2004). <em>Soft Machines: Nanotechnology and Life</em>. Oxford University Press.</li>
+        <li>Rothemund, P.W.K. (2006). "Folding DNA to create nanoscale shapes and patterns." <em>Nature</em>, 440, 297–302.</li>
+        <li>2016 Nobel Prize in Chemistry — Sauvage, Stoddart &amp; Feringa, for the design and synthesis of molecular machines.</li>
+        <li>"A molecular assembler that produces polymers." <em>Nature Communications</em> (2020), 11, 3967 — synthetic small-molecule sequence assembler.</li>
+        <li>Foresight Institute / CBN Nano Technologies — diamond-mechanosynthesis research program (proof-of-principle positional C–C bond formation).</li>
+      </ul>
+      <p class="meta-line">v1.0 — Canon §34 / §36 · pairs with Bootstrap Tech-Tree · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// ── hero: positional mechanosynthesis animation ──────────────────────────────
+(function(){
+  var surface=document.getElementById('surface'), carry=document.getElementById('carry');
+  if(!surface||!carry) return;
+  var SVGNS='http://www.w3.org/2000/svg';
+  var TIPX=360, BASEY=150, R=9, GAP=52, N=48, FIRST=3, START=TIPX-FIRST*GAP;
+  var h='';
+  for(var i=0;i<N;i++){ h+='<circle class="atom-site" id="ms-'+i+'" cx="'+(START+i*GAP)+'" cy="'+BASEY+'" r="'+R+'"/>'; }
+  surface.innerHTML=h;
+  var idx=FIRST, shift=0;
+  function setShift(px,anim){ surface.style.transition=anim?'transform 1.1s ease-in-out':'none'; surface.style.transform='translateX('+(-px)+'px)'; }
+  setShift(0,false);
+  function target(){ return document.getElementById('ms-'+idx); }
+  function mark(){ var t=target(); if(t && t.getAttribute('class')==='atom-site') t.setAttribute('class','atom-target'); }
+  function bond(){
+    var t=target(); if(!t) return;
+    t.setAttribute('class','atom-placed');
+    var x=parseFloat(t.getAttribute('cx')), cy=BASEY-16;
+    // placed dimer keeps the SAME side-by-side orientation it was carried in (no reorientation)
+    var ln=document.createElementNS(SVGNS,'line');
+    ln.setAttribute('class','ms-placed'); ln.setAttribute('x1',x-6); ln.setAttribute('y1',cy);
+    ln.setAttribute('x2',x+6); ln.setAttribute('y2',cy);
+    ln.setAttribute('stroke','var(--bond)'); ln.setAttribute('stroke-width','1.5');
+    surface.appendChild(ln);
+    [[x-6,cy],[x+6,cy]].forEach(function(p){
+      var c=document.createElementNS(SVGNS,'circle');
+      c.setAttribute('class','ms-placed'); c.setAttribute('cx',p[0]); c.setAttribute('cy',p[1]);
+      c.setAttribute('r',5); c.setAttribute('fill','var(--bond-glow)');
+      surface.appendChild(c);
+    });
+  }
+  function resetRow(){
+    surface.querySelectorAll('.ms-placed').forEach(function(e){e.remove();});
+    surface.querySelectorAll('circle[id]').forEach(function(e){e.setAttribute('class','atom-site');});
+    idx=FIRST; shift=0; setShift(0,false);
+  }
+  function cycle(){
+    mark();
+    carry.style.opacity='1';
+    carry.style.transform='translateY(78px)';        // descend onto the target site
+    setTimeout(function(){
+      bond();                                          // dimer bonds; site locks teal
+      carry.style.opacity='0';                         // dimer transferred — tip now empty
+      carry.style.transform='translateY(0px)';         // withdraw
+      setTimeout(function(){
+        shift+=GAP; idx++;
+        setShift(shift,true);                          // workpiece advances slowly to the left
+        setTimeout(function(){
+          if(idx>=N-3) resetRow();
+          setTimeout(cycle,300);
+        },1150);
+      },560);
+    },560);
+  }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ bond(); idx=FIRST+1; mark(); }           // static frame: one placed, next marked
+  else cycle();
+})();
+
+// ── tabs ────────────────────────────────────────────────────────────────────
+document.getElementById('tabs').querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+    var t=document.getElementById('tab-'+btn.dataset.tab); if(t)t.classList.add('active');
+    btn.classList.add('active');
+  });
+});
+
+// ── two paths ───────────────────────────────────────────────────────────────
+(function(){
+  var scene=document.getElementById('path-scene'); if(!scene)return;
+  var data={
+    hard:{ title:'Hard / dry — diamondoid mechanosynthesis',
+      desc:'Build rigid machines out of stiff covalent solids (diamond-like carbon), operating in vacuum, positioning reactive tool tips to add atoms one bond at a time. This is the path that promises a true general-purpose, self-replicating assembler — and the one that has been hardest to demonstrate even once.',
+      champ:'Champions: Drexler · Merkle · Freitas · CBN Nano Technologies' },
+    soft:{ title:'Soft / wet — bio-inspired self-assembly',
+      desc:'Don’t fight biology — borrow it. Use DNA origami, protein engineering and synthetic molecular motors that fold and self-assemble in water at room temperature. Far more has actually been built this way, but it trades the dream of a universal rigid assembler for programmable soft machinery.',
+      champ:'Champions: Richard Jones · DNA-nanotech & molecular-machine communities' }
+  };
+  function draw(path){
+    var d=data[path], h='';
+    if(path==='hard'){
+      // rigid lattice arm
+      h+='<text x="360" y="18" text-anchor="middle" class="lbl" style="fill:var(--gold-glow)">RIGID · COVALENT · VACUUM</text>';
+      for(var i=0;i<9;i++){var x=250+i*24; h+='<circle cx="'+x+'" cy="96" r="7" fill="rgba(52,230,224,.12)" stroke="var(--gold)" stroke-width="1.3"/>';}
+      for(var j=0;j<8;j++){var x2=262+j*24; h+='<line x1="'+(x2-12)+'" y1="96" x2="'+x2+'" y2="96" stroke="var(--gold)" stroke-width="1"/>';}
+      h+='<rect x="350" y="40" width="20" height="40" rx="3" fill="rgba(52,230,224,.1)" stroke="var(--gold)" stroke-width="1.3"/><circle cx="360" cy="88" r="6" fill="var(--gold-glow)"/>';
+    } else {
+      h+='<text x="360" y="18" text-anchor="middle" class="lbl" style="fill:var(--plum)">FLEXIBLE · SELF-ASSEMBLING · IN WATER</text>';
+      // wavy DNA-ish double strand
+      var p1='M250 70',p2='M250 96';
+      for(var k=1;k<=18;k++){var x3=250+k*12,y1=70+Math.sin(k*0.9)*14,y2=96+Math.sin(k*0.9+3.14)*14;p1+=' L'+x3+' '+y1.toFixed(0);p2+=' L'+x3+' '+y2.toFixed(0);}
+      h+='<path d="'+p1+'" fill="none" stroke="var(--plum)" stroke-width="1.8"/><path d="'+p2+'" fill="none" stroke="var(--ice)" stroke-width="1.8"/>';
+      for(var m=1;m<=8;m++){var xr=262+m*24;h+='<line x1="'+xr+'" y1="'+(70+Math.sin(m*1.8)*14).toFixed(0)+'" x2="'+xr+'" y2="'+(96+Math.sin(m*1.8+3.14)*14).toFixed(0)+'" stroke="var(--rim)" stroke-width="1"/>';}
+    }
+    scene.innerHTML=h;
+    document.getElementById('path-title').textContent=d.title;
+    document.getElementById('path-desc').textContent=d.desc;
+    document.getElementById('path-champ').textContent=d.champ;
+  }
+  document.querySelectorAll('#path-toggle .tg').forEach(function(b){ b.addEventListener('click',function(){
+    document.querySelectorAll('#path-toggle .tg').forEach(function(o){o.classList.remove('active');});
+    b.classList.add('active'); draw(b.dataset.path);
+  }); });
+  draw('hard');
+})();
+
+// ── Smalley objections ──────────────────────────────────────────────────────
+(function(){
+  var scene=document.getElementById('obj-scene'); if(!scene)return;
+  var data={
+    fat:{ title:'"Fat fingers" — no room to work',
+      desc:'Smalley argued that to control a chemical reaction you would need many manipulators crowded around a single point — but those manipulators are themselves made of atoms, and there simply isn’t room for enough "fingers" in the tiny space around one reaction site. The tools are too fat for the job.',
+      reb:'Drexler’s rebuttal: enzymes and ribosomes already perform precise, controlled chemistry at single sites using only a few well-placed atoms — no crowd of fingers required. Nature does positional chemistry with a handful of contacts, so the "too many fingers" framing is a false constraint.' },
+    sticky:{ title:'"Sticky fingers" — it won’t let go',
+      desc:'Even if you could place an atom precisely, Smalley argued, the atom would bond to the manipulator that carried it just as readily as to its target — so the tool could never cleanly release it. The fingers are too sticky to ever put anything down.',
+      reb:'Drexler’s rebuttal: chemistry is directional. Specific tool tips (e.g. a designed carbene "DCB6" tip) can be engineered so the new bond to the workpiece is stronger than the bond to the tool, letting the atom transfer and release — again, exactly what enzymes do with substrate specificity.' }
+  };
+  function draw(obj){
+    var d=data[obj], h='';
+    // shared: a reaction site at centre bottom
+    h+='<circle cx="360" cy="120" r="9" fill="rgba(35,255,136,.18)" stroke="var(--teal)" stroke-width="1.3"/><text x="360" y="144" text-anchor="middle" class="lbl">reaction site</text>';
+    if(obj==='fat'){
+      // many bulky fingers crowding, overlapping (problem) in red
+      [-70,-40,-12,16,44,72].forEach(function(dx){ h+='<rect x="'+(352+dx)+'" y="20" width="26" height="78" rx="13" fill="rgba(255,106,90,.12)" stroke="var(--red)" stroke-width="1.3"/>'; });
+      h+='<text x="360" y="14" text-anchor="middle" class="lbl" style="fill:var(--red)">too many bulky manipulators for one site</text>';
+    } else {
+      // one tip holding an atom that won't detach
+      h+='<rect x="346" y="20" width="28" height="56" rx="5" fill="rgba(255,194,77,.1)" stroke="var(--amber)" stroke-width="1.4"/>';
+      h+='<circle cx="360" cy="98" r="8" fill="var(--amber)"/>';
+      h+='<line x1="360" y1="76" x2="360" y2="90" stroke="var(--amber)" stroke-width="2"/>';
+      h+='<path d="M360 106 L360 112" stroke="var(--red)" stroke-width="2" stroke-dasharray="2 3"/>';
+      h+='<text x="430" y="100" class="lbl" style="fill:var(--red)">bond to tool ≈ bond to target →</text>';
+      h+='<text x="360" y="14" text-anchor="middle" class="lbl" style="fill:var(--amber)">the carried atom won’t release</text>';
+    }
+    scene.innerHTML=h;
+    document.getElementById('obj-title').textContent=d.title;
+    document.getElementById('obj-desc').textContent=d.desc;
+    document.getElementById('obj-reb').innerHTML='<strong>Drexler:</strong> '+d.reb.replace('Drexler’s rebuttal: ','');
+  }
+  document.querySelectorAll('#obj-toggle .tg').forEach(function(b){ b.addEventListener('click',function(){
+    document.querySelectorAll('#obj-toggle .tg').forEach(function(o){o.classList.remove('active');});
+    b.classList.add('active'); draw(b.dataset.obj);
+  }); });
+  draw('fat');
+})();
+
+// ── state of the art capability bars ────────────────────────────────────────
+(function(){
+  var wrap=document.getElementById('sota-caps'); if(!wrap)return;
+  var caps=[
+    ['Biological assemblers (ribosomes, enzymes)',100,'Fully real — they build you. Programmable, positional, atomically precise synthesis in water. The catch: they build proteins from biology’s parts list, not arbitrary diamondoid structures.'],
+    ['DNA origami & self-assembly',78,'DNA folded into programmed 2D/3D shapes and dynamic devices that assemble themselves. Mature and widely used — but self-assembly, not arbitrary positional construction.'],
+    ['Synthetic molecular machines/motors',62,'Rotaxanes, molecular motors and switches (2016 Nobel). Real, controllable nanoscale mechanism — still far from an integrated manufacturing system.'],
+    ['Single-atom positioning (STM/AFM)',45,'We can drag individual atoms into patterns — but slowly, one at a time, usually under vacuum and cryogenic cooling. Demonstrative, not manufacturing.'],
+    ['Synthetic sequence assembler (ribosome analogue)',38,'A rotaxane machine that reads a track and links peptide building blocks in order — a crude artificial ribosome. Proof a synthetic assembler can sequence, at tiny scale.'],
+    ['Diamondoid mechanosynthesis (positional C–C)',14,'The dream’s core step: a tool tip deliberately forming a covalent carbon bond. Still pre-demonstration in the general case; experimental programs are closing in.'],
+    ['General-purpose self-replicating assembler',2,'The whole machine: fast, programmable, room-temperature positional synthesis that can build arbitrary structures and a copy of itself. Does not exist.']
+  ];
+  var h='';
+  caps.forEach(function(c){
+    var col = c[1]>=70?'var(--teal)':c[1]>=40?'var(--gold)':c[1]>=15?'var(--amber)':'var(--red)';
+    h+='<div class="cap"><div class="cap-head"><span class="cap-name">'+c[0]+'</span><span class="cap-stat" style="color:'+col+'">'+c[1]+'% mature</span></div>'
+      +'<div class="cap-bar"><div class="cap-fill" style="width:'+c[1]+'%;background:linear-gradient(90deg,'+col+',var(--teal-glow))"></div></div>'
+      +'<div class="cap-desc">'+c[2]+'</div></div>';
+  });
+  wrap.innerHTML=h;
+})();
+
+// ── how far slider ──────────────────────────────────────────────────────────
+(function(){
+  var sl=document.getElementById('hf-slider'); if(!sl)return;
+  function verdict(v){
+    if(v<18) return ['Never','The Smalley position','A hard skeptic holds that general-purpose diamondoid assemblers run into chemistry that no amount of engineering fixes — that the closest we get is biology’s soft machinery, and the rigid universal assembler is a category error. On this view the Wake-Day inventory is right forever: no such machine, ever.'];
+    if(v<42) return ['100+ years','Deep-future engineering','Most mainstream nanoscientists put a true general assembler — if it comes at all — beyond the century mark. The building blocks exist; integrating them into a fast, error-corrected, self-replicating whole is many research eras of work, not a product roadmap.'];
+    if(v<68) return ['~50–80 years','The cautious middle','If the diamondoid proof-of-principle lands and the soft and hard paths cross-pollinate, a crude special-purpose assembler this century is conceivable — with a general, self-replicating one still generations out. Honest answer: nobody knows, and that uncertainty is load-bearing.'];
+    if(v<86) return ['~30 years','Drexler’s "if we tried"','The optimistic-but-serious case: with a focused, funded program the core mechanosynthesis step falls within a decade, and an early assembler within a few. Drexler always argued the limit was will and funding, not physics.'];
+    return ['"Soon"','Hard accelerationist','The most aggressive view holds that AI-driven design plus convergent progress in DNA nanotech and mechanosynthesis compresses the timeline dramatically — assemblers within a generation. A minority position, and the one the New Tripoli setting quietly assumes the ETI once occupied.'];
+  }
+  function draw(){
+    var v=+sl.value, x=verdict(v);
+    document.getElementById('hf-year').textContent=x[0];
+    document.getElementById('hf-sub').textContent=x[1];
+    document.getElementById('hf-desc').textContent=x[2];
+  }
+  sl.addEventListener('input',draw); draw();
+})();
+
+// ── about toggle ────────────────────────────────────────────────────────────
+(function(){
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+})();
+</script>
+</body>
+</html>

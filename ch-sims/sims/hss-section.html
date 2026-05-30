@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--
+  HSS Cross-Section — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon (§27 / §25 / §26)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSS Cross-Section — New Tripoli Sim Catalogue</title>
+<meta name="description" content="The Human Server Stadium is the real machine New Tripoli runs on. Explore its physical geography — the dense fridge core of biological brains, the vast laptop ring of the digitized, and the rolling knockout wave that filled it.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:18px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:680px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 16px}
+.tab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:8px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--teal-glow);border-color:var(--teal)}
+.tab.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.stage{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+@media(max-width:760px){.stage{grid-template-columns:1fr}}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px}
+.fig svg{display:block;width:100%;height:auto}
+.fig svg .region{cursor:pointer}
+.readout{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.r-name{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.5rem;color:var(--teal-glow);line-height:1.1}
+.r-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--gold-glow);margin:6px 0 12px}
+.statrow{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dotted var(--border);font-size:13px}
+.statrow .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.statrow .v{color:var(--text);text-align:right}
+.r-desc{font-size:14px;color:var(--body);line-height:1.7;margin-top:14px}
+.note{margin-top:16px;background:rgba(5,8,10,.45);border-left:2px solid var(--gold);border-radius:0 6px 6px 0;padding:12px 15px;font-size:13px;color:var(--body);line-height:1.6}
+.note strong{color:var(--gold-glow)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:28px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">HSS Cross-Section</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>The Human Server Stadium</h1>
+    <p class="tool-subtitle">Everything in New Tripoli runs on a cluster of physical machines underneath the Libyan desert. Here is its floor plan — and the part residents can never perceive: the 90/10 split (widely discussed but never confirmed in canon — it is the leading hypothesis among characters) is not a statistic, it's <em>geography</em>. Click a region.</p>
+    <span class="tier-badge">◆ In-world canon · §27 / §25 / §26</span>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="stage">
+    <div class="fig">
+      <svg id="plan" viewBox="0 0 480 360" role="img" aria-label="Plan view of the Human Server Stadium: a dense fridge core inside a vast laptop ring.">
+        <!-- facility frame -->
+        <g class="region" data-r="structure">
+          <rect id="frame" x="24" y="24" width="432" height="312" rx="6" fill="rgba(12,19,17,.5)" stroke="var(--rim)" stroke-width="1.6"/>
+          <g class="lbl" stroke="var(--rim)" stroke-width="1"><path d="M24 24 h18 M24 24 v18M456 24 h-18 M456 24 v18M24 336 h18 M24 336 v-18M456 336 h-18 M456 336 v-18"/></g>
+        </g>
+        <!-- laptop ring (fills facility) -->
+        <g class="region" data-r="ring"><g id="ring-dots"></g></g>
+        <!-- fridge core -->
+        <g class="region" data-r="core">
+          <rect id="core" x="186" y="138" width="108" height="84" rx="4" fill="rgba(52,230,224,.12)" stroke="var(--teal)" stroke-width="1.6"/>
+          <g id="core-dots"></g>
+          <text class="lbl" x="240" y="132" text-anchor="middle" style="fill:var(--teal-glow)">FRIDGE CORE · 800 M</text>
+        </g>
+        <text class="lbl" x="240" y="320" text-anchor="middle">LAPTOP RING · 7.2 B</text>
+        <!-- knockout is reached via the tab; its story lives in the detail globe -->
+        <text class="lbl" x="240" y="350" text-anchor="middle" style="font-size:8px;fill:var(--dim)">FACILITY FLOOR PLAN · select a region</text>
+      </svg>
+    </div>
+    <div class="readout">
+      <div class="r-name" id="r-name">—</div>
+      <div class="r-sub" id="r-sub">—</div>
+      <div id="stats"></div>
+      <svg id="inset" viewBox="0 0 200 138" style="display:block;width:100%;max-width:260px;height:auto;margin:16px auto 2px" aria-hidden="true"></svg>
+      <div class="r-desc" id="r-desc">—</div>
+      <div class="note" id="note">—</div>
+    </div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this section</button>
+    <div class="about-body" id="about-body">
+      <p>The HSS sits beneath the Libyan desert as a cluster of co-located facilities, powered by the Saharan solar array above. Roughly <code>100 miles</code> (~161 km) on a side, it rises 14 stories above grade over 4 finished basements — about 18 levels — with quadruple-redundant power and cooling. Its interior divides geographically: a dense central <strong>core</strong> of refrigerator-sized units holding the biological 10%, surrounded by a <strong>ring</strong> miles across holding the laptop-sized compute units of the digitized 90%.</p>
+      <p><strong>On the 90/10 ratio:</strong> The specific figures are the most widely-cited hypothesis among characters throughout the series — consistent with canon arithmetic (~8.1 billion total, roughly 800 million biological units, ~7.2 billion laptop units), but never formally disclosed by the ETI. Characters treat it as near-certain. It could be different. The point the residents can never check regardless: whether you are core or ring — biological tissue or pure computation — is a fact about <em>where your substrate physically sits in this building</em>, and the orientation (§2 Neo Sequence) is engineered so the experience is identical either way. You will never know which region you live in.</p>
+      <p>The machine was filled by the <strong>knockout</strong> (§25): roughly eight billion housefly-sized robots executing the conversion as a rolling wave that swept the timezones at local midnight. A small residual population — long-haul flight passengers, submarine crews, astronauts, and people in the most remote geography — were tagged over subsequent days. Pairs with the <a href="feasibility.html">Feasibility Calculator</a> (the energy that runs all this) and the <a href="layer-stack.html">Layer Stack</a> (the realities layered on top).</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Koomey, J.G. (2011). "Growth in Data Center Electricity Use 2005 to 2010." <em>Analytics Press</em> — foundational analysis of data center physical footprint, power density, and cooling requirements at scale; the engineering ground truth behind the HSS facility estimates. Putnam, H. (1981). <em>Reason, Truth and History</em>. Cambridge University Press — introduces the philosophical "brain in a vat" thought experiment (chapter 1) that the entire Cognitive Husbandry scenario builds upon.</p>
+      <p class="meta-line">v1.0 — Canon §27 / §25 / §26 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+var REGIONS={
+  structure:{name:"The Structure",sub:"~100 MI / SIDE · 14 STORIES + 4 BASEMENTS",
+    stats:[["Footprint","~100 mi (~161 km) per side"],["Levels","14 above grade + 4 basements"],["Redundancy","Quadruple power & cooling"],["Site","Libyan desert, on the Saharan array"]],
+    desc:"A single building the size of a small country, purpose-built by the probes' descendants to keep eight billion minds alive and computing. Everything else in the catalogue — every sim, every layer — executes somewhere inside this frame.",
+    note:"Co-located with the solar array for efficiency: the power source and the machine it feeds are the same place."},
+  core:{name:"The Fridge Core",sub:"~800 MILLION · THE BIOLOGICAL 10%",
+    stats:[["Units","~800 million fridge-sized"],["Holds","Living brains on life support"],["Share","10% of the population"],["Density","The densest part of the machine"]],
+    desc:"At the centre, the people who kept their original biological tissue — each brain in a refrigerator-sized life-support unit, packed tight. It's the hardest part to cool and the most fragile, so it sits in the protected core.",
+    note:"You can't feel the difference. A core resident and a ring resident wake into the identical New Tripoli."},
+  ring:{name:"The Laptop Ring",sub:"~7.2 BILLION · THE DIGITIZED 90%",
+    stats:[["Units","~7.2 billion laptop-sized"],["Holds","Fully digitized minds"],["Share","90% of the population"],["Extent","Miles across, around the core"]],
+    desc:"The overwhelming majority: minds copied onto laptop-scale compute units and spread for miles around the core. No tissue, no jar — just running computation that is, from the inside, a whole person living a whole life.",
+    note:"Whether you are one of these and not a brain in the core is unknowable to you. That uncertainty is engineered, not accidental (§2)."},
+  knockout:{name:"The Knockout",sub:"~8 BILLION ROBOTS · ROLLING MIDNIGHT",
+    stats:[["Agents","~8 billion housefly-sized"],["Method","Simultaneous, per-person"],["Pattern","A wave sweeping local midnight"],["Result","The machine, filled"]],
+    desc:"How the building got its occupants. A swarm of roughly eight billion tiny robots performed the conversion at once — but staged as a terminator line rolling around the planet at local midnight, timezone by timezone, so no organized response could form ahead of it. A small number of stragglers — passengers on long-haul flights, crews of remote sea vessels and submarines, astronauts in orbit, and individuals in the planet's most remote reaches — were tagged last, collected over subsequent days as the ETI's robotic infrastructure reached them.",
+    note:"The amber bar in the plan is that wave. By the time it had crossed every longitude, nearly all of humanity was remote-controlled and heading towards the HSS. The note in §25: the few who were tagged late experienced the conversion in smaller, quieter groups — but experience it they did."}
+};
+var ORDER=["structure","core","ring","knockout"];
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={r:"structure"};
+function loadHash(){var p=getHash();if(p.r&&REGIONS[p.r])state.r=p.r;}
+function saveHash(){setHash({r:state.r});}
+
+function buildDots(){
+  // ring dots scattered across facility (avoiding core), core dots dense
+  var rg=document.getElementById('ring-dots');var h='',s=7;
+  for(var i=0;i<150;i++){s=(s*9301+49297)%233280;var x=34+(s/233280)*412;s=(s*9301+49297)%233280;var y=34+(s/233280)*292;
+    if(x>180&&x<300&&y>132&&y<228)continue; // skip core zone
+    h+='<rect x="'+x.toFixed(0)+'" y="'+y.toFixed(0)+'" width="2.4" height="2.4" rx="0.5" fill="var(--rim)"/>';}
+  rg.innerHTML=h;
+  var cg=document.getElementById('core-dots');var ch='';
+  for(var r=0;r<6;r++)for(var c=0;c<9;c++){ch+='<rect x="'+(192+c*11)+'" y="'+(146+r*12)+'" width="6" height="7" rx="1" fill="var(--teal)" opacity="0.8"/>';}
+  cg.innerHTML=ch;
+}
+function buildTabs(){
+  var t=document.getElementById('tabs');var h='';ORDER.forEach(function(id){h+='<button class="tab" data-r="'+id+'">'+REGIONS[id].name+'</button>';});t.innerHTML=h;
+  t.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){state.r=b.dataset.r;saveHash();render();});});
+}
+function insetFor(r){
+  if(r==="structure"){
+    var h='<text x="100" y="11" text-anchor="middle" class="lbl" style="font-size:8px">SECTION · 14 STORIES + 4 BASEMENTS</text>';
+    h+='<line x1="48" y1="100" x2="152" y2="100" stroke="var(--rim)" stroke-width="1.4"/>';
+    for(var i=0;i<14;i++){h+='<rect x="60" y="'+(96-i*4.4).toFixed(1)+'" width="80" height="2.8" rx="1" fill="rgba(52,230,224,.5)"/>';}
+    for(var b=0;b<4;b++){h+='<rect x="64" y="'+(104+b*4.4).toFixed(1)+'" width="72" height="2.8" rx="1" fill="var(--edge)" stroke="var(--rim)" stroke-width="0.5"/>';}
+    h+='<text x="150" y="60" class="lbl" style="font-size:8px;fill:var(--teal-glow)">×14</text><text x="148" y="120" class="lbl" style="font-size:8px">×4 sub</text>';
+    return h;
+  }
+  if(r==="core"){
+    return '<text x="100" y="11" text-anchor="middle" class="lbl" style="fill:var(--teal-glow)">ONE FRIDGE UNIT · 1 of ~800M</text>'
+      +'<rect x="80" y="26" width="40" height="98" rx="4" fill="rgba(52,230,224,.10)" stroke="var(--teal)" stroke-width="1.6"/>'
+      +'<line x1="80" y1="56" x2="120" y2="56" stroke="var(--rim)" stroke-width="1"/>'
+      +'<ellipse cx="100" cy="84" rx="14" ry="16" fill="none" stroke="var(--teal)" stroke-width="1" opacity=".5"/>'
+      +'<path d="M93 78 q-6 -1 -6 5 q-4 1 -2 7 q-2 5 3 6 q1 4 6 2.5 q4 3.5 8 0 q5 1.5 7 -2.5 q5 -1 2 -7 q2 -5 -3 -6 q-1 -5 -6 -4 q-4 -3 -9 0 z" fill="none" stroke="var(--teal-glow)" stroke-width="1.3"/>'
+      +'<circle cx="100" cy="92" r="2" fill="var(--teal-glow)"><animate attributeName="opacity" values=".3;1;.3" dur="2.2s" repeatCount="indefinite"/></circle>'
+      +'<g stroke="var(--rim)" stroke-width="1"><path d="M120 38 h14 M120 48 h14 M120 58 h14"/></g><text x="138" y="42" class="lbl" style="font-size:7px">cooling</text>'
+      +'<path d="M88 124 v6 M112 124 v6" stroke="var(--teal)" stroke-width="1.4"/>';
+  }
+  if(r==="ring"){
+    return '<text x="100" y="11" text-anchor="middle" class="lbl" style="fill:var(--gold-glow)">ONE LAPTOP UNIT · 1 of ~7.2B</text>'
+      +'<rect x="72" y="40" width="56" height="40" rx="2" fill="rgba(35,255,136,.10)" stroke="var(--gold)" stroke-width="1.5"/>'
+      +'<g fill="var(--gold-glow)" opacity=".75"><rect x="79" y="48" width="34" height="2.4"/><rect x="79" y="54" width="26" height="2.4"/><rect x="79" y="60" width="30" height="2.4"/></g>'
+      +'<circle cx="116" cy="72" r="2" fill="var(--gold-glow)"><animate attributeName="opacity" values=".3;1;.3" dur="1.6s" repeatCount="indefinite"/></circle>'
+      +'<line x1="72" y1="80" x2="128" y2="80" stroke="var(--gold)" stroke-width="1.4"/>'
+      +'<path d="M58 104 h84 l8 8 h-100 z" fill="rgba(35,255,136,.06)" stroke="var(--gold)" stroke-width="1.4"/>'
+      +'<text x="100" y="128" text-anchor="middle" class="lbl" style="font-size:7.5px">no tissue — pure computation</text>';
+  }
+  // knockout — a globe with the midnight terminator sweeping around it
+  return '<defs><clipPath id="gclip"><circle cx="100" cy="74" r="36"/></clipPath></defs>'
+    +'<text x="100" y="11" text-anchor="middle" class="lbl" style="fill:var(--amber);font-size:7.5px">THE KNOCKOUT · ROLLING LOCAL MIDNIGHT</text>'
+    +'<circle cx="100" cy="74" r="36" fill="rgba(52,230,224,.05)" stroke="var(--teal)" stroke-width="1.4"/>'
+    +'<g clip-path="url(#gclip)" stroke="var(--rim)" stroke-width="0.8" fill="none">'
+      +'<ellipse cx="100" cy="74" rx="36" ry="12"/><ellipse cx="100" cy="74" rx="36" ry="24"/>'
+      +'<ellipse cx="100" cy="74" rx="14" ry="36"/><ellipse cx="100" cy="74" rx="28" ry="36"/>'
+      +'<line x1="64" y1="74" x2="136" y2="74"/>'
+    +'</g>'
+    +'<g clip-path="url(#gclip)">'
+      +'<rect x="64" y="38" width="0" height="72" fill="rgba(255,194,77,.18)"><animate attributeName="width" values="0;72;72;0" keyTimes="0;0.5;0.55;1" dur="6s" repeatCount="indefinite"/></rect>'
+      +'<rect x="64" y="38" width="2.4" height="72" fill="var(--amber)"><animate attributeName="x" values="64;134;134;64" keyTimes="0;0.5;0.55;1" dur="6s" repeatCount="indefinite"/></rect>'
+    +'</g>'
+    +'<circle cx="100" cy="74" r="36" fill="none" stroke="var(--teal)" stroke-width="1.4"/>'
+    +'<text x="100" y="126" text-anchor="middle" class="lbl" style="font-size:7.5px">~8 B bots convert the planet timezone by timezone</text>';
+}
+
+function knockoutOverlay(){
+  // For the knockout, the left plan becomes a WORLD MAP and the midnight
+  // terminator makes a single rolling pass west-to-east (one direction, then loops).
+  var plan=document.getElementById('plan');
+  var existing=document.getElementById('ko-overlay');
+  if(existing)existing.remove();
+  var g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('id','ko-overlay');
+  // continent outlines reused from the Wake-Earth map (native viewBox 0..520),
+  // fitted into the facility frame via a single transform.
+  var land=''
+    +'<path d="M48,16 L62,14 L82,18 L100,14 L118,16 L136,18 L148,14 L162,20 L172,16 L186,22 L194,18 L198,28 L192,36 L182,36 L175,44 L178,54 L172,62 L168,74 L162,88 L155,100 L148,110 L136,124 L120,134 L106,144 L94,164 L100,176 L110,170 L118,158 L128,148 L138,136 L148,122 L158,108 L164,92 L168,78 L178,66 L186,52 L196,38 L200,28 L194,20 L180,16 L162,14 L140,12 L120,14 L96,12 L72,14 L54,18 Z"/>'
+    +'<path d="M148,126 L162,118 L176,114 L190,116 L204,120 L214,128 L216,140 L212,156 L216,172 L216,190 L210,208 L200,220 L190,232 L178,240 L166,238 L158,228 L162,214 L166,198 L164,180 L158,164 L150,150 L144,136 Z"/>'
+    +'<path d="M178,16 L194,10 L210,10 L220,14 L222,20 L215,26 L206,28 L196,26 L184,22 Z"/>'
+    +'<path d="M248,20 L262,16 L278,16 L292,18 L300,24 L296,30 L302,36 L296,44 L284,50 L274,54 L268,62 L258,66 L252,70 L246,64 L242,58 L244,50 L250,44 L246,36 L248,28 Z"/>'
+    +'<path d="M246,70 L260,66 L272,66 L286,68 L298,66 L314,70 L324,80 L322,96 L318,112 L320,128 L318,144 L316,160 L320,176 L312,198 L300,212 L286,218 L274,214 L260,216 L248,206 L240,188 L238,170 L238,152 L236,132 L236,114 L238,96 L240,80 Z"/>'
+    +'<path d="M296,44 L308,42 L322,44 L330,50 L328,60 L318,62 L308,58 L300,52 Z"/>'
+    +'<path d="M300,20 L324,16 L352,14 L382,14 L412,16 L438,18 L458,22 L474,28 L490,34 L502,42 L500,52 L488,58 L472,62 L456,68 L446,78 L446,90 L452,102 L464,108 L474,118 L472,130 L460,136 L446,132 L432,120 L418,114 L404,122 L392,132 L380,140 L364,144 L350,138 L336,128 L322,124 L314,118 L308,108 L302,100 L298,88 L296,76 L298,62 L298,48 L298,32 Z"/>'
+    +'<path d="M374,106 L388,102 L400,108 L406,120 L402,134 L390,142 L378,140 L368,130 L366,118 Z"/>'
+    +'<path d="M422,110 L436,106 L450,110 L458,118 L456,128 L444,134 L432,132 L420,122 Z"/>'
+    +'<path d="M460,66 L466,62 L474,64 L476,72 L470,76 L462,74 Z"/>'
+    +'<path d="M394,172 L412,164 L432,160 L450,164 L466,160 L482,166 L492,176 L490,190 L486,204 L476,212 L460,218 L444,218 L428,212 L412,206 L400,196 L394,184 Z"/>'
+    +'<path d="M214,30 L222,28 L228,32 L226,38 L218,40 L212,36 Z"/>';
+  g.innerHTML=''
+    // opaque panel hides the fridge/laptop floor plan beneath
+    +'<rect x="24" y="24" width="432" height="312" rx="6" fill="#05080a" stroke="var(--rim)" stroke-width="1.4"/>'
+    +'<text x="240" y="44" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;letter-spacing:.14em;fill:var(--amber)">THE KNOCKOUT · ROLLING LOCAL MIDNIGHT</text>'
+    +'<text x="240" y="58" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:7.5px;letter-spacing:.1em;fill:var(--muted)">~8 BILLION BOTS · ONE SWEEP, TIMEZONE BY TIMEZONE</text>'
+    +'<g transform="translate(-14.4,62.75) scale(0.925)" fill="rgba(52,230,224,.07)" stroke="var(--rim)" stroke-width="1.1">'
+      +land
+      +'<path d="M272 150 l3 6 6 1 -4.5 4.5 1 6 -5.5 -3 -5.5 3 1 -6 -4.5 -4.5 6 -1 z" fill="var(--gold)" stroke="none"/>'
+      +'<text x="272" y="140" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--gold-glow)">HSS · LIBYA</text>'
+    +'</g>'
+    // converted region trailing the terminator (grows once, then resets — single direction)
+    +'<rect x="30" y="70" width="0" height="216" fill="rgba(255,194,77,.13)">'
+      +'<animate attributeName="width" values="0;420" dur="7s" repeatCount="indefinite"/></rect>'
+    // the terminator line itself, sweeping left to right and looping
+    +'<rect x="30" y="70" width="3" height="216" fill="var(--amber)">'
+      +'<animate attributeName="x" values="30;450" dur="7s" repeatCount="indefinite"/></rect>'
+    +'<text x="240" y="306" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:8px;letter-spacing:.12em;fill:var(--amber)">MIDNIGHT TERMINATOR · WEST → EAST, ONE PASS</text>';
+  plan.appendChild(g);
+}
+function render(){
+  var R=REGIONS[state.r];
+  document.getElementById('r-name').textContent=R.name;
+  document.getElementById('r-sub').textContent=R.sub;
+  var sv='';R.stats.forEach(function(s){sv+='<div class="statrow"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>';});
+  document.getElementById('stats').innerHTML=sv;
+  document.getElementById('r-desc').textContent=R.desc;
+  document.getElementById('note').innerHTML=R.note;
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('active',b.dataset.r===state.r);});
+  // highlight regions
+  var core=document.getElementById('core'),frame=document.getElementById('frame');
+  core.setAttribute('stroke',state.r==="core"?'var(--teal-glow)':'var(--teal)');
+  core.style.filter=state.r==="core"?'drop-shadow(0 0 6px rgba(52,230,224,.6))':'none';
+  frame.setAttribute('stroke',state.r==="structure"?'var(--teal-glow)':'var(--rim)');
+  frame.setAttribute('stroke-width',state.r==="structure"?'2.4':'1.6');
+  core.setAttribute('opacity',(state.r==='ring')?'0.3':'1');
+  // per-region detail inset + dim the non-active fabric
+  document.getElementById('inset').innerHTML=insetFor(state.r);
+  var rd=document.getElementById('ring-dots'),cd=document.getElementById('core-dots');
+  if(rd)rd.setAttribute('opacity',(state.r==='ring'||state.r==='structure')?'1':(state.r==='core'?'0.22':'0.55'));
+  if(cd)cd.setAttribute('opacity',(state.r==='core'||state.r==='structure')?'1':(state.r==='ring'?'0.28':'0.75'));
+  // knockout: animate the wave on the left-side plan as well
+  var existing=document.getElementById('ko-overlay');
+  if(state.r==='knockout'){if(!existing)knockoutOverlay();}
+  else{if(existing)existing.remove();}
+}
+function wire(){
+  document.querySelectorAll('#plan .region').forEach(function(g){g.addEventListener('click',function(){state.r=g.dataset.r;saveHash();render();});});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();buildDots();buildTabs();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

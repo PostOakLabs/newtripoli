@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!--
+  New Ganymede Cube Explorer — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon (§24)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Ganymede Cube Explorer — New Tripoli Sim Catalogue</title>
+<meta name="description" content="New Ganymede is a VR cube the size of a continent, almost all of it public space — parks, museums, stadiums, restaurants. Zoom out from your apartment to the whole cube and watch your home shrink to a rounding error — private homes are 0.000042% of the volume.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1000px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1000px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:18px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:680px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.breadcrumb{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 18px}
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px}
+.crumb:hover{color:var(--teal-glow);border-color:var(--teal)}
+.crumb.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.crumb .zx{opacity:.6;font-size:9px}
+.stage{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start}
+@media(max-width:760px){.stage{grid-template-columns:1fr}}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px}
+.fig svg{display:block;width:100%;height:auto}
+.readout{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:22px 24px}
+.r-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.r-name{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.6rem;color:var(--teal-glow);line-height:1.1}
+.r-scale{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--gold-glow);margin:7px 0 14px}
+.r-desc{font-size:14px;color:var(--body);line-height:1.7;margin-bottom:12px}
+.frac{font-family:'Chakra Petch',sans-serif;font-weight:700;color:var(--gold-glow);font-size:1.5rem;line-height:1}
+.frac .s{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);font-weight:400;letter-spacing:.06em;display:block;margin-top:3px}
+.nav-btns{display:flex;gap:10px;margin-top:18px}
+.nav-btn{flex:1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.nav-btn:hover:not(:disabled){color:var(--teal-glow);border-color:var(--teal)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.note{margin-top:18px;background:rgba(5,8,10,.45);border-left:2px solid var(--gold);border-radius:0 6px 6px 0;padding:13px 16px;font-size:13.5px;color:var(--body);line-height:1.6}
+.note strong{color:var(--gold-glow)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:28px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">New Ganymede Cube Explorer</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>New Ganymede · The Cube</h1>
+    <p class="tool-subtitle">The second enclave isn't a cavern — it's a VR cube the size of a continent, and almost all of it is public space: parks, museums, stadiums, restaurants. Zoom out from your front door and watch home become a rounding error (§24).</p>
+    <span class="tier-badge">◆ In-world canon · §24</span>
+  </header>
+
+  <div class="breadcrumb" id="breadcrumb"></div>
+
+  <div class="stage">
+    <div class="fig">
+      <svg id="zoom-svg" viewBox="0 0 360 320" role="img" aria-label="Zoom levels from a single apartment out to the full cube, with a human figure for scale.">
+        <g id="scene"></g>
+      </svg>
+    </div>
+    <div class="readout">
+      <div class="r-tag" id="r-tag">Zoom 0</div>
+      <div class="r-name" id="r-name">—</div>
+      <div class="r-scale" id="r-scale">—</div>
+      <div class="r-desc" id="r-desc">—</div>
+      <div class="frac" id="frac">—<span class="s">of the cube's volume, at this scale</span></div>
+      <div class="nav-btns">
+        <button class="nav-btn" id="btn-in">↳ Zoom in</button>
+        <button class="nav-btn" id="btn-out">Zoom out ↲</button>
+      </div>
+      <div class="note" id="note">—</div>
+    </div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this cube</button>
+    <div class="about-body" id="about-body">
+      <p>New Ganymede is modelled as a <strong>cube with the same volume as the moon Ganymede</strong> — about <code>4,246 km per side</code>, roughly New York to Los Angeles along every edge. Total volume is ~<code>76.6 billion km³</code>. <strong>Private homes</strong> — apartments and their teleporter decks and sim rooms — add up to only about <code>32,000 km³</code>, or <strong>0.000042%</strong> of the cube. But this is a <strong>VR world</strong>, so the rest is <em>not</em> solid: it's overwhelmingly <strong>public and "third" space</strong> — parks, museums, stadiums, plazas, restaurants and the instantiated environments of the sim catalogue — exactly as New Tripoli's downtown core (§5) is arts and entertainment rather than housing. A trivial remainder is actual compute/maintenance substrate, which a couple of characters note can be grown or shrunk as needed; the world never dwells on "server rooms."</p>
+      <p>The lived-in details are deliberately generous: a main floor of ~3,500 sq ft with 20-ft ceilings, two flanking teleporter decks (~12 people each), opening onto corridors 10 m wide and 35 m tall, with 4-m-tall doorways — about four times the width and fifteen times the height of the <em>Enterprise-D</em>'s, and those corridors stack floor over floor. It feels palatial, and that's the truth of the place: your home is a small private anchor inside a continent-sized commons. The reveal is the opposite of claustrophobic — almost all of New Ganymede is somewhere to <em>go</em>.</p>
+      <p>This is the ETI's answer to a problem New Tripoli created: residents drifting into private sims and away from each other. New Ganymede builds teleporters into every home by default, making spontaneous gathering the path of least resistance again. Pairs with the <a href="layer-stack.html">Layer Stack</a> and the <a href="time-dilation.html">Time Dilation Instrument</a> (the cube runs at 100×).</p>
+      <p class="meta-line">v1.0 — Canon §24 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// zoom levels, outermost-relative scale: each level's real size (m) for ratio display
+var LEVELS=[
+  {tag:"Zoom 0 · Home",name:"Your Apartment",scale:"~3,500 sq ft · 20-ft ceilings · back wall: [TELE] [SIM RM] [TELE]",
+   desc:"The main floor. At the back wall: two teleporter decks flanking the sim room door, each holding ~12 people simultaneously. Bedroom/hearth room on the left, garage/hyperloop bay on the right. You enter from the corridor through the foyer at the front. By the standards of any pre-Intake city, an extravagant home.",
+   frac:"~1 home",fracsub:"the unit you live in",
+   note:"It feels palatial — which is exactly the trick. Nothing about standing in it tells you how little of the cube is like it.",
+   innerW:60,innerH:40},
+  {tag:"Zoom 1 · Hallway",name:"The Corridor",scale:"10 m wide × 35 m tall · doors 4 m",
+   desc:"Your door opens onto a corridor about four times the width and fifteen times the height of the Enterprise-D's — a covered street with an eleven-storey ceiling, and this is just one floor: identical corridors stack above it through the shell.",
+   frac:"a ribbon",fracsub:"of homes along one of many stacked halls",
+   note:"Even the circulation space is oversized — and it repeats upward, floor over floor. The homes are lavish, yet a tiny fraction of a cube that is mostly public space.",
+   innerW:34,innerH:96},
+  {tag:"Zoom 2 · District",name:"A Residential District",scale:"home grid threaded through parks, plazas, museums, stadiums",
+   desc:"The home cluster sits in the center of the district — a dense grid of private apartments connected by the wide corridors. Around them: parks, plazas, a museum quarter, a restaurant quarter, a stadium. The homes are the small, anchoring private part; the shared space is almost everything else. Your apartment is the lit cell in the grid.",
+   frac:"0.004%",fracsub:"order-of-magnitude, private homes relative to this district",
+   note:"The architecture is deliberate: teleporters are built into every home by default (see the apartment view), making the step from your living room to any public space in the cube frictionless. The ETI designed New Ganymede specifically to reverse the New Tripoli drift toward private sims — by making the commons the path of least resistance.",
+   innerW:120,innerH:150},
+  {tag:"Zoom 3 · The Cube",name:"New Ganymede, Entire",scale:"4,246 km / side · NY → LA per edge · ~76.6 billion km³",
+   desc:"The whole thing: a cube the volume of a moon — and, because it's a VR world, not a solid block. The bright speck near the centre is everyone's private homes (~32,000 km³). Almost all the rest is public space: parks, museums, stadiums, restaurants and the instantiated worlds of the sim catalogue.",
+   frac:"0.000042%",fracsub:"private homes ÷ total volume",
+   note:"Not the margins of a machine — the opposite. A continent-sized commons with homes as tiny private anchors inside it, exactly as New Tripoli's downtown core is entertainment rather than housing. New Ganymede is somewhere you go out into.",
+   innerW:4,innerH:4}
+];
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={z:0};
+function loadHash(){var p=getHash();if(p.z!==undefined){var v=parseInt(p.z);if(!isNaN(v)&&v>=0&&v<=3)state.z=v;}}
+function saveHash(){setHash({z:state.z});}
+
+function buildCrumb(){
+  var bc=document.getElementById('breadcrumb');var names=["Home","Corridor","District","The Cube"];var h='';
+  for(var i=0;i<4;i++){h+='<button class="crumb" data-z="'+i+'"><span class="zx">Z'+i+'</span>'+names[i]+'</button>';}
+  bc.innerHTML=h;bc.querySelectorAll('.crumb').forEach(function(b){b.addEventListener('click',function(){state.z=parseInt(b.dataset.z);saveHash();render();});});
+}
+function human(cx,yb,h,col){
+  if(h<4){return '<circle cx="'+cx+'" cy="'+(yb-1.2).toFixed(1)+'" r="1.3" fill="'+col+'"/>';}
+  var head=h*0.17, sw=Math.max(0.7,h*0.05), hy=yb-h+head/2, sy=yb-h+head, hipy=yb-h*0.45;
+  return '<g stroke="'+col+'" stroke-width="'+sw.toFixed(2)+'" fill="none" stroke-linecap="round">'
+    +'<circle cx="'+cx+'" cy="'+hy.toFixed(1)+'" r="'+(head/2).toFixed(1)+'" fill="'+col+'" stroke="none"/>'
+    +'<line x1="'+cx+'" y1="'+sy.toFixed(1)+'" x2="'+cx+'" y2="'+hipy.toFixed(1)+'"/>'
+    +'<line x1="'+cx+'" y1="'+(sy+h*0.06).toFixed(1)+'" x2="'+(cx-h*0.16).toFixed(1)+'" y2="'+(hipy-h*0.02).toFixed(1)+'"/>'
+    +'<line x1="'+cx+'" y1="'+(sy+h*0.06).toFixed(1)+'" x2="'+(cx+h*0.16).toFixed(1)+'" y2="'+(hipy-h*0.02).toFixed(1)+'"/>'
+    +'<line x1="'+cx+'" y1="'+hipy.toFixed(1)+'" x2="'+(cx-h*0.13).toFixed(1)+'" y2="'+yb+'"/>'
+    +'<line x1="'+cx+'" y1="'+hipy.toFixed(1)+'" x2="'+(cx+h*0.13).toFixed(1)+'" y2="'+yb+'"/></g>';
+}
+function buildScene(z){
+  if(z===0){ // apartment — one-point-perspective 3D room, teleporters at BACK WALL per §24 canon
+    var h='<text class="lbl" x="180" y="18" text-anchor="middle" style="fill:var(--teal-glow)">APARTMENT · 3,500 SQ FT · 20-FT CEILING</text>';
+    // floor quad (front edge wide, back edge narrow)
+    h+='<path d="M46 250 L314 250 L230 186 L146 186 Z" fill="rgba(52,230,224,.06)" stroke="var(--teal)" stroke-width="1"/>';
+    // back wall + ceiling + side walls (faint)
+    h+='<rect x="146" y="120" width="84" height="66" fill="rgba(52,230,224,.03)" stroke="var(--teal)" stroke-width="1.2"/>';
+    h+='<path d="M46 54 L146 120 M314 54 L230 120 M46 250 L146 186 M314 250 L230 186" fill="none" stroke="var(--rim)" stroke-width="1"/>';
+    h+='<rect x="46" y="54" width="268" height="196" fill="none" stroke="var(--teal)" stroke-width="1.6"/>';
+    // BACK WALL layout: [TELEPORTER A] [SIM ROOM DOOR] [TELEPORTER B] per §24 canonical floor plan
+    // back wall is the narrow rect at x=146-230, y=120-186. Divide into thirds.
+    // left third: teleporter A (x=146..171)
+    h+='<rect x="147" y="122" width="24" height="62" fill="rgba(35,255,136,.10)" stroke="var(--gold)" stroke-width="1.3"/>';
+    h+='<ellipse cx="159" cy="153" rx="9" ry="6" fill="rgba(35,255,136,.2)" stroke="var(--gold)" stroke-width="1"/>';
+    h+='<ellipse cx="159" cy="153" rx="5" ry="3.5" fill="rgba(134,246,242,.35)"><animate attributeName="opacity" values=".2;.7;.2" dur="2.1s" repeatCount="indefinite"/></ellipse>';
+    // center third: sim room door (x=171..205)
+    h+='<rect x="172" y="122" width="32" height="62" fill="rgba(52,230,224,.06)" stroke="var(--teal)" stroke-width="1.3" stroke-dasharray="3 3"/>';
+    h+='<text class="lbl" x="188" y="148" text-anchor="middle" style="font-size:6.5px;fill:var(--teal-glow)">SIM</text>';
+    h+='<text class="lbl" x="188" y="158" text-anchor="middle" style="font-size:6.5px;fill:var(--teal-glow)">ROOM</text>';
+    // right third: teleporter B (x=205..230)
+    h+='<rect x="206" y="122" width="23" height="62" fill="rgba(35,255,136,.10)" stroke="var(--gold)" stroke-width="1.3"/>';
+    h+='<ellipse cx="218" cy="153" rx="9" ry="6" fill="rgba(35,255,136,.2)" stroke="var(--gold)" stroke-width="1"/>';
+    h+='<ellipse cx="218" cy="153" rx="5" ry="3.5" fill="rgba(134,246,242,.35)"><animate attributeName="opacity" values=".2;.7;.2" dur="2.1s" begin="1.05s" repeatCount="indefinite"/></ellipse>';
+    // labels for the back wall components
+    h+='<text class="lbl" x="159" y="193" text-anchor="middle" style="font-size:6.5px;fill:var(--gold-glow)">TELE</text>';
+    h+='<text class="lbl" x="218" y="193" text-anchor="middle" style="font-size:6.5px;fill:var(--gold-glow)">TELE</text>';
+    // entrance from foyer at the FRONT (near side of the room)
+    h+='<path d="M152 250 L152 236 L208 236 L208 250" fill="rgba(52,230,224,.04)" stroke="var(--teal)" stroke-width="1" stroke-dasharray="3 3"/>';
+    h+='<text class="lbl" x="180" y="265" text-anchor="middle" style="font-size:7px;fill:var(--teal-glow)">← ENTRY FROM FOYER / CORRIDOR</text>';
+    // side doors: bedroom left, garage right
+    h+='<path d="M46 138 L72 138 L72 180 L46 180" fill="rgba(52,230,224,.04)" stroke="var(--rim)" stroke-width="1"/>';
+    h+='<text class="lbl" x="59" y="162" text-anchor="middle" style="font-size:6px" transform="rotate(-90 59 162)">BEDROOM</text>';
+    h+='<path d="M288 138 L314 138 L314 180 L288 180" fill="rgba(35,255,136,.04)" stroke="var(--rim)" stroke-width="1"/>';
+    h+='<text class="lbl" x="301" y="162" text-anchor="middle" style="font-size:6px" transform="rotate(90 301 162)">GARAGE</text>';
+    // garage opens outward to the hyperloop bay
+    h+='<path d="M314 160 l12 0 M321 156 l5 4 l-5 4" stroke="var(--gold-glow)" stroke-width="0.9" fill="none"/>';
+    h+='<text class="lbl" x="334" y="176" text-anchor="middle" style="font-size:5.5px;fill:var(--muted)">hyperloop</text>';
+    // human for scale
+    h+=human(112,236,52,'var(--teal-glow)');
+    h+='<text class="lbl" x="112" y="250" text-anchor="middle" style="font-size:7px">≈ 1.8 m</text>';
+    // ceiling-height marker
+    h+='<line x1="36" y1="56" x2="36" y2="248" stroke="var(--rim)" stroke-width="1"/><path d="M32 60 l4 -5 l4 5 M32 244 l4 5 l4 -5" stroke="var(--rim)" stroke-width="1" fill="none"/><text class="lbl" x="24" y="152" text-anchor="middle" transform="rotate(-90 24 152)" style="font-size:8px">20 ft</text>';
+    // back wall callout note
+    h+='<text class="lbl" x="360" y="130" style="font-size:7px;fill:var(--gold-glow)">Back wall:</text>';
+    h+='<text class="lbl" x="360" y="141" style="font-size:7px">[TELE] [SIM RM] [TELE]</text>';
+    h+='<text class="lbl" x="360" y="152" style="font-size:7px;fill:var(--muted)">per §24 floor plan</text>';
+    h+='<line x1="230" y1="153" x2="356" y2="153" stroke="var(--gold)" stroke-width="0.7" stroke-dasharray="2 3"/>';
+    return h;
+  }
+  if(z===1){ // corridor — 3D one-point perspective, 35 m tall × 10 m wide, floors stacked above
+    var c='<text class="lbl" x="180" y="15" text-anchor="middle" style="fill:var(--teal-glow)">CORRIDOR · 10 m WIDE × 35 m TALL · DOORS 4 m</text>';
+    // floors stacked above (faded, receding right like the focus corridor)
+    c+='<text class="lbl" x="180" y="30" text-anchor="middle" style="font-size:7.5px;fill:var(--muted)">↑ identical corridors stack above, floor over floor</text>';
+    c+='<g opacity="0.45">';
+    c+='<path d="M96 56 L156 56 L250 44 L222 44 Z" fill="rgba(52,230,224,.05)" stroke="var(--rim)" stroke-width="0.9"/>';
+    c+='<path d="M104 44 L150 44 L236 34 L210 34 Z" fill="rgba(52,230,224,.04)" stroke="var(--rim)" stroke-width="0.8"/>';
+    c+='</g>';
+    // focus corridor: near opening (96,78)-(156,286), recedes to a far end near vanishing point on the right
+    c+='<path d="M96 286 L156 286 L262 206 L238 206 Z" fill="rgba(52,230,224,.07)" stroke="var(--rim)" stroke-width="0.9"/>';      // floor
+    c+='<path d="M96 78 L156 78 L262 158 L238 158 Z" fill="rgba(52,230,224,.025)" stroke="var(--rim)" stroke-width="0.9"/>';     // ceiling
+    c+='<path d="M96 78 L96 286 L238 206 L238 158 Z" fill="rgba(52,230,224,.04)" stroke="var(--rim)" stroke-width="0.9"/>';      // left wall (faces us)
+    c+='<path d="M238 158 L262 158 L262 206 L238 206 Z" fill="rgba(52,230,224,.10)" stroke="var(--teal)" stroke-width="1.2"/>';  // far wall
+    c+='<rect x="96" y="78" width="60" height="208" fill="none" stroke="var(--teal)" stroke-width="1.6"/>';                      // near opening frame
+    // a 4-m door on the left wall, standing on the floor near the front
+    c+='<path d="M112 284 L138 272 L138 248 L112 260 Z" fill="rgba(35,255,136,.10)" stroke="var(--gold)" stroke-width="1.4"/>';
+    c+='<text class="lbl" x="150" y="250" style="font-size:7px;fill:var(--gold-glow)">4-m door</text>';
+    // person for scale on the near floor (1.8 m ≈ 11 px here)
+    c+=human(132,285,11,'var(--teal-glow)');
+    c+='<text class="lbl" x="132" y="298" text-anchor="middle" style="font-size:7px">1.8 m</text>';
+    // height dimension 35 m on the far left
+    c+='<line x1="84" y1="79" x2="84" y2="285" stroke="var(--rim)" stroke-width="1"/><path d="M80 83 l4 -5 l4 5 M80 281 l4 5 l4 -5" stroke="var(--rim)" stroke-width="1" fill="none"/><text class="lbl" x="72" y="182" text-anchor="middle" transform="rotate(-90 72 182)" style="font-size:8px">35 m</text>';
+    // width dimension 10 m across the near opening top
+    c+='<text class="lbl" x="126" y="72" text-anchor="middle" style="font-size:8px">10 m</text>';
+    // --- stairwell down to the hyperloop line (schematic inset off the corridor) ---
+    c+='<g>';
+    c+='<path d="M262 182 L278 150" stroke="var(--rim)" stroke-width="0.8" stroke-dasharray="2 3" fill="none"/>'; // tie to corridor far end
+    c+='<text class="lbl" x="312" y="100" text-anchor="middle" style="font-size:7px;fill:var(--gold-glow)">STAIRS DOWN TO HYPERLOOP</text>';
+    for(var si=0;si<6;si++){ c+='<rect x="'+(278+si*10)+'" y="'+(110+si*9)+'" width="11" height="9" fill="rgba(35,255,136,.08)" stroke="var(--gold)" stroke-width="0.8"/>'; }
+    c+='<path d="M276 110 l0 54" stroke="var(--rim)" stroke-width="0.7"/>'; // rail hint
+    c+='<rect x="270" y="176" width="80" height="22" rx="11" fill="rgba(35,255,136,.10)" stroke="var(--gold)" stroke-width="1.2"/>'; // hyperloop tube
+    c+='<rect x="276" y="181" width="34" height="12" rx="6" fill="rgba(134,246,242,.22)" stroke="var(--gold)" stroke-width="0.9"/>'; // pod
+    c+='<path d="M312 187 l12 0 M319 183 l6 4 l-6 4" stroke="var(--gold-glow)" stroke-width="1" fill="none"/>'; // motion arrow
+    c+='<text class="lbl" x="310" y="210" text-anchor="middle" style="font-size:6.5px;fill:var(--muted)">hyperloop platform</text>';
+    c+='</g>';
+    c+='<text class="lbl" x="180" y="312" text-anchor="middle" style="font-size:7px">that speck is a person — the ceiling is ~11 storeys up, and the building keeps going</text>';
+    return c;
+  }
+  if(z===2){ // district — homes + corridors + public space context
+    var d='<text class="lbl" x="180" y="14" text-anchor="middle" style="fill:var(--teal-glow)">DISTRICT · HOMES THREADED THROUGH PUBLIC SPACE</text>';
+
+    // Public space backdrop (the majority) — parks, plazas, museums
+    d+='<rect x="16" y="22" width="328" height="264" rx="4" fill="rgba(35,255,136,.04)" stroke="var(--rim)" stroke-width="0.8"/>';
+    // Park zones (large green-tinted areas between the home clusters)
+    d+='<rect x="22" y="28" width="90" height="60" rx="3" fill="rgba(52,230,224,.07)" stroke="rgba(52,230,224,.2)" stroke-width="0.7"/>';
+    d+='<text class="lbl" x="67" y="54" text-anchor="middle" style="font-size:7px;fill:var(--teal)">PARK /</text>';
+    d+='<text class="lbl" x="67" y="64" text-anchor="middle" style="font-size:7px;fill:var(--teal)">PLAZA</text>';
+    d+='<rect x="238" y="28" width="100" height="60" rx="3" fill="rgba(52,230,224,.07)" stroke="rgba(52,230,224,.2)" stroke-width="0.7"/>';
+    d+='<text class="lbl" x="288" y="54" text-anchor="middle" style="font-size:7px;fill:var(--teal)">MUSEUM /</text>';
+    d+='<text class="lbl" x="288" y="64" text-anchor="middle" style="font-size:7px;fill:var(--teal)">GALLERY</text>';
+    d+='<rect x="22" y="190" width="90" height="60" rx="3" fill="rgba(52,230,224,.07)" stroke="rgba(52,230,224,.2)" stroke-width="0.7"/>';
+    d+='<text class="lbl" x="67" y="218" text-anchor="middle" style="font-size:7px;fill:var(--teal)">STADIUM /</text>';
+    d+='<text class="lbl" x="67" y="228" text-anchor="middle" style="font-size:7px;fill:var(--teal)">ARENA</text>';
+    d+='<rect x="238" y="190" width="100" height="60" rx="3" fill="rgba(52,230,224,.07)" stroke="rgba(52,230,224,.2)" stroke-width="0.7"/>';
+    d+='<text class="lbl" x="288" y="218" text-anchor="middle" style="font-size:7px;fill:var(--teal)">RESTAURANT</text>';
+    d+='<text class="lbl" x="288" y="228" text-anchor="middle" style="font-size:7px;fill:var(--teal)">QUARTER</text>';
+
+    // Home cluster in the center — with visible corridors
+    var cols=8,rows=6,cw=18,ch=16,x0=118,y0=106;
+    // Corridors (horizontal + vertical lines between rows/cols of homes)
+    for(var rr=0;rr<=rows;rr++){d+='<line x1="'+x0+'" y1="'+(y0+rr*ch)+'" x2="'+(x0+cols*cw)+'" y2="'+(y0+rr*ch)+'" stroke="var(--rim)" stroke-width="1.4"/>';}
+    for(var cc=0;cc<=cols;cc++){d+='<line x1="'+(x0+cc*cw)+'" y1="'+y0+'" x2="'+(x0+cc*cw)+'" y2="'+(y0+rows*ch)+'" stroke="var(--rim)" stroke-width="1.4"/>';}
+    // Home units
+    for(var rr=0;rr<rows;rr++){for(var cc=0;cc<cols;cc++){
+      var hl=(rr===2&&cc===3); // your home
+      d+='<rect x="'+(x0+cc*cw+1.5)+'" y="'+(y0+rr*ch+1.5)+'" width="'+(cw-3)+'" height="'+(ch-3)+'" rx="1" fill="'+(hl?'rgba(52,230,224,.28)':'rgba(27,39,34,.8)')+'" stroke="'+(hl?'var(--teal-glow)':'var(--rim)')+'" stroke-width="'+(hl?1.5:0.6)+'"/>';
+    }}
+    // Your home dot
+    d+='<circle cx="'+(x0+3*cw+cw/2)+'" cy="'+(y0+2*ch+ch/2)+'" r="2.5" fill="var(--teal-glow)"/>';
+    d+='<line x1="'+(x0+3*cw+cw/2)+'" y1="'+(y0+2*ch+ch/2)+'" x2="270" y2="96" stroke="var(--gold)" stroke-width="0.8" stroke-dasharray="2 3"/>';
+    d+='<text class="lbl" x="276" y="94" style="font-size:7px;fill:var(--gold-glow)">your apartment</text>';
+    // Corridor label
+    d+='<text class="lbl" x="'+(x0+cols*cw+6)+'" y="'+(y0+3*ch)+'" style="font-size:7px;fill:var(--muted)">corridor →</text>';
+    // Legend
+    d+='<text class="lbl" x="180" y="294" text-anchor="middle" style="font-size:8px">homes are the small dense grid · public space is everything around it · this floor stacks above and below</text>';
+    return d;
+  }
+  // z===3 the cube — human gone, residential a speck
+  var q='<text class="lbl" x="180" y="18" text-anchor="middle" style="fill:var(--teal-glow)">THE CUBE · 4,246 km / SIDE · ~76.6 BILLION km³</text>';
+  var cx=180,cy=172,s=92;
+  // isometric cube
+  q+='<path d="M'+cx+' '+(cy-s)+' L'+(cx+s)+' '+(cy-s*0.5)+' L'+(cx+s)+' '+(cy+s*0.5)+' L'+cx+' '+(cy+s)+' L'+(cx-s)+' '+(cy+s*0.5)+' L'+(cx-s)+' '+(cy-s*0.5)+' Z" fill="rgba(52,230,224,.04)" stroke="var(--teal)" stroke-width="1.6"/>';
+  q+='<path d="M'+cx+' '+(cy-s)+' L'+cx+' '+cy+' L'+(cx-s)+' '+(cy-s*0.5)+' M'+cx+' '+cy+' L'+(cx+s)+' '+(cy-s*0.5)+' M'+cx+' '+cy+' L'+cx+' '+(cy+s)+'" fill="none" stroke="var(--rim)" stroke-width="1"/>';
+  q+='<circle cx="'+cx+'" cy="'+cy+'" r="1.5" fill="var(--gold-glow)"/>';
+  q+='<line x1="'+cx+'" y1="'+cy+'" x2="282" y2="116" stroke="var(--gold)" stroke-width="0.8"/><text class="lbl" x="286" y="114" style="font-size:7.5px;fill:var(--gold-glow)">private homes · 0.000042%</text>';
+  q+='<text class="lbl" x="180" y="150" text-anchor="middle" style="font-size:8px;fill:var(--teal-glow)">PUBLIC &amp; THIRD SPACE</text>';
+  q+='<text class="lbl" x="180" y="161" text-anchor="middle" style="font-size:6.5px;fill:var(--muted)">parks · museums · stadiums · restaurants · sims</text>';
+  q+='<text class="lbl" x="180" y="290" text-anchor="middle" style="font-size:7.5px">homes are a speck — almost all of this is somewhere to go · each edge ≈ NY → LA</text>';
+  return q;
+}
+
+function render(){
+  var L=LEVELS[state.z];
+  document.getElementById('r-tag').textContent=L.tag;
+  document.getElementById('r-name').textContent=L.name;
+  document.getElementById('r-scale').textContent=L.scale;
+  document.getElementById('r-desc').textContent=L.desc;
+  document.getElementById('frac').innerHTML=L.frac+'<span class="s">'+L.fracsub+'</span>';
+  document.getElementById('note').innerHTML=L.note;
+  document.getElementById('scene').innerHTML=buildScene(state.z);
+  // breadcrumb + buttons
+  document.querySelectorAll('#breadcrumb .crumb').forEach(function(b){b.classList.toggle('active',parseInt(b.dataset.z)===state.z);});
+  document.getElementById('btn-in').disabled=(state.z<=0);
+  document.getElementById('btn-out').disabled=(state.z>=3);
+}
+function wire(){
+  document.getElementById('btn-in').addEventListener('click',function(){if(state.z>0){state.z--;saveHash();render();}});
+  document.getElementById('btn-out').addEventListener('click',function(){if(state.z<3){state.z++;saveHash();render();}});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();buildCrumb();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

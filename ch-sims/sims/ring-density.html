@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<!--
+  Ring-Pack Density Calculator — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon (§5)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ring-Pack Density Calculator — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Could New Tripoli's residential ring actually hold 8.1 billion people? Slide the ring width and per-person floor area and watch — the skyline holds almost no one; the mid-rise ring does all the work.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--plum:#23ff88;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .s-ph{stroke:var(--teal);fill:none}svg .s-tl{stroke:var(--gold);fill:none}svg .s-dim{stroke:var(--rim);fill:none}svg .f-ph{fill:var(--teal)}svg .f-tl{fill:var(--gold)}svg .f-dim{fill:var(--edge)}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{display:grid;grid-template-columns:1fr .8fr;gap:28px;align-items:center;margin-bottom:20px}
+@media(max-width:760px){.tool-header{grid-template-columns:1fr}}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:560px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:12px}
+.fig svg{display:block;width:100%;height:auto}
+.input-card{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.slider-block{margin-bottom:18px}.slider-block:last-child{margin-bottom:0}
+.slider-block label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--body);display:block;margin-bottom:7px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--edge),var(--teal))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-row input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--teal-glow);cursor:pointer;border:none}
+.slider-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--teal-glow);min-width:120px;text-align:right;white-space:nowrap}
+.preset-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.preset-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);width:100%;margin-bottom:2px}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer}
+.preset-btn:hover{color:var(--gold-glow);border-color:var(--gold)}
+.headline{background:linear-gradient(135deg,rgba(52,230,224,.10),rgba(8,13,12,.4));border:1px solid var(--plum);border-radius:12px;padding:24px 28px;margin-bottom:24px;text-align:center}
+.headline-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.headline-text{font-family:'Chakra Petch',sans-serif;font-size:22px;color:var(--text);line-height:1.4}
+.headline-text .v{color:var(--gold-glow);font-weight:600}
+.verdict{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:12px;padding:4px 12px;border-radius:4px}
+.verdict.ok{color:var(--teal);background:rgba(52,230,224,.1);border:1px solid rgba(52,230,224,.4)}
+.verdict.under{color:#ffc24d;background:rgba(255,194,77,.08);border:1px solid rgba(255,194,77,.4)}
+.section-card{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.section-card svg{display:block;width:100%;height:auto;max-width:560px;margin:4px auto 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:680px){.grid3{grid-template-columns:1fr}}
+.stat-card{background:rgba(12,19,17,.55);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.stat-card .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px}
+.stat-card .value{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:600;color:var(--teal-glow)}
+.sc-note{font-size:13.5px;color:var(--body);line-height:1.65;padding:13px 16px;background:rgba(5,8,10,.45);border-radius:6px;border-left:2px solid var(--plum);margin-top:12px}
+.sc-note strong{color:var(--plum-glow)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:8px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Ring-Pack Density Calculator</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <div>
+      <h1>Ring-Pack Density</h1>
+      <p class="tool-subtitle">New Tripoli houses ~8.1 billion people in a residential ring 750 km out from the Downtown core. Could it actually fit them? Tune the ring and find the surprise: the famous skyline holds almost nobody.</p>
+      <span class="tier-badge">◆ In-world canon · §5</span>
+    </div>
+    <div class="fig">
+      <!-- ring cross-section: an annulus whose band-width tracks the slider -->
+      <svg id="ring-svg" viewBox="0 0 300 300" role="img" aria-label="Plan view of the residential ring around New Tripoli's downtown core.">
+        <circle cx="150" cy="150" r="120" class="s-dim" stroke-width="1"/>
+        <circle id="ring-outer" cx="150" cy="150" r="120" class="f-ph" opacity="0.16"/>
+        <circle id="ring-inner" cx="150" cy="150" r="96" fill="var(--void)"/>
+        <circle id="ring-outerline" cx="150" cy="150" r="120" class="s-ph" stroke-width="1.4"/>
+        <circle id="ring-innerline" cx="150" cy="150" r="96" class="s-ph" stroke-width="1.2" opacity=".7"/>
+        <!-- core — 4 buildings of varying heights, not Excel-chart flat -->
+        <g class="s-tl" stroke-width="1.2" fill="rgba(35,255,136,.08)">
+          <rect x="138" y="138" width="9" height="24"/>
+          <rect x="149" y="132" width="9" height="30"/>
+          <rect x="160" y="142" width="8" height="20"/>
+          <rect x="169" y="122" width="9" height="40"/>
+        </g>
+        <text class="lbl" x="150" y="186" text-anchor="middle" style="fill:var(--gold)">CORE</text>
+        <text class="lbl" id="ring-wlbl" x="150" y="44" text-anchor="middle">RING</text>
+        <text class="lbl" x="150" y="292" text-anchor="middle">750 km radius</text>
+      </svg>
+    </div>
+  </header>
+
+  <section class="input-card">
+    <div class="card-title">Parameters</div>
+    <div class="slider-block">
+      <label>Ring depth (width of the residential band)</label>
+      <div class="slider-row"><input type="range" id="w-slider" min="200" max="10000" step="50" value="200"><span class="slider-value" id="w-val">200 m</span></div>
+      <div class="preset-row"><span class="preset-label">Canon table</span>
+        <button class="preset-btn" data-w="200">200 m</button><button class="preset-btn" data-w="500">500 m</button><button class="preset-btn" data-w="1000">1 km</button><button class="preset-btn" data-w="5000">5 km</button><button class="preset-btn" data-w="10000">10 km</button>
+      </div>
+    </div>
+    <div class="slider-block">
+      <label>Floor area per person</label>
+      <div class="slider-row"><input type="range" id="a-slider" min="10" max="200" step="1" value="70"><span class="slider-value" id="a-val">70 m²</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Residential floors (ground floor is retail)</label>
+      <div class="slider-row"><input type="range" id="f-slider" min="3" max="24" step="1" value="12"><span class="slider-value" id="f-val">12 floors</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Downtown-core residents (mid-rise between the towers)</label>
+      <div class="slider-row"><input type="range" id="c-slider" min="0" max="400" step="10" value="300"><span class="slider-value" id="c-val">300 M</span></div>
+    </div>
+    <div class="slider-block" style="margin-bottom:0">
+      <label>Match a real city core's density (one click sets floors &amp; area)</label>
+      <div class="preset-row" id="city-row"></div>
+    </div>
+  </section>
+
+  <section class="headline">
+    <div class="headline-label">Capacity</div>
+    <div class="headline-text" id="headline-text">computing…</div>
+    <div id="verdict-wrap"></div>
+  </section>
+
+  <section class="grid3">
+    <div class="stat-card"><div class="label">Housed in the ring</div><div class="value" id="s-ring">—</div></div>
+    <div class="stat-card"><div class="label">Housed in the core</div><div class="value" id="s-core">—</div></div>
+    <div class="stat-card"><div class="label">Total vs 8.1 B target</div><div class="value" id="s-pct">—</div></div>
+  </section>
+
+  <section class="section-card">
+    <div class="card-title">FIG // Where everyone actually lives</div>
+    <svg id="bar-svg" viewBox="0 0 560 132" role="img" aria-label="Stacked bar comparing ring and core housing to the 8.1 billion target.">
+      <text class="lbl" x="10" y="20">POPULATION HOUSED</text>
+      <text class="lbl" x="550" y="20" text-anchor="end" id="bar-cap">target 8.1 B</text>
+      <rect class="f-dim" x="10" y="28" width="540" height="30" rx="5"/>
+      <rect id="bar-ring" class="f-ph" x="10" y="28" width="0" height="30" rx="5"/>
+      <rect id="bar-core" class="f-tl" x="10" y="28" width="0" height="30"/>
+      <line x1="550" y1="24" x2="550" y2="62" class="s-ph" stroke-width="1.5"/>
+      <text class="lbl" x="10" y="80"><tspan style="fill:var(--teal)">■ ring</tspan>   <tspan style="fill:var(--gold)">■ core</tspan></text>
+      <!-- skyline callout -->
+      <text class="lbl" x="10" y="108">EVERY SKYSCRAPER >150 m ON EARTH, COMBINED:</text>
+      <rect class="f-dim" x="10" y="114" width="540" height="10" rx="3"/>
+      <rect id="bar-sky" class="f-ph" x="10" y="114" width="2" height="10" rx="2"/>
+      <text class="lbl" x="556" y="123" text-anchor="end" style="fill:var(--gold-glow)">~2 M people</text>
+    </svg>
+    <div class="sc-note" id="note">—</div>
+  </section>
+
+  <section class="section-card">
+    <div class="card-title">FIG // How dense is that, really?</div>
+    <svg id="dens-svg" viewBox="0 0 560 104" role="img" aria-label="Logarithmic density scale with real-world city cores and the current ring density marked.">
+      <line x1="24" y1="64" x2="536" y2="64" class="s-dim" stroke-width="1.3"/>
+      <g id="dens-ticks"></g>
+      <line id="dens-needle" x1="24" y1="48" x2="24" y2="80" class="s-ph" stroke-width="2"/>
+      <circle id="dens-dot" cx="24" cy="48" r="4" class="f-ph"/>
+      <text id="dens-read" x="24" y="40" text-anchor="middle" style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:13px;fill:var(--teal-glow)">—</text>
+    </svg>
+    <div class="sc-note" id="dens-note">—</div>
+  </section>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this calculator</button>
+    <div class="about-body" id="about-body">
+      <h3 style="font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--text);margin-bottom:8px">The formula</h3>
+      <p>Ring capacity = <code>circumference × width × floors ÷ area-per-person</code>. The ring sits at 750 km radius, so its circumference is ~4,712 km. At 12 floors and 70 m²/person, a 10 km-deep band houses ~8.1 billion — exactly the canon table (200 m → 162 M; 1 km → 810 M; 10 km → 8.1 B).</p>
+      <p>The reveal: assembling <em>all ~6,000 buildings over 150 m worldwide</em>, their combined residential floor space holds only about <strong>2 million</strong> people. New Tripoli's towers are arts, hospitality and restaurants — not housing. The unglamorous mid-rise ring does essentially all of the residential work; downtown adds only ~200–400 M between the towers. Downtown is the city's living room, not its bedroom.</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Demographia World Urban Areas (annual). 22nd edition, 2026 — source for real-world urban density benchmarks (Mong Kok at ~130,000/km², Paris inner arrondissements at ~22,000/km²) used to calibrate the ring density scale. Jacobs, J. (1961). <em>The Death and Life of Great American Cities</em>. Random House — foundational text on how mid-rise, mixed-use fabric produces liveable urban density, versus towers which hold surprisingly few residents; the insight behind the "every skyscraper combined = 2 million people" finding.</p>
+      <p class="meta-line">v1.0 — Canon §5 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script src="../data/canon.js"></script>
+<script>
+"use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
+var H=(C&&C.housing)?C.housing:{ringCircumferenceKm:4712,skyscraperResidents:2e6};
+var TARGET=(C&&C.population)?C.population.humans:8.1e9;
+var SKY=H.skyscraperResidents||2e6;
+
+function fmtPop(n){if(!isFinite(n))return'∞';if(n>=1e9)return (n/1e9).toFixed(2)+' B';if(n>=1e6)return (n/1e6).toFixed(0)+' M';return Math.round(n).toLocaleString();}
+function fmtPct(x){if(x>=10)return Math.round(x)+'%';return x.toFixed(1)+'%';}
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={w:200,a:70,f:12,c:300};
+function loadHash(){var p=getHash();['w','a','f','c'].forEach(function(k){if(p[k]!==undefined){var v=parseFloat(p[k]);if(!isNaN(v))state[k]=v;}});}
+function saveHash(){setHash({w:state.w,a:state.a,f:state.f,c:state.c});}
+
+// real city-core densities (people/km²); f,a chosen so 1e6*f/a ≈ density
+var CITIES=[
+  {id:"paris",name:"Paris",dens:22000,f:3,a:136},
+  {id:"manhattan",name:"Manhattan",dens:28000,f:4,a:143},
+  {id:"hk",name:"HK dense",dens:50000,f:6,a:120},
+  {id:"mongkok",name:"Mong Kok",dens:130000,f:12,a:92},
+  {id:"dhaka",name:"Dhaka core",dens:200000,f:12,a:60},
+  {id:"kwc",name:"Kowloon Walled City",dens:1255000,f:14,a:11}
+];
+var DMIN=1e4,DMAX=2.5e6,DX0=24,DX1=536;
+function densOf(){return 1e6*state.f/state.a;}
+function dx(d){d=Math.max(DMIN,Math.min(DMAX,d));return DX0+(DX1-DX0)*(Math.log10(d)-Math.log10(DMIN))/(Math.log10(DMAX)-Math.log10(DMIN));}
+function nearestCity(d){var best=CITIES[0],bd=1e99;CITIES.forEach(function(c){var diff=Math.abs(Math.log10(c.dens)-Math.log10(d));if(diff<bd){bd=diff;best=c;}});return best;}
+function buildScale(){var g=document.getElementById('dens-ticks');if(!g)return;var h='';CITIES.forEach(function(c){var x=dx(c.dens);h+='<line x1="'+x.toFixed(1)+'" y1="58" x2="'+x.toFixed(1)+'" y2="70" class="s-dim" stroke-width="1"/>';h+='<text x="'+x.toFixed(1)+'" y="90" text-anchor="middle" class="lbl" style="font-size:7.5px">'+c.name+'</text>';});g.innerHTML=h;}
+function buildCities(){var r=document.getElementById('city-row');if(!r)return;var h='';CITIES.forEach(function(c){h+='<button class="preset-btn" data-city="'+c.id+'">'+c.name+'</button>';});r.innerHTML=h;r.querySelectorAll('.preset-btn').forEach(function(b){b.addEventListener('click',function(){var c=CITIES.filter(function(x){return x.id===b.dataset.city;})[0];if(c){state.f=c.f;state.a=c.a;document.getElementById('f-slider').value=c.f;document.getElementById('a-slider').value=c.a;saveHash();render();}});});}
+
+function render(){
+  document.getElementById('w-val').textContent = state.w>=1000 ? (state.w/1000)+' km' : state.w+' m';
+  document.getElementById('a-val').textContent = state.a+' m²';
+  document.getElementById('f-val').textContent = state.f+' floors';
+  document.getElementById('c-val').textContent = state.c+' M';
+
+  var circM=H.ringCircumferenceKm*1000;
+  var ring = circM*state.w*state.f/state.a;
+  var core = state.c*1e6;
+  var total = ring+core;
+  var pct = total/TARGET*100;
+
+  document.getElementById('s-ring').textContent=fmtPop(ring);
+  document.getElementById('s-core').textContent=fmtPop(core);
+  document.getElementById('s-pct').textContent=fmtPct(pct);
+
+  var hl=document.getElementById('headline-text');
+  hl.innerHTML='A <span class="v">'+(state.w>=1000?(state.w/1000)+' km':state.w+' m')+'</span>-deep ring houses <span class="v">'+fmtPop(ring)+'</span> — total with the core, <span class="v">'+fmtPop(total)+'</span> of 8.1 B.';
+  document.getElementById('verdict-wrap').innerHTML = pct>=100
+    ? '<span class="verdict ok">Fits the whole population · '+fmtPct(pct)+'</span>'
+    : '<span class="verdict under">Holds '+fmtPct(pct)+' — widen the ring</span>';
+
+  // bar
+  var W=540;
+  var ringW=Math.min(W,W*ring/TARGET), coreW=Math.min(W-ringW,W*core/TARGET);
+  document.getElementById('bar-ring').setAttribute('width',ringW.toFixed(1));
+  document.getElementById('bar-core').setAttribute('x',(10+ringW).toFixed(1));
+  document.getElementById('bar-core').setAttribute('width',coreW.toFixed(1));
+  document.getElementById('bar-sky').setAttribute('width',Math.max(2,W*SKY/TARGET).toFixed(1));
+
+  // ring annulus inner radius from width (visual, exaggerated for legibility)
+  var maxBand=46; // px at 10 km
+  var band=8+ (state.w/10000)*maxBand;
+  document.getElementById('ring-inner').setAttribute('r',(120-band).toFixed(1));
+  document.getElementById('ring-innerline').setAttribute('r',(120-band).toFixed(1));
+  document.getElementById('ring-wlbl').textContent='RING '+(state.w>=1000?(state.w/1000)+' km':state.w+' m');
+
+  var note=document.getElementById('note');
+  if(pct>=100){
+    note.innerHTML='At this depth the ring alone covers everyone. Notice the bottom bar: <strong>every tall building on Earth combined houses ~2 M</strong> — a rounding error against 8.1 B. The skyline is theatre; the ring is the city.';
+  } else {
+    note.innerHTML='Short by '+fmtPop(TARGET-total)+'. The canon answer is a band <strong>5–10 km deep</strong> — multiple concentric Paris/DC street grids stacked outward, not a single row of buildings.';
+  }
+  // density scale + city comparison
+  var dens=densOf(), dnx=dx(dens);
+  document.getElementById('dens-needle').setAttribute('x1',dnx.toFixed(1));
+  document.getElementById('dens-needle').setAttribute('x2',dnx.toFixed(1));
+  document.getElementById('dens-dot').setAttribute('cx',dnx.toFixed(1));
+  var dr=document.getElementById('dens-read');dr.setAttribute('x',Math.max(44,Math.min(516,dnx)).toFixed(1));dr.textContent=Math.round(dens).toLocaleString()+'/km²';
+  var nc=nearestCity(dens);
+  document.getElementById('dens-note').innerHTML='At <strong>'+state.f+' floors</strong> and <strong>'+state.a+' m²/person</strong>, the ring packs <strong>'+Math.round(dens).toLocaleString()+' people/km²</strong> — about the density of <strong>'+nc.name+'</strong>. Density depends only on floors and floor-area; the ring’s <em>width</em> decides how many people that holds, not how tightly they live. (~825,000 great apes also live in the ring, in their own species enclaves — §13.)';
+
+  document.querySelectorAll('.preset-btn[data-w]').forEach(function(b){b.style.borderColor=(parseFloat(b.dataset.w)===state.w)?'var(--gold)':'';});
+  document.querySelectorAll('#city-row .preset-btn').forEach(function(b){var c=CITIES.filter(function(x){return x.id===b.dataset.city;})[0];b.style.borderColor=(c&&c.f===state.f&&c.a===state.a)?'var(--gold)':'';});
+}
+function wire(){
+  var w=document.getElementById('w-slider'),a=document.getElementById('a-slider'),f=document.getElementById('f-slider'),c=document.getElementById('c-slider');
+  w.value=state.w;a.value=state.a;f.value=state.f;c.value=state.c;
+  w.addEventListener('input',function(){state.w=parseFloat(w.value);saveHash();render();});
+  a.addEventListener('input',function(){state.a=parseFloat(a.value);saveHash();render();});
+  f.addEventListener('input',function(){state.f=parseFloat(f.value);saveHash();render();});
+  c.addEventListener('input',function(){state.c=parseFloat(c.value);saveHash();render();});
+  document.querySelectorAll('.preset-btn[data-w]').forEach(function(b){b.addEventListener('click',function(){state.w=parseFloat(b.dataset.w);w.value=state.w;saveHash();render();});});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();buildScale();buildCities();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

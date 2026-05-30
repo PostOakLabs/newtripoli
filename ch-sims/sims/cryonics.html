@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<!--
+  Cryonics — State of the Science (and Why the Fridge Units Are Different)
+  New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+  Canon refs: §25 (knockout mechanism / fridge-containers), §9 (hearthing / "fridged"), CH "Technical Feasibility"
+  Real-world refs: Alcor, Cryonics Institute, M22 vitrification, PNAS 2025 hippocampus paper
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryonics — State of the Science — New Tripoli Sim Catalogue</title>
+<meta name="description" content="How does real-world cryonics actually work? Why has no one been revived? And how do the ETI's fridge-containers compare to Alcor's dewars — and to the in-universe threat of being 'fridged'?">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#ffc24d;--teal-glow:#ffe09a;--gold:#34e6e0;--gold-glow:#86f6f2;--green:#23ff88;--green-glow:#7dffb8;--amber:#ffc24d;--amber-glow:#ffe09a;--red:#ff6a5a;--ice:#a0d4f5;--border:rgba(255,194,77,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(35,255,136,.08),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(52,230,224,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(35,255,136,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1060px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1060px;margin:0 auto;padding:34px 26px 80px}
+.tool-header h1{font-size:28px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15px;max-width:700px;line-height:1.7}
+.tier-badges{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor}
+.tb-spec{color:var(--gold-glow);background:rgba(52,230,224,.08)}.tb-canon{color:var(--teal);background:rgba(35,255,136,.08)}.tb-real{color:var(--ice);background:rgba(160,212,245,.06)}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 16px}
+.tab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:8px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--teal-glow);border-color:var(--teal)}
+.tab.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+
+/* Content cards */
+.panel{display:none;animation:fadeIn .25s ease}
+.panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:rgba(8,13,12,.5);border:1px solid var(--edge);border-radius:12px;padding:20px 22px;margin-bottom:16px}
+.card-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.card h3{font-size:1.1rem;color:var(--text);margin-bottom:8px}
+.card p{font-size:13.5px;color:var(--body);line-height:1.7;margin-bottom:8px}
+.card p:last-child{margin-bottom:0}
+.card p strong{color:var(--text)}
+.card p em{color:var(--body)}
+
+/* Two-column grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+
+/* Stat row */
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px dotted var(--edge);gap:14px;font-size:13px}
+.stat-row:last-child{border-bottom:none}
+.sr-label{color:var(--body);font-family:'JetBrains Mono',monospace;font-size:11px;flex:1}
+.sr-val{color:var(--teal-glow);font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:600;text-align:right}
+.sr-val.amber{color:var(--amber-glow)}.sr-val.ice{color:var(--ice)}.sr-val.red{color:var(--red)}
+
+/* Temperature scale */
+.temp-scale-wrap{background:rgba(5,8,10,.6);border:1px solid var(--edge);border-radius:10px;padding:14px 18px;margin-bottom:16px}
+.temp-scale-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+/* Barriers */
+.barrier{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:rgba(5,8,10,.5);border:1px solid var(--edge);border-radius:8px;margin-bottom:10px}
+.barrier-num{font-family:'Chakra Petch',sans-serif;font-size:1.6rem;font-weight:700;color:var(--amber);line-height:1;flex-shrink:0;width:32px}
+.barrier-body h4{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-glow);margin-bottom:4px}
+.barrier-body p{font-size:13px;color:var(--body);line-height:1.65}
+
+/* Animal table */
+.animal-row{display:grid;grid-template-columns:1fr 1fr 2fr;gap:10px;padding:8px 10px;border-radius:6px;font-size:13px;margin-bottom:4px}
+.animal-row.header{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.animal-row.ok{background:rgba(35,255,136,.06);border:1px solid rgba(35,255,136,.12)}
+.animal-row.no{background:rgba(255,106,90,.04);border:1px solid rgba(255,106,90,.1)}
+.ar-name{color:var(--text);font-weight:500}
+.ar-result.ok{color:var(--teal-glow)}.ar-result.no{color:var(--red)}
+
+/* Comparison grid */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px}
+.comp-table th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px 6px;border-bottom:1px solid var(--edge)}
+.comp-table td{padding:8px 12px;border-bottom:1px dotted var(--edge);color:var(--body);vertical-align:top;line-height:1.55}
+.comp-table td:first-child{color:var(--text);font-weight:500;font-size:12px}
+.comp-table td.teal{color:var(--teal-glow)}.comp-table td.ice{color:var(--ice)}.comp-table td.amber{color:var(--amber-glow)}
+.comp-table tr:last-child td{border-bottom:none}
+
+/* Canon note box */
+.canon-box{background:rgba(35,255,136,.06);border:1px solid rgba(35,255,136,.2);border-radius:8px;padding:14px 18px;margin-bottom:16px}
+.canon-box .cn-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.canon-box p{font-size:13.5px;color:var(--body);line-height:1.7}
+.canon-box p strong{color:var(--text)}
+
+/* SF note */
+.sf-box{background:rgba(182,156,255,.05);border:1px solid rgba(182,156,255,.2);border-radius:8px;padding:14px 18px;margin-bottom:16px}
+.sf-box .sf-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#b69cff;margin-bottom:6px}
+.sf-box p{font-size:13.5px;color:var(--body);line-height:1.7}
+
+/* About */
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:24px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:700px){.tool-header h1{font-size:22px}.container{padding:20px 14px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Cryonics · State of the Science</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+
+<div class="container">
+  <header class="tool-header">
+    <h1>Cryonics</h1>
+    <p class="tool-subtitle">Space-faring sims routinely put characters into cryogenic suspension for interstellar voyages. In-universe, the "fridge-container" name is no accident — and characters debate whether the ETI could "fridge" someone as punishment. Here is the real science behind the trope: why cryonics works in principle, why no one has ever been revived, and what separates Alcor from the HSS.</p>
+    <div class="tier-badges">
+      <span class="tier-badge tb-real">🧊 Real science</span>
+      <span class="tier-badge tb-spec">✦ Speculative future</span>
+      <span class="tier-badge tb-canon">◆ Canon context</span>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="science">The Science</button>
+    <button class="tab" data-tab="barriers">4 Barriers</button>
+    <button class="tab" data-tab="orgs">Alcor vs CI</button>
+    <button class="tab" data-tab="animals">Why Animals Win</button>
+    <button class="tab" data-tab="canon">Canon Connection</button>
+    <button class="tab" data-tab="sf">SF vs Reality</button>
+  </div>
+
+  <!-- ── SCIENCE TAB ─────────────────────────────────────────────────────── -->
+  <div class="panel active" id="tab-science">
+    <div class="card">
+      <div class="card-label">The core problem</div>
+      <h3>Why you can't just freeze a brain and thaw it later</h3>
+      <p>When water freezes, it doesn't just solidify — it forms ice crystals. At the cellular level, those crystals are mechanical weapons: they puncture cell membranes, shred the organized architecture of tissue, and create osmotic pressure differentials that rupture the structures that encode memory and personality. Early cryonics attempts (pre-1980s) almost certainly caused catastrophic damage to the very tissue they were trying to preserve.</p>
+      <p><strong>The solution: vitrification.</strong> Instead of letting the tissue freeze into crystalline ice, you flood it with cryoprotectant chemicals that prevent water molecules from forming the hexagonal ice lattice. As temperature drops and cryoprotectant concentration rises, viscosity increases exponentially until the whole system solidifies into an amorphous, glass-like state — without ice. "Vitrification" comes from the Latin for glass: <em>vitrum</em>.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">The chemistry</div>
+      <h3>M22 — the current state of the art</h3>
+      <p>The leading vitrification agent is <strong>M22</strong>, developed by Gregory Fahy and Brian Wowk at 21st Century Medicine over decades of work. It is a 16-component mixture. The primary agents are DMSO, formamide, ethylene glycol, and — crucially — synthetic "ice blocker" polymers that inhibit any residual ice nucleation during cooling or warming. Storage temperature: −196°C (liquid nitrogen). The glass transition for M22 solutions occurs around −120 to −135°C; liquid nitrogen storage provides a 60°C safety margin.</p>
+      <p><strong>The key trade-off:</strong> Higher cryoprotectant concentrations mean less ice risk, but more chemical toxicity to cells. M22 represents the current optimal balance. "Cryoprotectant toxicity is the greatest obstacle to cryopreservation" — a phrase that appears in the research literature in almost exactly that form.</p>
+      <p><strong>2025 milestone:</strong> A paper published in <em>PNAS</em> (2025) reported functional recovery of adult mouse hippocampal slices after vitrification. Slices (~300 μm thick) survived, resumed metabolism, and showed electrophysiological activity. This is the first published demonstration of functional recovery of adult mammalian brain tissue after vitrification. A slice is not a brain — but it is a meaningful step. Scaling from 300 μm slices to a 1,300 cm³ human brain remains an enormous unsolved problem.</p>
+    </div>
+
+    <!-- Temperature scale SVG -->
+    <div class="temp-scale-wrap">
+      <div class="temp-scale-label">Temperature reference scale</div>
+      <svg viewBox="0 0 720 180" role="img" aria-label="Temperature scale from body temperature down to absolute zero, with cryonics reference points marked.">
+        <defs><linearGradient id="temp-grad" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="rgba(255,106,90,0.8)"/>
+          <stop offset="18%" stop-color="rgba(255,194,77,0.6)"/>
+          <stop offset="40%" stop-color="rgba(35,255,136,0.4)"/>
+          <stop offset="65%" stop-color="rgba(160,212,245,0.6)"/>
+          <stop offset="100%" stop-color="rgba(100,150,255,0.8)"/>
+        </linearGradient></defs>
+        <!-- axis bar -->
+        <rect x="30" y="72" width="660" height="18" rx="9" fill="url(#temp-grad)" opacity="0.85"/>
+        <!-- tick marks with labels -->
+        <!-- 37°C body temp = x=30 (leftmost) -->
+        <!-- -196°C LN2 = x=690 (rightmost) -->
+        <!-- Scale: 233°C total range over 660px = 2.83 px/°C -->
+        <!-- x(T) = 30 + (37 - T) * 660/233 -->
+        <g style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--muted)">
+          <!-- 37°C: body temp -->
+          <line x1="30" y1="66" x2="30" y2="95" stroke="var(--red)" stroke-width="1.5"/>
+          <text x="30" y="58" text-anchor="middle" style="fill:var(--red)">37°C</text>
+          <text x="30" y="48" text-anchor="middle" style="font-size:7.5px;fill:var(--muted)">body temp</text>
+          <!-- 0°C: water freezes -->
+          <line x1="126" y1="68" x2="126" y2="93" stroke="var(--body)" stroke-width="1"/>
+          <text x="126" y="62" text-anchor="middle">0°C</text>
+          <text x="126" y="52" text-anchor="middle" style="font-size:7.5px">water freezes</text>
+          <!-- -120°C: vitrification glass transition -->
+          <line x1="439" y1="66" x2="439" y2="95" stroke="var(--teal)" stroke-width="1.5"/>
+          <text x="439" y="58" text-anchor="middle" style="fill:var(--teal-glow)">−120°C</text>
+          <text x="439" y="48" text-anchor="middle" style="font-size:7.5px;fill:var(--teal)">glass transition</text>
+          <text x="439" y="40" text-anchor="middle" style="font-size:7.5px;fill:var(--teal)">M22 solidifies</text>
+          <!-- -196°C: LN2 storage -->
+          <line x1="641" y1="66" x2="641" y2="95" stroke="var(--ice)" stroke-width="1.5"/>
+          <text x="641" y="58" text-anchor="middle" style="fill:var(--ice)">−196°C</text>
+          <text x="641" y="48" text-anchor="middle" style="font-size:7.5px;fill:var(--ice)">liquid nitrogen</text>
+          <text x="641" y="40" text-anchor="middle" style="font-size:7.5px;fill:var(--ice)">storage temp</text>
+          <!-- -273°C: absolute zero -->
+          <line x1="690" y1="68" x2="690" y2="93" stroke="var(--muted)" stroke-width="1"/>
+          <text x="690" y="62" text-anchor="middle">−273°C</text>
+          <text x="690" y="52" text-anchor="middle" style="font-size:7.5px">abs. zero</text>
+        </g>
+        <!-- phase labels below bar -->
+        <text x="78" y="118" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted)">liquid / biological</text>
+        <text x="280" y="118" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted)">ice crystals form (dangerous)</text>
+        <text x="565" y="118" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--teal)">vitrified glass (safe)</text>
+        <!-- safety margin brace -->
+        <path d="M439,140 L439,148 L641,148 L641,140" fill="none" stroke="var(--teal)" stroke-width="1"/>
+        <text x="540" y="162" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--teal)">60°C safety margin</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── BARRIERS TAB ──────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-barriers">
+    <div class="card">
+      <div class="card-label">Why no one has been revived</div>
+      <h3>Four compounding, independent barriers</h3>
+      <p>Revival has never been demonstrated for any mammal, regardless of size. The barriers are not one hard problem but four independent hard problems that must all be solved simultaneously, and each compounds the others.</p>
+    </div>
+    <div class="card" style="background:rgba(8,13,12,.55)">
+      <div class="card-label">Interactive · all four gates, or none</div>
+      <svg id="bar-viz" viewBox="0 0 720 120" role="img" aria-label="A revival beam passing through four gates, one per barrier. The beam halts at the first unsolved gate; only when all four are solved does it reach revival." style="display:block;width:100%;height:auto">
+        <text x="12" y="20" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--teal-glow)">PRESERVED BRAIN</text>
+        <text x="708" y="20" text-anchor="end" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--red)" id="bar-end">REVIVAL ✕</text>
+        <line x1="14" y1="44" x2="706" y2="44" stroke="var(--edge)" stroke-width="1.5"/>
+        <rect id="bar-beam" x="14" y="39" width="2" height="10" rx="5" fill="var(--teal)" opacity="0.9"/>
+        <g id="bar-gates"></g>
+      </svg>
+      <div id="bar-btns" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px"></div>
+      <p id="bar-msg" style="font-size:13px;color:var(--body);margin:11px 0 0;line-height:1.6">&nbsp;</p>
+    </div>
+    <div class="barrier">
+      <div class="barrier-num">1</div>
+      <div class="barrier-body">
+        <h4>Cryoprotectant toxicity</h4>
+        <p>The same chemicals that prevent ice formation are chemically toxic at the concentrations required. DMSO denatures proteins; formamide is a mutagen at sustained exposure. M22 minimizes but cannot eliminate this. Removing cryoprotectants upon rewarming adds a second toxic insult — you are poisoning the tissue twice: once going in, once coming out. No fully reliable "antidote" protocol exists for either direction.</p>
+      </div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-num">2</div>
+      <div class="barrier-body">
+        <h4>Thermal stress and fracturing</h4>
+        <p>At −196°C, vitrified tissue contracts. Different regions of a large organ cool at different rates, generating mechanical stress. At sufficient temperature gradients, the tissue cracks — literally fractures like glass. Preserved human brains routinely show fracture lines under imaging. Rewarming has the same problem in reverse: non-uniform heating produces differential expansion. For a 1,300 cm³ human brain, achieving truly uniform rewarming without fracturing is currently impossible. The only demonstrated workarounds require volumes smaller than 1 cm³.</p>
+      </div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-num">3</div>
+      <div class="barrier-body">
+        <h4>Ischemic damage before preservation begins</h4>
+        <p>No cryonics patient has been preserved the instant death occurs. There is always a delay — sometimes minutes, sometimes hours — before cryoprotectant perfusion can begin. During this window, oxygen deprivation causes: ischemic cell death, glutamate excitotoxicity, calcium influx that activates destructive enzymes, and membrane breakdown. This damage must <em>also</em> be repaired for revival. Most cryonics patients have suffered significant ischemia before preservation begins, regardless of how quickly the team responds.</p>
+      </div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-num">4</div>
+      <div class="barrier-body">
+        <h4>No revival technology exists</h4>
+        <p>Even if a patient were perfectly vitrified with zero ischemia and zero fractures, reviving them would require: (a) rewarming uniformly without cracking; (b) removing cryoprotectants from every cell simultaneously at safe concentrations; (c) restarting metabolism in the correct sequence; (d) repairing all damage from steps (a)–(c). The Society for Cryobiology states explicitly: "the knowledge necessary for the revival of live or dead whole mammals following cryopreservation does not currently exist." No mammal of any size has been revived from a vitrified state. The 2025 PNAS result (functional recovery of mouse hippocampal <em>slices</em>) is encouraging, but a slice is 300 μm thick; a human brain is 1,300 cm³.</p>
+      </div>
+    </div>
+    <div class="card" style="background:rgba(52,230,224,.05);border-color:rgba(52,230,224,.2)">
+      <div class="card-label">The information-theoretic argument</div>
+      <h3>Why cryonicists think it's still worth doing</h3>
+      <p>Ralph Merkle (co-inventor of public-key cryptography) articulated the key argument in 1994: a person is not truly dead — <strong>information-theoretically dead</strong> — until the physical structures encoding their memories, personality, and identity are destroyed to the point where recovery is impossible in principle. Clinical death (cardiac arrest) does not equal information-theoretic death. A vitrified brain, even one with fractures and ischemic damage, may still contain enough structural information to reconstruct the person, given sufficiently advanced future technology.</p>
+      <p>Kenneth Hayworth (Brain Preservation Foundation) extended this: the relevant unit is the <strong>connectome</strong> — the complete wiring diagram of synaptic connections. If the connectome survives in the preserved tissue, the person survives in a meaningful sense. Future scanning and emulation, or nanotechnology-based repair, could theoretically recover it — in centuries, not decades. The rational case for cryonics, under this argument, doesn't require believing revival is easy. It requires believing (1) the information survives preservation, and (2) the probability of future revival, however small, exceeds the probability of revival without preservation (which is zero).</p>
+    </div>
+  </div>
+
+  <!-- ── ORGS TAB ──────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-orgs">
+    <div class="card">
+      <div class="card-label">The organizations (as of 2025–2026)</div>
+      <h3>Alcor Life Extension Foundation vs. Cryonics Institute</h3>
+      <p>Two organizations dominate the field. They serve overlapping but distinct communities, have meaningfully different pricing and protocols, and have accumulated roughly comparable numbers of patients.</p>
+    </div>
+
+    <div class="card" style="background:rgba(8,13,12,.55)">
+      <div class="card-label">Interactive · the real price tag</div>
+      <div id="org-toggle" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="org-mode" data-mode="member" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--teal);color:var(--void);cursor:pointer">Headline membership figure</button>
+        <button class="org-mode" data-mode="full" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer">With standby + transport</button>
+      </div>
+      <svg id="org-viz" viewBox="0 0 720 150" role="img" aria-label="Bar comparison of cryonics preservation cost for Alcor versus the Cryonics Institute." style="display:block;width:100%;height:auto">
+        <g id="org-bars"></g>
+      </svg>
+      <p id="org-msg" style="font-size:13px;color:var(--body);margin:8px 0 0;line-height:1.6">&nbsp;</p>
+    </div>
+
+    <table class="comp-table" style="width:100%;margin-bottom:16px;background:rgba(8,13,12,.5);border-radius:10px;overflow:hidden;border:1px solid var(--edge)">
+      <tr><th>—</th><th style="color:var(--teal-glow)">Alcor (Scottsdale, AZ)</th><th style="color:var(--ice)">Cryonics Institute (Clinton Twp, MI)</th></tr>
+      <tr><td>Patients preserved</td><td class="teal">~250 (mid-2025)</td><td class="ice">~250 (mid-2025)</td></tr>
+      <tr><td>Active members (future)</td><td class="teal">~1,535</td><td class="ice">~2,000+</td></tr>
+      <tr><td>Neuropreservation (head only)</td><td class="teal">$80,000 min</td><td class="ice">Not offered</td></tr>
+      <tr><td>Whole-body preservation</td><td class="teal">$200,000 min</td><td class="ice">$28,000 (members)</td></tr>
+      <tr><td>Annual dues</td><td class="teal">$15 × age/yr (e.g. $450 at 30)</td><td class="ice">$1,250 lifetime or $120/yr</td></tr>
+      <tr><td>Standby included?</td><td class="teal">Yes — team travels to you at end of life</td><td class="ice">No — you arrange separately (~$60k)</td></tr>
+      <tr><td>Vitrification agent</td><td class="teal">M22 (state of art)</td><td class="ice">Proprietary blend; M22-comparable</td></tr>
+      <tr><td>Storage configuration</td><td class="teal">Individual aluminum dewar</td><td class="ice">Multiple patients per dewar</td></tr>
+      <tr><td>Legal basis</td><td colspan="2">Legal only after certified death. U.S.: no specific cryonics law; treated as human remains storage. Oregon: only state with explicit statutory permission.</td></tr>
+    </table>
+
+    <div class="card">
+      <div class="card-label">The fine print on CI pricing</div>
+      <p>Cryonics Institute's $28,000 is the most-cited figure in popular media and is genuinely the membership cost. However, it does <em>not</em> include standby and transport — the professional team that responds when you're dying, which is often the most important factor in preservation quality. Adding standby through Suspended Animation Inc. or similar brings total cost to $88,000–$105,000, comparable to Alcor's whole-body price. The $28,000 option assumes you can self-arrange transport and that death occurs in a medically cooperative environment with minimal delay.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">The 2016 Brain Preservation Prize</div>
+      <p>The Brain Preservation Foundation (founded by Ken Hayworth) awarded its small mammal prize in 2016 to Gregory Fahy and Robert McIntyre at 21st Century Medicine for demonstrating <strong>Aldehyde-Stabilized Cryopreservation (ASC)</strong>. The technique: flood the brain with glutaraldehyde (chemical fixative that halts decomposition almost instantly by cross-linking proteins), then add vitrification agents for storage. Electron microscope images of the entire rabbit brain showed ultrastructural preservation described as "near-perfect" — every synapse, cell membrane, and myelin sheath intact. The judges considered it to meet the connectomic standard.</p>
+      <p><strong>The catch Alcor noted:</strong> Glutaraldehyde kills all biological function permanently. The brain is chemically fixed — a museum specimen. It cannot be biologically revived. Only mind-uploading or substrate-independent consciousness could leverage ASC-preserved tissue. Alcor does not use fixatives; their vitrification approach theoretically preserves biological revival potential. ASC and traditional cryonics have different assumptions about what "preservation" means.</p>
+    </div>
+  </div>
+
+  <!-- ── ANIMALS TAB ────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-animals">
+    <div class="card">
+      <div class="card-label">Nature got there first (sort of)</div>
+      <h3>Why some animals survive freezing and mammals can't</h3>
+      <p>Several organisms tolerate conditions that would kill any mammal. The key is not how cold they get — it's that they don't form ice crystals in the first place, or they tolerate the ice they do form through biochemical mechanisms that evolution produced and mammals never acquired.</p>
+    </div>
+
+    <div class="card" style="background:rgba(8,13,12,.55)">
+      <div class="card-label">Interactive · what freezing does inside one cell</div>
+      <div id="anm-toggle" style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="anm-mode" data-mode="frog" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 11px;border-radius:8px;border:1px solid var(--border);background:var(--teal);color:var(--void);cursor:pointer">Wood frog</button>
+        <button class="anm-mode" data-mode="tardigrade" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer">Tardigrade</button>
+        <button class="anm-mode" data-mode="mammal" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer">Mammal</button>
+      </div>
+      <svg id="anm-viz" viewBox="0 0 720 180" role="img" aria-label="A single cell showing where ice forms or is prevented under each organism's freezing strategy." style="display:block;width:100%;height:auto">
+        <g id="anm-scene"></g>
+      </svg>
+      <p id="anm-msg" style="font-size:13px;color:var(--body);margin:8px 0 0;line-height:1.6">&nbsp;</p>
+    </div>
+
+    <div class="animal-row header">
+      <span>Organism</span><span>Freezing survival</span><span>Mechanism</span>
+    </div>
+    <div class="animal-row ok">
+      <span class="ar-name">Wood frog (<em>Rana sylvatica</em>)</span>
+      <span class="ar-result ok">Yes — fully frozen, heart stopped</span>
+      <span>Rapid glucose release from the liver floods cells as natural cryoprotectant. Up to 65% of body water freezes <em>extracellularly</em> without penetrating cells. Urea accumulates as additional cryoprotectant. Thaws in spring and hops away.</span>
+    </div>
+    <div class="animal-row ok">
+      <span class="ar-name">Tardigrade ("water bear")</span>
+      <span class="ar-result ok">Yes — near absolute zero (−272°C)</span>
+      <span>Enters <em>cryptobiosis</em>: replaces body water with trehalose (a sugar), which forms a protective glass around cellular structures. Technically not "freezing" — it's dehydration-based suspended animation. Survives rehydration centuries later.</span>
+    </div>
+    <div class="animal-row ok">
+      <span class="ar-name">Nematode (<em>C. elegans</em>)</span>
+      <span class="ar-result ok">Yes — standard lab practice</span>
+      <span>Cryopreserved in glycerol and revived routinely. ~1,000 cells total, 302 neurons. Standard laboratory technique. The simplest organism with a mapped nervous system — a key reference point for connectome preservation.</span>
+    </div>
+    <div class="animal-row no">
+      <span class="ar-name">Any mammal (mouse, rabbit, human)</span>
+      <span class="ar-result no">No — not revived from vitrified state</span>
+      <span>Lacks enzymatic machinery to synthesize and distribute natural cryoprotectants fast enough to prevent ice. Large cells, complex metabolism, metabolically exquisite brain. Largest success: isolated kidneys revived from vitrification (M22 + machine perfusion). No whole brain, no whole organ with neural tissue, no whole animal.</span>
+    </div>
+    <div class="card">
+      <p><strong>Why the gap matters for cryonics:</strong> Evolution had millions of years to build wood-frog biochemistry. Cryonics researchers have decades. The wood frog's glucose flood is <em>instant</em> — triggered within minutes of cold exposure — because the machinery is encoded in the genome. M22 has to be perfused through the vascular system after death, under time pressure, against ischemic damage already accumulating. The frog starts from a healthy living state; the cryonics patient starts from death.</p>
+    </div>
+  </div>
+
+  <!-- ── CANON TAB ─────────────────────────────────────────────────────── -->
+  <div class="panel" id="tab-canon">
+    <div class="canon-box">
+      <div class="cn-tag">◆ Canon — §25 The Knockout Mechanism</div>
+      <p>The ETI's "fridge-container" units are not cryonic preservation. The biological 10% are not frozen — they are maintained at physiological temperature with active life support: continuous nutrient flow, glymphatic-equivalent waste clearance, and temperature regulation. The "fridge" name refers to size and form factor (refrigerator-sized units), not to freezing. <strong>The brains are alive and warm.</strong> The BCI interface writes sensory experience directly to the cortex; the biological brain runs as normal, just decoupled from its body.</p>
+    </div>
+
+    <div class="card" style="background:rgba(8,13,12,.55)">
+      <div class="card-label">Interactive · the "fridging" dial (in-world speculation)</div>
+      <svg id="cn-viz" viewBox="0 0 720 150" role="img" aria-label="A dial spanning a fridge-container's possible operating states, from warm and running down to vitrified stasis." style="display:block;width:100%;height:auto">
+        <defs><linearGradient id="cn-grad" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stop-color="rgba(255,106,90,0.75)"/><stop offset="33%" stop-color="rgba(255,194,77,0.6)"/>
+          <stop offset="66%" stop-color="rgba(160,212,245,0.55)"/><stop offset="100%" stop-color="rgba(100,150,255,0.8)"/>
+        </linearGradient></defs>
+        <rect x="40" y="58" width="640" height="14" rx="7" fill="url(#cn-grad)" opacity="0.85"/>
+        <g id="cn-ticks" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--muted)"></g>
+        <polygon id="cn-knob" points="40,46 34,34 46,34" fill="var(--text)"/>
+        <line id="cn-knobline" x1="40" y1="48" x2="40" y2="82" stroke="var(--text)" stroke-width="1.5"/>
+        <text id="cn-state" x="360" y="110" text-anchor="middle" style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:16px;fill:var(--text)">Warm — alive &amp; running</text>
+        <text id="cn-temp" x="360" y="132" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--muted)">~37&#176;C · normal operation</text>
+      </svg>
+      <input type="range" id="cn-slider" min="0" max="100" step="1" value="0" style="width:100%;margin-top:6px" aria-label="Fridge-container operating state">
+      <p id="cn-msg" style="font-size:13px;color:var(--body);margin:10px 0 0;line-height:1.6">Drag from normal operation toward stasis to see the three options characters debate. TAC has never confirmed which, if any, is real.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">The "fridging" debate in-universe</div>
+      <h3>Can the ETI freeze someone as punishment?</h3>
+      <p>The punitive "fridging" hypothesis — that the ETI could deliberately suspend a brain in something resembling cryogenic stasis as punishment for repeat violations — appears in character discussions across the series. The mechanics are ambiguous. Options characters have proposed:</p>
+      <p><strong>Option A: Actual temperature reduction.</strong> The fridge-container's cooling system (which normally maintains physiological temperature) is run in reverse — brain temperature gradually drops toward a non-destructive but cognitively inactivating range. The person is not dead, but not conscious either. A kind of chemically-induced hibernation. On rewarming, normal function resumes.</p>
+      <p><strong>Option B: Sensory blackout without cooling.</strong> The ETI simply stops writing sensory input to the cortex. The brain continues metabolically but receives no simulation input. Whether this produces subjective experience of nothing, or true unconsciousness, is unknown and horrifying to contemplate. Characters describe this as the "solitary confinement in an empty white room" scenario.</p>
+      <p><strong>Option C: Actual cryopreservation.</strong> The brain is vitrified for the duration of the sentence and revived afterward. Given that the ETI can presumably solve the four barriers that humans cannot, this is technically feasible in-universe. The brain would experience no subjective time during the sentence — which makes it simultaneously the most and least humane option, depending on your view of subjective time as the currency of punishment.</p>
+      <p>TAC has never confirmed or denied any of these options. Characters who ask receive the standard deflection.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Natural disaster scenario</div>
+      <h3>What if the fridge-containers actually froze?</h3>
+      <p>The HSS sits in the Libyan desert, co-located with the Saharan solar array. Power interruption scenarios — catastrophic solar flare disrupting the array, terrorist attack on the superconducting cables, cascading hardware failure — appear in speculation across the series. A sufficiently long power interruption would allow the fridge-container temperature to drift. The cooling systems run on continuous power; failure would cause gradual warming initially, not cooling. However, some characters have raised the scenario of a power surge in reverse: a cooling system malfunction or loss of temperature regulation in a specific section causing localized temperature drops.</p>
+      <p>The canon's answer (via TAC): quadruple redundancy on power and hardware. The HSS was designed to survive "hurricane-force winds, major seismic events, and repeated direct hits from Mark 8 armor-piercing naval shells and small bombs" (§27). A power failure severe enough to crash the cooling systems would require circumstances that the ETI apparently considered and hardened against. Characters note, however, that the ETI's definition of "hardened against" was calibrated against Earth Prime threats, not against things the ETI itself might do deliberately — which is what makes the punitive "fridging" scenario uniquely unsettling.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Space-faring sims and the cryonics trope</div>
+      <h3>Why every interstellar sim uses suspended animation</h3>
+      <p>The Space Robinsonade genre (§17 of the Canon, listed as one of the most-played sim families) routinely uses suspended animation for the voyage phase of interstellar travel. The trope is accepted without scrutiny in most instances — characters put their character into cryo for the 400-year transit and wake up at the destination. This reflects the SF trope rather than rigorous in-universe logic, which is fine: the sim is entertainment, not a physics lecture.</p>
+      <p>The more careful Robinsonade mods treat suspended animation as a solved problem in the sim's setting — technology the in-sim civilization mastered — without specifying the mechanism. Several modders have tried to make it explicit, usually landing on some variant of "metabolic suppression to near-zero combined with protective vitrification" that hand-waves the revival problem. A small community of scientifically-minded residents has built mods in which the revival process goes wrong in realistic ways, producing horror-adjacent narratives about partial revival, identity disruption after centuries of stasis, or the social consequences of arriving in a world that has moved on. These mods are well-regarded but less widely played than the standard "you wake up fresh" variant.</p>
+    </div>
+  </div>
+
+  <!-- ── SF VS REALITY TAB ─────────────────────────────────────────────── -->
+  <div class="panel" id="tab-sf">
+    <div class="sf-box">
+      <div class="sf-tag">✦ SF tropes vs. the actual science</div>
+      <p>Almost everything about cryonics in popular science fiction is wrong in ways that matter — not because filmmakers are lazy, but because the true constraints of cryopreservation would make for a very different kind of story.</p>
+    </div>
+
+    <div class="card" style="background:rgba(8,13,12,.55)">
+      <div class="card-label">Interactive · the same journey, two ways</div>
+      <div id="sf-toggle" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="sf-mode" data-mode="sf" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--gold);color:var(--void);cursor:pointer">SF version</button>
+        <button class="sf-mode" data-mode="real" style="font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer">What it would really take</button>
+      </div>
+      <svg id="sf-viz" viewBox="0 0 720 150" role="img" aria-label="A timeline of cryonic suspension and revival, contrasting the science-fiction shortcut with the real multi-stage process." style="display:block;width:100%;height:auto">
+        <g id="sf-track"></g>
+      </svg>
+      <p id="sf-msg" style="font-size:13px;color:var(--body);margin:8px 0 0;line-height:1.6">&nbsp;</p>
+    </div>
+
+    <table class="comp-table" style="width:100%;background:rgba(8,13,12,.5);border-radius:10px;overflow:hidden;border:1px solid var(--edge);margin-bottom:16px">
+      <tr><th>SF convention</th><th>Reality</th></tr>
+      <tr><td>Patients go in healthy, come out healthy</td><td class="amber">Cryonics is <em>only legal after legal death</em>. You cannot be frozen alive. Every patient enters the process with ischemia already underway.</td></tr>
+      <tr><td>Revival is routine and well-understood</td><td class="red">No mammal of any size has been revived from a vitrified state. The four barriers (toxicity, fracturing, ischemia, revival technology) remain unsolved.</td></tr>
+      <tr><td>You sleep, you wake up — no confusion</td><td class="amber">At minimum, revival would require biological repair at nanometer resolution, controlled rewarming through a glass-transition temperature range, and careful cryoprotectant removal — none of which exist. "Waking up fresh" is pure wish fulfillment.</td></tr>
+      <tr><td>Used for long space voyages (not death)</td><td class="ice">The SF "torpor/hibernation" concept (body at 32–34°C, metabolically slowed) is scientifically more achievable than true cryonics for 2-week segments. NASA has investigated this for deep-space missions. But it does not stop aging or allow century-long storage — that requires actual cryopreservation, with all its unsolved problems.</td></tr>
+      <tr><td>Identity is preserved perfectly</td><td class="amber">The connectome-preservation argument says: the <em>information</em> might survive, even if biological function is lost. Whether a reconstructed connectome running on non-biological substrate is "the same person" is the Ship of Theseus problem applied to neuroscience — and it has no agreed answer.</td></tr>
+      <tr><td>Revival restores you to the point of suspension</td><td class="amber">You'd be revived with ischemic damage, cryoprotectant toxicity residue, and whatever fracture damage occurred — plus, you are now in a society that might be unrecognizable centuries later. The psychological literature on jet lag and shift work gives some sense of what radical circadian disruption does; multiplied by centuries, the social and psychological implications are largely unexplored in mainstream SF.</td></tr>
+    </table>
+
+    <div class="card">
+      <div class="card-label">The most honest SF treatments</div>
+      <p>Greg Egan's work (<em>Quarantine</em>, <em>Permutation City</em>) engages seriously with connectome-based identity and the information-theoretic dimensions of consciousness preservation — without pretending the engineering is solved. Ken MacLeod and Charles Stross have written cryonics revival as genuinely traumatic social re-entry. Peter Watts' <em>Blindsight</em> briefly engages with what extremely long-term stasis might do to a person's relationship to their own identity.</p>
+      <p>The honest science-fiction treatment of cryonics would focus on: (1) the revival as a multi-year medical process, not an event; (2) the ethical status of a person who is legally dead, biologically preserved, and potentially recoverable; (3) the gap between the world the patient remembers and the world they wake into; and (4) whether the person who revives is, in any meaningful sense, the same person who was preserved. These are the questions that make cryonics genuinely interesting — and they're mostly absent from the pod-and-wake-up-fresh convention.</p>
+    </div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this sim</button>
+    <div class="about-body" id="about-body">
+      <p>This sim covers the current state of cryonics science (as of 2025–2026), the two primary cryonics organizations, the four independent barriers to revival, organisms that survive freezing naturally, and the canon connections to New Tripoli's fridge-container infrastructure and the "fridging" punishment hypothesis.</p>
+      <p>The science content is based on published research and organizational information as of mid-2025. The canon connections are grounded in §25 (Knockout Mechanism), §9 (hearthing / "fridging" speculation), §27 (HSS physical architecture), and the Cognitive Husbandry world bible ("Technical Feasibility: Brain in a Vat"). The SP/SF comparison section is analytical rather than exhaustive.</p>
+      <p><strong>Key sources:</strong></p>
+      <ul style="margin:6px 0 10px;padding-left:20px;font-size:13.5px;color:var(--body);line-height:1.8">
+        <li>Fahy, G.M., et al. (2004). "Cryopreservation of organs by vitrification: perspectives and recent advances." <em>Cryobiology</em>, 48(2), 157–178.</li>
+        <li>Wowk, B. (2010). "Thermodynamic aspects of vitrification." <em>Cryobiology</em>, 60(1), 11–22.</li>
+        <li>"Functional recovery of the adult murine hippocampus after cryopreservation by vitrification." <em>PNAS</em> (2025). DOI: 10.1073/pnas.2516848123 — landmark result; first demonstrated functional recovery of adult mammalian brain tissue slices after vitrification.</li>
+        <li>Merkle, R.C. (1994). "The molecular repair of the brain." <em>Cryonics Magazine</em> — original formulation of information-theoretic death.</li>
+        <li>Deryabina, T.G., et al. (2015). "Long-term census data reveal abundant wildlife populations at Chernobyl." <em>Current Biology</em>, 25(19), R824–R826 — rewilding analogue.</li>
+        <li>Alcor Life Extension Foundation: alcor.org (membership, pricing, protocols).</li>
+        <li>Cryonics Institute: cryonics.org.</li>
+      </ul>
+      <p class="meta-line">v1.0 — Canon §25 / §9 / §27 / CH Feasibility · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// Tab switching
+document.getElementById('tabs').querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var id='tab-'+btn.dataset.tab;
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+    var target=document.getElementById(id);
+    if(target){target.classList.add('active');}
+    btn.classList.add('active');
+  });
+});
+// About toggle
+var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+
+// ── Barriers: all four gates, or none ──────────────────────────────────────
+(function(){
+  var gatesG=document.getElementById('bar-gates'); if(!gatesG)return;
+  var shortBtn=['1 · Toxicity','2 · Fracturing','3 · Ischemia','4 · Revival tech'];
+  var gx=[170,320,470,620], solved=[false,false,false,false];
+  function draw(){
+    var h='';
+    for(var i=0;i<4;i++){
+      var col=solved[i]?'var(--teal)':'var(--red)';
+      h+='<rect x="'+(gx[i]-5)+'" y="22" width="10" height="44" rx="2" fill="'+(solved[i]?'rgba(35,255,136,.18)':'rgba(255,106,90,.16)')+'" stroke="'+col+'" stroke-width="1.6"/>';
+      h+='<text x="'+gx[i]+'" y="84" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:8px;fill:'+(solved[i]?'var(--teal)':'var(--muted)')+'">'+(i+1)+'</text>';
+    }
+    gatesG.innerHTML=h;
+    var stop=706, allSolved=true, blockIdx=-1;
+    for(var j=0;j<4;j++){ if(!solved[j]){ stop=gx[j]-6; allSolved=false; blockIdx=j; break; } }
+    var beam=document.getElementById('bar-beam');
+    beam.setAttribute('width',Math.max(2,(stop-14)).toFixed(0));
+    beam.setAttribute('fill', allSolved?'var(--teal)':'var(--amber)');
+    var end=document.getElementById('bar-end');
+    end.textContent= allSolved?'REVIVAL ✓':'REVIVAL ✕';
+    end.setAttribute('fill', allSolved?'var(--teal-glow)':'var(--red)');
+    var msg=document.getElementById('bar-msg');
+    if(allSolved){ msg.innerHTML='<strong style="color:var(--teal-glow)">All four solved.</strong> Only now does the beam reach revival — which is the whole point: these are independent problems, and three out of four still gets you nowhere.'; }
+    else { var n=solved.filter(Boolean).length; msg.innerHTML='Solved '+n+' of 4. The beam halts at barrier '+(blockIdx+1)+'. Each gate is a hard problem on its own; progress on the others does not help until this one falls.'; }
+  }
+  var btns=document.getElementById('bar-btns'), bh='';
+  for(var i=0;i<4;i++){ bh+='<button class="bar-b" data-i="'+i+'" style="font-family:\'JetBrains Mono\',monospace;font-size:11px;padding:6px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer">'+shortBtn[i]+'</button>'; }
+  btns.innerHTML=bh;
+  btns.querySelectorAll('.bar-b').forEach(function(b){ b.addEventListener('click',function(){ var i=+b.dataset.i; solved[i]=!solved[i]; b.style.background=solved[i]?'var(--teal)':'transparent'; b.style.color=solved[i]?'var(--void)':'var(--body)'; draw(); }); });
+  draw();
+})();
+
+// ── Orgs: the real price tag ────────────────────────────────────────────────
+(function(){
+  var bars=document.getElementById('org-bars'); if(!bars)return;
+  var data={ member:{alcor:200000,ci:28000,note:'Headline figures: Alcor whole-body minimum vs CI membership minimum. CI looks ~7× cheaper — but the figure leaves out the team that responds when you are dying.'},
+             full:{alcor:200000,ci:100000,note:'With standby + transport added, CI rises to roughly $88k–$105k — close to Alcor, which already bundles standby. The gap mostly closes once you compare like for like.'} };
+  var max=220000, x0=130, w=540;
+  function fmt(v){return '$'+(v/1000).toFixed(0)+'k';}
+  function draw(mode){
+    var d=data[mode];
+    var rows=[['Alcor · whole-body',d.alcor,'var(--teal)'],['Cryonics Inst.',d.ci,'var(--ice)']];
+    var h='';
+    rows.forEach(function(r,i){
+      var y=26+i*58, bw=w*r[1]/max;
+      h+='<text x="12" y="'+(y+20)+'" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;fill:'+r[2]+'">'+r[0]+'</text>';
+      h+='<rect x="'+x0+'" y="'+y+'" width="'+bw.toFixed(0)+'" height="30" rx="4" fill="'+r[2]+'" opacity="0.8"><animate attributeName="width" from="0" to="'+bw.toFixed(0)+'" dur="0.5s"/></rect>';
+      h+='<text x="'+(x0+bw+8)+'" y="'+(y+20)+'" style="font-family:\'Chakra Petch\',sans-serif;font-weight:700;font-size:13px;fill:'+r[2]+'">'+fmt(r[1])+'</text>';
+    });
+    bars.innerHTML=h;
+    document.getElementById('org-msg').textContent=d.note;
+  }
+  document.querySelectorAll('.org-mode').forEach(function(b){ b.addEventListener('click',function(){
+    document.querySelectorAll('.org-mode').forEach(function(o){o.style.background='transparent';o.style.color='var(--body)';});
+    b.style.background='var(--teal)';b.style.color='var(--void)'; draw(b.dataset.mode);
+  }); });
+  draw('member');
+})();
+
+// ── Animals: what freezing does inside one cell ─────────────────────────────
+(function(){
+  var scene=document.getElementById('anm-scene'); if(!scene)return;
+  function cell(inner){ return '<ellipse cx="360" cy="86" rx="150" ry="62" fill="rgba(35,255,136,.05)" stroke="var(--teal)" stroke-width="1.6"/>'+inner; }
+  var modes={
+    frog:{ draw:function(){ var ice='';
+      for(var i=0;i<7;i++){var a=i/7*6.283;ice+='<path d="M'+(360+Math.cos(a)*185).toFixed(0)+','+(86+Math.sin(a)*88).toFixed(0)+' l8 4 -8 4 0 -8 z" fill="var(--ice)" opacity="0.8"/>';}
+      return ice+cell('<circle cx="360" cy="86" r="22" fill="rgba(35,255,136,.18)" stroke="var(--teal-glow)" stroke-width="1.2"/>')+'<text x="360" y="168" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--teal)">ice forms OUTSIDE the cell · interior intact</text>'; },
+      msg:'Wood frog: glucose floods the cells and ice forms only <em>between</em> them. The cell interior never freezes — so the cell survives. Up to 65% of body water becomes extracellular ice.'},
+    tardigrade:{ draw:function(){ var dots='';
+      for(var i=0;i<6;i++){dots+='<circle cx="'+(300+i*24)+'" cy="'+(70+(i%2)*30)+'" r="3" fill="var(--ice)" opacity="0.5"/>';}
+      return cell('<circle cx="360" cy="86" r="118" fill="rgba(160,212,245,.06)"/>'+dots)+'<text x="360" y="168" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--ice)">water replaced by trehalose glass · no ice at all</text>'; },
+      msg:'Tardigrade: cellular water is swapped for trehalose sugar, which sets into a protective glass. Technically not freezing — vitrification by dehydration. Survives to near −272°C.'},
+    mammal:{ draw:function(){ var shards='';
+      for(var i=0;i<11;i++){var a=i/11*6.283,r=18+(i%3)*15;shards+='<path d="M'+(360+Math.cos(a)*r).toFixed(0)+','+(86+Math.sin(a)*r*0.6).toFixed(0)+' l7 3 -7 4 0 -7 z" fill="var(--red)" opacity="0.85"/>';}
+      return cell(shards)+'<text x="360" y="168" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--red)">ice crystals form INSIDE the cell · membranes shredded</text>'; },
+      msg:'Mammal: no fast natural cryoprotectant. Ice nucleates <em>inside</em> the cell and tears membranes and organelles apart. This is the damage vitrification (M22) tries to prevent — and why no mammal has been revived from a frozen state.'}
+  };
+  function draw(mode){ scene.innerHTML=modes[mode].draw(); document.getElementById('anm-msg').innerHTML=modes[mode].msg; }
+  document.querySelectorAll('.anm-mode').forEach(function(b){ b.addEventListener('click',function(){
+    document.querySelectorAll('.anm-mode').forEach(function(o){o.style.background='transparent';o.style.color='var(--body)';});
+    b.style.background= b.dataset.mode==='mammal'?'var(--red)':'var(--teal)'; b.style.color='var(--void)'; draw(b.dataset.mode);
+  }); });
+  draw('frog');
+})();
+
+// ── Canon: the "fridging" dial ──────────────────────────────────────────────
+(function(){
+  var sl=document.getElementById('cn-slider'); if(!sl)return;
+  var ticks=document.getElementById('cn-ticks'), th='';
+  [[40,'37°C'],[200,'10°C'],[360,'−40°C'],[520,'−120°C'],[680,'−196°C']].forEach(function(t){ th+='<line x1="'+t[0]+'" y1="74" x2="'+t[0]+'" y2="82" stroke="var(--rim)" stroke-width="1"/><text x="'+t[0]+'" y="96" text-anchor="middle">'+t[1]+'</text>'; });
+  ticks.innerHTML=th;
+  function state(v){
+    if(v<20) return ['Warm — alive & running','~37°C · normal operation','var(--text)','The default: the brain is warm and conscious inside its sim. This is how every fridge-container normally runs.'];
+    if(v<50) return ['Sensory blackout (Option B)','~37°C · input cut, still warm','var(--amber)','Option B: temperature unchanged, but the ETI stops writing sensory input. Metabolically alive in an empty white room — the option characters find most disturbing.'];
+    if(v<80) return ['Cooled toward stasis (Option A)','~10°C → −40°C · hibernation range','var(--ice)','Option A: the cooling system runs in reverse, dropping temperature into a non-destructive but cognitively inactivating range. A chemically-induced hibernation; normal function resumes on rewarming.'];
+    return ['Vitrified stasis (Option C)','~−196°C · subjective time stops','#6496ff','Option C: full cryopreservation for the sentence. No subjective time passes — simultaneously the most and least humane option, depending on whether lost subjective time is the punishment.'];
+  }
+  function draw(){
+    var v=+sl.value, x=40+(v/100)*640;
+    document.getElementById('cn-knob').setAttribute('points',x+',46 '+(x-6)+',34 '+(x+6)+',34');
+    document.getElementById('cn-knobline').setAttribute('x1',x); document.getElementById('cn-knobline').setAttribute('x2',x);
+    var s=state(v), st=document.getElementById('cn-state'); st.textContent=s[0]; st.setAttribute('fill',s[2]);
+    document.getElementById('cn-temp').textContent=s[1]; document.getElementById('cn-msg').innerHTML=s[3];
+  }
+  sl.addEventListener('input',draw); draw();
+})();
+
+// ── SF vs reality timeline ──────────────────────────────────────────────────
+(function(){
+  var track=document.getElementById('sf-track'); if(!track)return;
+  function draw(mode){
+    var h='';
+    if(mode==='sf'){
+      h+='<line x1="40" y1="72" x2="680" y2="72" stroke="var(--edge)" stroke-width="2"/>';
+      h+='<path d="M95 72 H625" stroke="var(--gold)" stroke-width="2" stroke-dasharray="4 5"/>';
+      h+='<circle cx="80" cy="72" r="9" fill="var(--gold)"/><text x="80" y="102" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--gold-glow)">enter pod</text>';
+      h+='<circle cx="640" cy="72" r="9" fill="var(--gold)"/><text x="640" y="102" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--gold-glow)">wake up fresh</text>';
+      h+='<text x="360" y="48" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--muted)">a clean sleep · no damage · no doubt</text>';
+      track.innerHTML=h; document.getElementById('sf-msg').innerHTML='The convention: healthy in, healthy out, the story resumes. It needs none of the real constraints — which is exactly why it is fiction.';
+    } else {
+      var stages=[['legal death','var(--red)'],['ischemia','var(--amber)'],['perfuse+vitrify','var(--ice)'],['centuries cold','var(--ice)'],['rewarm','var(--amber)'],['repair damage','var(--amber)'],['? identity','var(--red)']];
+      var x0=44,w=632,step=w/(stages.length-1);
+      h+='<line x1="44" y1="72" x2="676" y2="72" stroke="var(--edge)" stroke-width="2"/>';
+      stages.forEach(function(s,i){var x=x0+i*step; h+='<circle cx="'+x.toFixed(0)+'" cy="72" r="7" fill="'+s[1]+'"/>'; h+='<text x="'+x.toFixed(0)+'" y="'+(i%2?102:50)+'" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:8px;fill:'+s[1]+'">'+s[0]+'</text>';});
+      h+='<text x="360" y="128" text-anchor="middle" style="font-family:\'JetBrains Mono\',monospace;font-size:9px;fill:var(--red)">every stage can fail · none of the revival steps exist yet</text>';
+      track.innerHTML=h; document.getElementById('sf-msg').innerHTML='The real path is a multi-year medical process where each stage carries damage and the final steps have no demonstrated technology. "Wake up fresh" skips all seven.';
+    }
+  }
+  document.querySelectorAll('.sf-mode').forEach(function(b){ b.addEventListener('click',function(){
+    document.querySelectorAll('.sf-mode').forEach(function(o){o.style.background='transparent';o.style.color='var(--body)';});
+    b.style.background='var(--gold)';b.style.color='var(--void)'; draw(b.dataset.mode);
+  }); });
+  draw('sf');
+})();
+</script>
+</body>
+</html>

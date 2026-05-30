@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--
+  Guided demo: "Why Are We Waiting?"
+  Cognitive Husbandry / New Tripoli — Sim Catalogue
+  An argument you walk through, chaining the live instruments via hash deep-links.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+  Source: Cognitive Husbandry.md (Technical Feasibility); Canon - New Tripoli.md §4 (Thematic Purpose).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Are We Waiting? — New Tripoli Sim Catalogue</title>
+<meta name="description" content="A six-step argument: the Intake used no alien technology. Energy is feasible, biology is the ceiling, and once you climb the augmentation ladder, subjective time becomes abundant. So why are we waiting? Walks through the live instruments.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --teal:#23ff88;--teal-glow:#7dffb8;--gold:#34e6e0;--gold-glow:#86f6f2;--amber:#ffc24d;
+  --border:rgba(35,255,136,0.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;
+  background-image:radial-gradient(ellipse at 12% 4%,rgba(35,255,136,.10),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(52,230,224,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(35,255,136,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.022) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none;transition:color .15s}
+a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}
+.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.03em;margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
+.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head{margin-bottom:14px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--gold)}
+.demo-head h1{font-size:clamp(2rem,4.4vw,3rem);text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--teal);text-shadow:0 0 18px rgba(35,255,136,.35)}
+.demo-head .lede{font-size:1.05rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+
+.steps{margin-top:40px;display:grid;grid-template-columns:62px 1fr;gap:0 22px}
+@media(max-width:620px){.steps{grid-template-columns:44px 1fr;gap:0 14px}}
+.spine{display:flex;flex-direction:column;align-items:center}
+.node{width:46px;height:46px;border-radius:50%;border:1px solid var(--teal);background:var(--deep);color:var(--teal-glow);
+  font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(35,255,136,.18)}
+@media(max-width:620px){.node{width:36px;height:36px;font-size:16px}}
+.node.end{border-color:var(--gold);color:var(--gold-glow);box-shadow:0 0 16px rgba(52,230,224,.22)}
+.rail{flex:1;width:1px;background:linear-gradient(var(--teal),var(--rim));min-height:24px;margin:6px 0}
+.rail.last{background:linear-gradient(var(--gold),transparent)}
+.step{padding-bottom:34px}
+.step .claim{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:1.4rem;color:var(--text);line-height:1.2;margin-bottom:6px}
+.step .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.step p{font-size:.97rem;color:var(--body);line-height:1.7;margin-bottom:14px;max-width:60ch}
+.step p strong{color:var(--text);font-weight:500}
+.panel{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));border:1px solid var(--edge);border-radius:10px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.panel svg{flex-shrink:0}
+.bignum{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:2rem;color:var(--teal-glow);line-height:1}
+.bignum.gold{color:var(--gold-glow)}
+.panel .pn-cap{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.5}
+.cta{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:9px 16px;border-radius:6px;font-weight:600;transition:background .15s}
+.cta:hover{background:var(--teal-glow);color:var(--void)}
+.cta.gold{background:var(--gold)}.cta.gold:hover{background:var(--gold-glow)}
+svg .s-ph{stroke:var(--teal);fill:none}svg .s-tl{stroke:var(--gold);fill:none}svg .s-dim{stroke:var(--rim);fill:none}svg .f-ph{fill:var(--teal)}svg .f-tl{fill:var(--gold)}svg .f-dim{fill:var(--edge)}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em}
+.close{margin-top:8px;border:1px solid var(--gold);border-radius:12px;padding:26px 30px;background:linear-gradient(135deg,rgba(52,230,224,.08),rgba(8,13,12,.4));text-align:center}
+.close h2{font-size:clamp(1.5rem,3vw,2.2rem);text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px}
+.close h2 .acc{color:var(--gold-glow)}
+.close p{color:var(--body);max-width:60ch;margin:0 auto 18px;line-height:1.7}
+.close .ctarow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.footnote{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+    <span class="nav-title">Guided walkthrough</span>
+    <a class="nav-link" href="../index.html">← Catalogue</a>
+  </div>
+</nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Guided walkthrough · the argument</span>
+    <h1>Why are we <span class="acc">waiting?</span></h1>
+    <p class="lede">The Intake was monstrous because it was <strong>involuntary</strong> — not because it was impossible. The unsettling claim underneath the whole series is that nothing the ETI did sits off humanity's own tech tree. Walk the six steps; run the numbers yourself at each one.</p>
+  </header>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="spine"><div class="node">1</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Premise</div>
+      <div class="claim">The Intake used no alien magic.</div>
+      <p>Femtoscale manufacturing, a solar-powered substrate, brains kept alive and lit — every ingredient is something a sufficiently advanced <em>human</em> government or corporation could in principle build. The ETI supplied the will and removed the consent. The capability is ours to reach.</p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="spine"><div class="node">2</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">Energy · feasibility</div>
+      <div class="claim">Power is not the obstacle.</div>
+      <p>Eight billion preserved brains, plus their life-support, draw on the order of <strong>0.4 TW</strong>. The Sahara — already the chosen site — can deliver roughly <strong>230 TW</strong>. That's under a fifth of one percent, with a <strong>~550× margin</strong>.</p>
+      <div class="panel">
+        <svg width="92" height="64" viewBox="0 0 92 64" aria-hidden="true">
+          <rect class="f-dim" x="4" y="14" width="84" height="16" rx="3"/>
+          <rect class="s-dim" x="4" y="14" width="84" height="16" rx="3" stroke-width="1"/>
+          <rect class="f-ph" x="4" y="14" width="3" height="16" rx="1.5"/>
+          <text class="lbl" x="4" y="10">SAHARA 230 TW</text>
+          <text class="lbl" x="4" y="44" style="fill:var(--teal)">DRAW 0.18%</text>
+        </svg>
+        <div><div class="bignum">557×</div><div class="pn-cap">energy margin<br>at 8.1B · 10% biological · 1×</div></div>
+      </div>
+      <a class="cta" href="../sims/feasibility.html#pop=8.1&bio=10&accel=1&aug=vat">Run the energy budget →</a>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="spine"><div class="node">3</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">The catch · biology</div>
+      <div class="claim">Biology is the obstacle.</div>
+      <p>A brain runs at ~20 W and you cannot simply overclock tissue — neural firing, synaptic delay, the binding rhythm of consciousness and neurotransmitter depletion all cap it. A pure biological vat tops out near <strong>2×</strong>. The hard part was never the power bill; it's the meat.</p>
+      <div class="panel">
+        <svg width="64" height="76" viewBox="0 0 64 76" aria-hidden="true">
+          <rect class="s-dim" x="22" y="6" width="20" height="44" rx="10" stroke-width="1.3"/>
+          <circle class="s-dim" cx="32" cy="58" r="13" stroke-width="1.3"/>
+          <rect class="f-ph" x="26" y="34" width="12" height="16" rx="6"/>
+          <circle class="f-ph" cx="32" cy="58" r="10"/>
+          <text x="32" y="62" text-anchor="middle" style="font-family:'Chakra Petch';font-size:11px;font-weight:600;fill:var(--void)">20W</text>
+        </svg>
+        <div><div class="bignum">~2×</div><div class="pn-cap">ceiling of a pure<br>biological vat</div></div>
+      </div>
+      <a class="cta" href="../sims/feasibility.html#pop=8.1&bio=10&accel=2&aug=vat">See the biological ceiling →</a>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="spine"><div class="node">4</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">The ladder · augmentation</div>
+      <div class="claim">But the ladder has rungs.</div>
+      <p>Replace chemical synapses with photonic ones, then more of the cortex, and the ceiling climbs — <strong>~50×</strong>, then <strong>thousands</strong>, then substrate speed. Each rung trades away a little more biology, and the question stops being "can we power it?" and becomes "is it still the same mind?"</p>
+      <div class="panel">
+        <svg width="160" height="74" viewBox="0 0 160 74" aria-hidden="true">
+          <rect class="f-dim" x="0" y="6" width="34" height="10" rx="3"/><text class="lbl" x="38" y="14">vat 2×</text>
+          <rect class="f-dim" x="0" y="24" width="70" height="10" rx="3"/><text class="lbl" x="74" y="32">synaptic 50×</text>
+          <rect class="f-ph" x="0" y="42" width="118" height="10" rx="3"/><text class="lbl" x="122" y="50" style="fill:var(--teal)">hybrid 5k×</text>
+          <rect class="f-tl" x="0" y="60" width="150" height="10" rx="3"/><text class="lbl" x="0" y="58" style="fill:var(--gold)">upload → substrate speed</text>
+        </svg>
+      </div>
+      <a class="cta" href="../sims/feasibility.html#pop=8.1&bio=10&accel=50&aug=synaptic">Climb the augmentation ladder →</a>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="spine"><div class="node">5</div><div class="rail"></div></div>
+    <div class="step">
+      <div class="tag">The payoff · time</div>
+      <div class="claim">Then time becomes abundant.</div>
+      <p>Once the substrate can run fast, a single calendar year buys <strong>subjective centuries</strong> — and at the series' upper rates, a million subjective years per year. Lifetimes of art, study, and company, folded into ordinary wall-clock time. That is the prize the dilation tool measures.</p>
+      <div class="panel">
+        <svg width="92" height="64" viewBox="0 0 92 64" aria-hidden="true">
+          <circle class="s-ph" cx="30" cy="32" r="20" stroke-width="1.4"/>
+          <path class="s-ph" stroke-width="1.4" stroke-linecap="round" d="M30 32 V18 M30 32 l11 7"/>
+          <circle class="f-ph" cx="30" cy="32" r="2"/>
+          <path class="s-tl" stroke-width="1.4" d="M58 32 h22 M74 26 l6 6 l-6 6"/>
+        </svg>
+        <div><div class="bignum gold">1,000,000×</div><div class="pn-cap">subjective years<br>per calendar year (New Centauri)</div></div>
+      </div>
+      <a class="cta gold" href="../sims/time-dilation.html#r=1000000&reset=12&acq=10">Measure abundant time →</a>
+    </div>
+
+    <!-- STEP 6 / close -->
+    <div class="spine"><div class="node end">6</div><div class="rail last"></div></div>
+    <div class="step">
+      <div class="tag">The question</div>
+      <div class="close">
+        <h2>So why are we <span class="acc">waiting?</span></h2>
+        <p>San Junipero is on the tech tree. The energy is lying in the desert; the biology is an engineering problem with visible rungs; the payoff is centuries of subjective life. The only thing the ETI added was the decision to build it — and the refusal to ask first. The series leaves the reader holding the obvious follow-up.</p>
+        <div class="ctarow">
+          <a class="cta" href="../sims/feasibility.html#pop=8.1&bio=10&accel=1&aug=vat">Feasibility →</a>
+          <a class="cta gold" href="../sims/time-dilation.html#r=50&reset=6&acq=10">Time dilation →</a>
+        </div>
+      </div>
+      <div class="footnote">SOURCE // Cognitive Husbandry.md — "Technical Feasibility: Brain in a Vat" · Canon - New Tripoli.md §4 (Thematic Purpose). Figures are ✦ speculative engineering estimates over ◆ canon parameters. Each step deep-links into a live instrument with its inputs preset.</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

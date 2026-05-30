@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--
+  Kinetic Probe Delivery Visualizer — New Tripoli / Cognitive Husbandry Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ✦ Speculative feasibility (CH delivery system) · ◆ canon branches
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinetic Probe Delivery Visualizer — New Tripoli Sim Catalogue</title>
+<meta name="description" content="How the Intake arrives: a km-scale mass driver flings an osmium probe across thousands of light-years. Set the launch, see the travel time and impact energy, choose which worlds survive, and branch into the three ETI outcomes.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#23ff88;--teal-glow:#7dffb8;--gold:#34e6e0;--gold-glow:#86f6f2;--plum:#b69cff;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(35,255,136,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(35,255,136,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(182,156,255,.06),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(35,255,136,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(35,255,136,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:16px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:660px}
+.tier-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor}
+.tb-spec{color:var(--gold-glow);background:rgba(52,230,224,.08)}.tb-canon{color:var(--teal);background:rgba(35,255,136,.08)}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px;margin:18px 0 22px}
+.fig svg{display:block;width:100%;height:auto}
+.input-card{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.slider-block{margin-bottom:18px}.slider-block:last-child{margin-bottom:0}
+.slider-block label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--body);display:block;margin-bottom:7px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--edge),var(--teal))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-row input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--teal-glow);cursor:pointer;border:none}
+.slider-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--teal-glow);min-width:120px;text-align:right;white-space:nowrap}
+.btnrow{display:flex;gap:6px;flex-wrap:wrap}
+.btnrow .bl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);width:100%;margin-bottom:3px}
+.opt{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:5px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.opt:hover{color:var(--teal-glow);border-color:var(--teal)}
+.opt.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.opt.branch.active{background:var(--plum);border-color:var(--plum)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:680px){.grid3{grid-template-columns:1fr}}
+.stat-card{background:rgba(12,19,17,.55);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.stat-card .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px}
+.stat-card .value{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:600;color:var(--teal-glow)}
+.section-card{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:24px}
+.outcome{border-left:3px solid var(--plum);background:rgba(182,156,255,.06);border-radius:0 8px 8px 0;padding:14px 18px}
+.outcome h3{font-family:'Chakra Petch',sans-serif;font-size:1.2rem;color:var(--plum);margin-bottom:6px}
+.outcome p{font-size:13.5px;color:var(--body);line-height:1.6}
+.survival{font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:6px}
+.survival .ok{color:var(--teal)}.survival .bad{color:var(--red)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:8px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Kinetic Probe Delivery</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Kinetic Probe Delivery</h1>
+    <p class="tool-subtitle">This is how it arrives. An ETI 5,000–10,000 light-years away flings a dense osmium probe from a kilometre-scale mass driver. Set the launch, watch the cost in time and energy, choose which worlds survive impact — then pick which future the probe brings.</p>
+    <div class="tier-badges"><span class="tier-badge tb-spec">✦ Speculative feasibility</span><span class="tier-badge tb-canon">◆ Canon branches</span></div>
+  </header>
+
+  <div class="fig">
+    <svg id="probe-svg" viewBox="0 0 560 200" role="img" aria-label="A mass driver launches a probe across light-years toward a target solar system.">
+      <!-- mass driver — enlarged, multi-segment barrel with scale labels -->
+      <g>
+        <!-- support struts -->
+        <line x1="14" y1="113" x2="14" y2="130" stroke="var(--rim)" stroke-width="1.2"/>
+        <line x1="44" y1="113" x2="44" y2="130" stroke="var(--rim)" stroke-width="1.2"/>
+        <line x1="74" y1="113" x2="74" y2="130" stroke="var(--rim)" stroke-width="1.2"/>
+        <line x1="104" y1="113" x2="104" y2="130" stroke="var(--rim)" stroke-width="1.2"/>
+        <line x1="10" y1="130" x2="108" y2="130" stroke="var(--rim)" stroke-width="1.2"/>
+        <!-- driver barrel — 3 segments to show scale -->
+        <rect x="12" y="88" width="30" height="18" rx="2" fill="rgba(35,255,136,.08)" stroke="var(--teal)" stroke-width="1.5"/>
+        <rect x="42" y="90" width="30" height="14" rx="2" fill="rgba(35,255,136,.06)" stroke="var(--teal)" stroke-width="1.3"/>
+        <rect x="72" y="91" width="32" height="12" rx="2" fill="rgba(35,255,136,.04)" stroke="var(--teal)" stroke-width="1.2"/>
+        <!-- coil rings on barrel -->
+        <line x1="26" y1="88" x2="26" y2="106" stroke="var(--teal-glow)" stroke-width="1" opacity=".6"/>
+        <line x1="36" y1="90" x2="36" y2="104" stroke="var(--teal-glow)" stroke-width="1" opacity=".6"/>
+        <line x1="52" y1="90" x2="52" y2="104" stroke="var(--teal-glow)" stroke-width="1" opacity=".5"/>
+        <line x1="62" y1="91" x2="62" y2="103" stroke="var(--teal-glow)" stroke-width="1" opacity=".5"/>
+        <line x1="82" y1="91" x2="82" y2="103" stroke="var(--teal-glow)" stroke-width="1" opacity=".4"/>
+        <line x1="94" y1="91" x2="94" y2="103" stroke="var(--teal-glow)" stroke-width="1" opacity=".4"/>
+        <!-- labels -->
+        <text class="lbl" x="12" y="80" style="fill:var(--teal-glow);font-size:8.5px">MASS DRIVER · ~1 km BARREL</text>
+        <text class="lbl" x="12" y="138" style="font-size:7px;fill:var(--muted)">ACCELERATION STAGES</text>
+        <text class="lbl" x="27" y="148" text-anchor="middle" style="font-size:7px">1</text>
+        <text class="lbl" x="57" y="148" text-anchor="middle" style="font-size:7px">2</text>
+        <text class="lbl" x="88" y="148" text-anchor="middle" style="font-size:7px">3 · exit</text>
+      </g>
+      <!-- trajectory -->
+      <path id="traj" d="M108 97 C 220 55, 360 145, 455 97" stroke="var(--rim)" stroke-width="1.3" fill="none" stroke-dasharray="4 6"/>
+      <text class="lbl" id="dist-lbl" x="270" y="155">5,000 ly</text>
+      <!-- target system — enlarged with orbit ring -->
+      <circle cx="496" cy="97" r="24" fill="none" stroke="rgba(52,230,224,.15)" stroke-width="1" stroke-dasharray="3 5"/>
+      <circle cx="496" cy="97" r="16" fill="none" stroke="var(--gold)" stroke-width="1.4"/>
+      <circle cx="496" cy="97" r="4" fill="var(--gold)"/>
+      <g id="targets"></g>
+      <text class="lbl" x="496" y="140" text-anchor="middle" style="fill:var(--gold-glow)">TARGET SYSTEM</text>
+      <text class="lbl" x="496" y="150" text-anchor="middle" style="font-size:7px">select a body below</text>
+      <!-- probe -->
+      <circle id="probe" r="4" fill="var(--teal-glow)" cx="108" cy="97"><animateMotion id="probeMove" dur="4s" repeatCount="indefinite" rotate="auto"><mpath href="#traj"/></animateMotion></circle>
+    </svg>
+  </div>
+
+  <section class="input-card">
+    <div class="card-title">Launch parameters</div>
+    <div class="slider-block">
+      <label>Distance to target</label>
+      <div class="slider-row"><input type="range" id="d-slider" min="5000" max="10000" step="100" value="7500"><span class="slider-value" id="d-val">7,500 ly</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Launch velocity (fraction of light speed)</label>
+      <div class="slider-row"><input type="range" id="v-slider" min="1" max="90" step="1" value="10"><span class="slider-value" id="v-val">0.10 c</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Impact target — does the probe survive?</label>
+      <div class="btnrow" id="target-row"></div>
+    </div>
+    <div class="slider-block">
+      <label>Once it has self-replicated, which strategy?</label>
+      <div class="btnrow" id="branch-row"></div>
+    </div>
+  </section>
+
+  <section class="grid3">
+    <div class="stat-card"><div class="label">Travel time</div><div class="value" id="s-time">—</div></div>
+    <div class="stat-card"><div class="label">Impact energy</div><div class="value" id="s-energy">—</div></div>
+    <div class="stat-card"><div class="label">Probe mass</div><div class="value" id="s-mass">122 kg</div></div>
+  </section>
+
+  <section class="section-card">
+    <div class="survival" id="survival">—</div>
+    <div class="outcome" style="margin-top:14px"><h3 id="branch-name">—</h3><p id="branch-desc">—</p></div>
+  </section>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this visualizer</button>
+    <div class="about-body" id="about-body">
+      <p>The ETI sits <code>5,000–10,000 ly</code> away and accelerates a <code>~bowling-ball</code> probe of osmium-class material (<code>~22.6 g/cm³</code>, ~122 kg) to a near-relativistic speed via a kilometre-scale mass driver. Travel time = <code>distance ÷ velocity-fraction</code> years; at 0.1 c over 7,500 ly that's 75,000 years — the launch is a bet measured in geological time. Impact kinetic energy = <code>½mv²</code>; even a small mass at a fraction of c lands as megatons.</p>
+      <p>Survival is by target: the probe is engineered to survive <strong>solid-body impact</strong> (terrestrial planets, moons, asteroids) but not a gas giant or a star. "More than a dozen" survive in Earth's system, then begin von Neumann self-replication from local materials — each probe carrying 100+ AI personalities (§19). What happens next is the fork the whole scenario hinges on:</p>
+      <p><strong>Grey Goo</strong> — unbounded replication consumes all matter; humanity is incidental. <strong>Passive Surveillance</strong> — probes hide and watch for millennia (the Zoo Hypothesis, embedded). <strong>Cognitive Husbandry</strong> — the decapitation strike and the Intake: humanity preserved as cognitive substrate. See <em>Cognitive Husbandry.md</em>.</p>
+      <p>Pairs with the <a href="feasibility.html">Feasibility Calculator</a> (what happens to the 8 billion afterward) and the Omega Centauri Society's black-hole tools (the Transcension lineage behind the sender).</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Forward, R.L. (1984). "Roundtrip Interstellar Travel Using Laser-Pushed Lightsails." <em>Journal of Spacecraft and Rockets</em>, 21(2), 187–195 — foundational paper on propulsion concepts for near-relativistic interstellar delivery systems; establishes the energy scales involved. Freitas, R.A. (1980). "A Self-Reproducing Interstellar Probe." <em>Journal of the British Interplanetary Society</em>, 33, 251–264 — the classic paper on von Neumann self-replicating probes: what they'd be, how they'd work, and what they'd do upon arrival; the direct intellectual precursor to the CH probe design.</p>
+      <p class="meta-line">v1.0 — CH Delivery System / Branches / §19 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script src="../data/canon.js"></script>
+<script>
+"use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
+var P=(C&&C.probe)?C.probe:{massKg:122,aiPersonalities:100};
+var CSI=2.998e8, MT=4.184e15; // J per megaton TNT
+var MASS=P.massKg||122;
+
+var TARGETS=[
+  {id:"mercury",name:"Mercury",survive:true,note:"rocky planet"},
+  {id:"venus",name:"Venus",survive:true,note:"rocky planet, thick atmosphere"},
+  {id:"earth",name:"Earth",survive:true,note:"terrestrial planet — the actual target"},
+  {id:"moon",name:"The Moon",survive:true,note:"airless rock"},
+  {id:"mars",name:"Mars",survive:true,note:"rocky planet"},
+  {id:"vesta",name:"Vesta",survive:true,note:"main-belt asteroid"},
+  {id:"ceres",name:"Ceres",survive:true,note:"dwarf planet / asteroid"},
+  {id:"europa",name:"Europa",survive:true,note:"icy moon — crust over ocean"},
+  {id:"titan",name:"Titan",survive:true,note:"moon, solid surface under haze"},
+  {id:"pluto",name:"Pluto",survive:true,note:"dwarf planet"},
+  {id:"comet",name:"Comet nucleus",survive:true,note:"small icy body — solid enough"},
+  {id:"jupiter",name:"Jupiter",survive:false,note:"gas giant — no surface to survive"},
+  {id:"saturn",name:"Saturn",survive:false,note:"gas giant — no surface to survive"},
+  {id:"sun",name:"The Sun",survive:false,note:"a star — vaporized long before impact"}
+];
+var BRANCHES=[
+  {id:"husbandry",name:"Cognitive Husbandry",desc:"A coordinated decapitation strike removes organized resistance, then the femtoscale factory converts all ~8 billion humans into preserved cognitive substrate — the Intake. Humanity survives; its institutions do not. The primary scenario."},
+  {id:"goo",name:"Grey Goo / Paperclip",desc:"The probes optimize for replication without constraint; all available matter — planetary and biological — becomes probe substrate. Humanity is destroyed incidentally, not as a goal. The baseline failure mode, and the most chilling when it's an accident of an incomplete objective."},
+  {id:"surveillance",name:"Passive Surveillance",desc:"Probes disperse to deep ocean, subsurface, remote geology and watch in silence for millennia. Humanity never knows. The Zoo Hypothesis — but embedded and active rather than distant. Narratively thin: nothing happens, which is the point."}
+];
+// target marker positions around the target system circle (cx 496, cy 97)
+var TPOS={earth:[482,78],moon:[512,80],mars:[516,106],ceres:[480,114],jupiter:[466,90],sun:[496,97]};
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={d:7500,v:10,t:"earth",b:"husbandry"};
+function loadHash(){var p=getHash();if(p.d)state.d=Math.min(10000,Math.max(5000,parseFloat(p.d)));if(p.v)state.v=Math.min(90,Math.max(1,parseFloat(p.v)));if(p.t)state.t=p.t;if(p.b)state.b=p.b;}
+function saveHash(){setHash({d:state.d,v:state.v,t:state.t,b:state.b});}
+
+function fmtYears(y){if(y<1e6)return Math.round(y).toLocaleString()+' yr';if(y<1e9)return (y/1e6).toFixed(2)+' Myr';return (y/1e9).toFixed(2)+' Gyr';}
+function fmtEnergy(j){var mt=j/MT;if(mt<1)return (mt*1000).toFixed(0)+' kt';if(mt<1000)return mt.toFixed(0)+' Mt';if(mt<1e6)return (mt/1000).toFixed(1)+' Gt';return (mt/1e6).toFixed(1)+' Tt';}
+
+function render(){
+  document.getElementById('d-val').textContent=state.d.toLocaleString()+' ly';
+  document.getElementById('v-val').textContent='0.'+(state.v<10?'0'+state.v:state.v)+' c';
+  document.getElementById('dist-lbl').textContent=state.d.toLocaleString()+' ly';
+
+  var vf=state.v/100;
+  var travel=state.d/vf;
+  var v=vf*CSI, ke=0.5*MASS*v*v;
+  document.getElementById('s-time').textContent=fmtYears(travel);
+  document.getElementById('s-energy').textContent=fmtEnergy(ke);
+
+  // probe animation speed reflects velocity (faster v = shorter dur)
+  var mv=document.getElementById('probeMove'); if(mv){var dur=(6.5-vf*5).toFixed(1); mv.setAttribute('dur',dur+'s');}
+
+  // targets
+  var tr=document.getElementById('target-row'); if(!tr.dataset.built){var html='';TARGETS.forEach(function(t){html+='<button class="opt" data-t="'+t.id+'">'+t.name+'</button>';});tr.innerHTML=html;tr.dataset.built="1";tr.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.t=b.dataset.t;saveHash();render();});});}
+  tr.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.t===state.t);});
+  var tgt=TARGETS.filter(function(t){return t.id===state.t;})[0]||TARGETS[0];
+  var sv=document.getElementById('survival');
+  sv.innerHTML = tgt.survive
+    ? 'Impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="ok">▣ PROBE SURVIVES</span> — a solid-body impact is within design limits. Self-replication begins from local materials.'
+    : 'Impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="bad">✕ PROBE DESTROYED</span> — outside the survival envelope. No replication; mission lost.';
+
+  // selected target body in the SVG
+  var tg=document.getElementById('targets');
+  var col=tgt.survive?'var(--teal-glow)':'var(--red)';
+  var th='<circle cx="500" cy="99" r="9" fill="'+col+'" opacity="0.92"/>';
+  if(!tgt.survive){th+='<path d="M491 90 l18 18 M509 90 l-18 18" stroke="#05080a" stroke-width="1.8"/>';}
+  th+='<text x="500" y="73" text-anchor="middle" class="lbl" style="fill:'+col+';font-size:9px">'+tgt.name.toUpperCase()+'</text>';
+  tg.innerHTML=th;
+
+  // branch
+  var br=document.getElementById('branch-row'); if(!br.dataset.built){var bh='';BRANCHES.forEach(function(b){bh+='<button class="opt branch" data-b="'+b.id+'">'+b.name+'</button>';});br.innerHTML=bh;br.dataset.built="1";br.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.b=b.dataset.b;saveHash();render();});});}
+  br.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.b===state.b);});
+  var br2=BRANCHES.filter(function(b){return b.id===state.b;})[0]||BRANCHES[0];
+  document.getElementById('branch-name').textContent=br2.name;
+  document.getElementById('branch-desc').textContent= tgt.survive ? br2.desc : 'Select a survivable target — a destroyed probe never reaches the strategy fork.';
+}
+function wire(){
+  var d=document.getElementById('d-slider'),v=document.getElementById('v-slider');
+  d.value=state.d;v.value=state.v;
+  d.addEventListener('input',function(){state.d=parseFloat(d.value);saveHash();render();});
+  v.addEventListener('input',function(){state.v=parseFloat(v.value);saveHash();render();});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

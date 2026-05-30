@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<!--
+  Azure Janus Portal Map
+  Cognitive Husbandry / New Tripoli — Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon · ▣ Narrative sim (§17 Novo Alexandria / Azure Janus chain)
+  No PII, no network calls at runtime (fonts excepted).
+  Aesthetic: "Simulation Terminal" — phosphor green console on green-black, CRT texture.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Janus Portal Map — New Tripoli Sim Catalogue</title>
+<meta name="description" content="An explorable map of the portal chain — the Wadlow Portal in California, Azure Janus, Rust-Mars, and the black-hole library Novo Alexandria. The most philosophically weighted sim in the catalogue. Client-side, no PII.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--violet:#b69cff;
+  --border:rgba(52,230,224,0.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;
+  background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none;transition:color .15s}
+a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}
+.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.03em;margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
+.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:18px}
+.tool-header h1{font-size:30px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:16px;max-width:680px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.protocol{margin:20px 0 18px;background:rgba(35,255,136,.06);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13px;color:var(--body);line-height:1.6}
+.protocol strong{color:var(--gold-glow)}
+.breadcrumb{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.crumb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px}
+.crumb:hover{color:var(--teal-glow);border-color:var(--teal)}
+.crumb.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.crumb .px{opacity:.6;font-size:9px}
+.stage{display:grid;grid-template-columns:1.18fr .82fr;gap:24px;align-items:start}
+@media(max-width:780px){.stage{grid-template-columns:1fr}}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px}
+.fig svg{display:block;width:100%;height:auto}
+.fig svg .node{cursor:pointer}
+.readout{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:22px 24px}
+.r-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.r-name{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.7rem;color:var(--teal-glow);line-height:1.1}
+.r-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--gold-glow);margin:6px 0 14px}
+.statrow{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dotted var(--border);font-size:13px}
+.statrow .k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.statrow .v{color:var(--text);text-align:right}
+.r-desc{font-size:14px;color:var(--body);line-height:1.7;margin:14px 0}
+.mystery{background:rgba(5,8,10,.45);border-left:2px solid var(--gold);border-radius:0 6px 6px 0;padding:12px 15px;font-size:13.5px;color:var(--body);line-height:1.65}
+.mystery .mh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-glow);display:block;margin-bottom:5px}
+.nav-btns{display:flex;gap:10px;margin-top:18px}
+.nav-btn{flex:1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.nav-btn:hover:not(:disabled){color:var(--teal-glow);border-color:var(--teal)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:30px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}
+.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}
+.about-body.open{display:block}.about-body p{margin-bottom:10px}.about-body p:last-child{margin-bottom:0}
+.about-body a{color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+    <span class="nav-title">Azure Janus Portal Map</span>
+    <a class="nav-link" href="../index.html">← Catalogue</a>
+  </div>
+</nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Azure Janus Portal Map</h1>
+    <p class="tool-subtitle">The most philosophically weighted sim in the catalogue — a portal chain that ends not at a battle but at a library with no closing time. Trace it node by node.</p>
+    <span class="tier-badge">◆ Canon · ▣ Narrative sim · §17</span>
+  </header>
+
+  <div class="protocol">
+    <strong>Traversal protocol — Azure Janus:</strong> anything that crosses a threshold must remain at least <strong>24 hours</strong> before returning. Subjects who come back sooner suffer severe vertigo; robots go sluggish. The rule holds at <em>every</em> portal in the chain — no one knows whether it is portal physics or biology.
+  </div>
+
+  <div class="breadcrumb" id="breadcrumb"></div>
+
+  <div class="stage">
+    <div class="fig">
+      <svg id="map-svg" viewBox="0 0 520 320" role="img" aria-label="Map of the four-portal chain from California to the Novo Alexandria station.">
+        <!-- connectors -->
+        <g id="links" stroke-dasharray="4 6" stroke-width="1.3" fill="none">
+          <path id="lk0" class="lk" d="M70 234 C 120 210, 150 150, 190 128" stroke="var(--rim)"/>
+          <path id="lk1" class="lk" d="M190 128 C 250 150, 290 196, 332 210" stroke="var(--rim)"/>
+          <path id="lk2" class="lk" d="M332 210 C 390 188, 420 120, 458 96" stroke="var(--rim)"/>
+        </g>
+        <text class="lbl" x="92" y="186" transform="rotate(-32 92 186)">step through</text>
+        <text class="lbl" x="250" y="196">~4,800 mi by sea</text>
+        <text class="lbl" x="372" y="150" transform="rotate(-34 372 150)">+4 yrs exploring</text>
+
+        <!-- NODE 0 — Wadlow Portal -->
+        <g class="node" data-node="0">
+          <ellipse id="n0r" cx="70" cy="234" rx="20" ry="28" stroke="var(--teal)" fill="rgba(52,230,224,0.04)" stroke-width="1.6"/>
+          <line x1="56" y1="262" x2="44" y2="272" stroke="var(--rim)" stroke-width="1.2"/><line x1="84" y1="262" x2="96" y2="272" stroke="var(--rim)" stroke-width="1.2"/>
+          <circle id="n0d" cx="70" cy="234" r="3.5" fill="var(--teal)"/>
+          <text class="lbl" id="n0t" x="70" y="294" text-anchor="middle" fill="var(--teal-glow)">WADLOW · CA</text>
+        </g>
+        <!-- NODE 1 — Azure Janus -->
+        <g class="node" data-node="1">
+          <ellipse id="n1r" cx="190" cy="128" rx="18" ry="25" stroke="var(--rim)" fill="rgba(52,230,224,0.03)" stroke-width="1.5"/>
+          <circle id="n1d" cx="190" cy="128" r="3" fill="var(--rim)"/>
+          <text class="lbl" id="n1t" x="190" y="92" text-anchor="middle">AZURE JANUS</text>
+        </g>
+        <!-- NODE 2 — Rust-Mars -->
+        <g class="node" data-node="2">
+          <ellipse id="n2r" cx="332" cy="210" rx="18" ry="25" stroke="var(--rim)" fill="rgba(52,230,224,0.03)" stroke-width="1.5"/>
+          <circle id="n2d" cx="332" cy="210" r="3" fill="var(--rim)"/>
+          <text class="lbl" id="n2t" x="332" y="252" text-anchor="middle">RUST-MARS</text>
+        </g>
+        <!-- NODE 3 — Novo Alexandria (black hole + station) -->
+        <g class="node" data-node="3">
+          <circle id="n3bh" cx="458" cy="96" r="11" fill="#05080a" stroke="var(--rim)" stroke-width="1"/>
+          <ellipse id="n3r" cx="458" cy="96" rx="30" ry="9" stroke="var(--gold)" fill="none" stroke-width="1.6"/>
+          <ellipse cx="458" cy="96" rx="30" ry="9" stroke="var(--rim)" fill="none" stroke-width="1" transform="rotate(52 458 96)" opacity=".5"/>
+          <rect id="n3s" x="452" y="90" width="12" height="12" rx="2" fill="var(--gold)"/>
+          <text class="lbl" id="n3t" x="458" y="58" text-anchor="middle">NOVO ALEXANDRIA</text>
+        </g>
+
+        <!-- traveller marker -->
+        <circle id="here" r="5.5" fill="var(--teal-glow)" cx="70" cy="234">
+          <animate attributeName="opacity" values="1;.3;1" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+
+    <div class="readout">
+      <div class="r-tag" id="r-tag">Portal 0 of 3</div>
+      <div class="r-name" id="r-name">—</div>
+      <div class="r-sub" id="r-sub">—</div>
+      <div id="stats"></div>
+      <div class="r-desc" id="r-desc">—</div>
+      <div class="mystery"><span class="mh" id="m-head">Open thread</span><span id="m-body">—</span></div>
+      <div class="nav-btns">
+        <button class="nav-btn" id="btn-prev">← Previous portal</button>
+        <button class="nav-btn" id="btn-next">Traverse →</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this chain</button>
+    <div class="about-body" id="about-body">
+      <p>Novo Alexandria is, unusually, a sim that functions less as an action environment than as an <em>argument</em>. A space object lands on state land in southeast California; from it opens the <strong>Wadlow Portal</strong> (just over 9 ft each way — named for the tallest recorded human). It hums a slow Morse signal: three textbooks of schematics — a working fusion reactor, a supercollider beyond the Waxahachie design, and "a quantum computer that actually works."</p>
+      <p>The chain runs California → <strong>Azure Janus</strong> (a Texas-shaped landmass at one-fifth scale, breathable, no predators — and seven hangars of unexplained refined material) → <strong>Rust-Mars</strong> (mask, not suit) → <strong>Novo Alexandria</strong>, a moon-sized computronium station orbiting a stellar black hole, staffed by tens of thousands of academics who simply want to teach.</p>
+      <p>Late in <em>New Pluto</em>, characters argue the sim's presence in the Day 1 catalogue was deliberate: the ETI advertising what voluntary self-improvement at civilisational scale looks like. As one puts it, Borg was always the wrong analogy — the right one was a library with no closing time. Pairs with the <a href="time-dilation.html">Time Dilation Instrument</a> (Novo Alexandria runs on black-hole time) and the Omega Centauri Society's black-hole tools.</p>
+      <p class="meta-line">v1.0 — Canon §17 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+var NODES=[
+  { name:"The Wadlow Portal", crumb:"Wadlow",
+    sub:"ORIGIN · CALIFORNIA THRESHOLD VANGUARD",
+    stats:[["Location","SE California, state land"],["Aperture","~9 ft × 9 ft · bidirectional ramps"],["Signal","Monthly Morse — 3 schematics"],["Oversight","CTV (Dept. of Interior)"]],
+    desc:"A meteorite that wasn't. The portal's surface is solid, non-reflective — no shimmer. It hums a slow Morse signal that decodes to three textbooks of engineering: a fusion reactor, a supercollider beyond Waxahachie, and “a quantum computer that actually works” (the line that got the first laugh in the briefing room).",
+    mh:"Who is broadcasting — and why hand us the blueprints?", mb:"All three designs sit outside any but state-level reach, so the CTV eventually released them publicly. Nobody knows the sender's intent." },
+  { name:"Azure Janus", crumb:"Azure Janus",
+    sub:"PLANET 1 · TEXAS-SHAPED LANDMASS, 1/5 SCALE",
+    stats:[["Atmosphere","Breathable"],["Gear","None required"],["Biosphere","Flora to ~35 ft · no large fauna · no pathogens"],["First crossing","PRU — 20 volunteers, avg age 68, 3 days"]],
+    desc:"Azure for the blue sky, Janus for the god of thresholds. Not Mars, not Earth — Earth-mass with gentler tectonics and scattered island continents. After-action reviews keep using one word: “lucky.” Within a year, five million people had registered and paid non-refundable deposits to relocate.",
+    mh:"The seven hangars", mb:"In the panhandle: seven connected hangars, each larger than Boeing Everett, stacked with gigatons of refined, gold-bar-sized material and partial aerospace components — no blueprints, clean and orderly, deliberately vacated. The chain's first great mystery." },
+  { name:"Rust-Mars", crumb:"Rust-Mars",
+    sub:"PLANET 2 · ~4,800 MI BY SEA FROM PORTAL 1",
+    stats:[["Reached by","Boat — no airports yet"],["Atmosphere","Thin — breathing mask, no full suit"],["Climate","Cold, arid, desolately scenic"],["Yield","A third portal, after ~4 years"]],
+    desc:"Portal 2 sits roughly 4,800 miles northeast of New California's coast, so the first crossings are a sea voyage. The far side is Mars-adjacent — thin air you can survive with a mask, rust-coloured and empty. Teams explore it for about four years before the next threshold turns up.",
+    mh:"Why a chain at all?", mb:"Each portal leads to somewhere stranger and further out. By Rust-Mars it's clear this isn't a destination — it's a path, laid deliberately, leading somewhere specific." },
+  { name:"Novo Alexandria", crumb:"Novo Alexandria",
+    sub:"COMPUTRONIUM STATION · STELLAR BLACK-HOLE ORBIT",
+    stats:[["Form","Moon-sized · built entirely of computronium"],["Orbit","Near the ISCO of a star-harvesting black hole"],["Occupants","Tens of thousands of academics, varied morphology"],["Offer","Standing open enrollment — stay or leave freely"]],
+    desc:"The third portal opens not onto a surface but onto a moon-sized station of pure computronium, orbiting a large stellar black hole that is slowly eating its companion star. Inside: library stacks, open classrooms, teachers in every discipline. It is not hostile. It issues no ultimatum. It simply invites you to study, for as long as you like.",
+    mh:"The honest advertisement", mb:"Characters come to read the whole chain as a breadcrumb the ETI left in the Day 1 catalogue — a quiet pitch for what voluntary self-improvement at civilisational scale could be. The right analogy was never the Borg. It was a library with no closing time." }
+];
+var POS=[[70,234],[190,128],[332,210],[458,96]];
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={ node:0 };
+function loadHash(){var p=getHash(); if(p.node!==undefined){var v=parseInt(p.node); if(!isNaN(v)&&v>=0&&v<=3)state.node=v;}}
+function saveHash(){setHash({node:state.node});}
+
+function buildCrumb(){
+  var bc=document.getElementById('breadcrumb'),html='';
+  for(var i=0;i<NODES.length;i++){html+='<button class="crumb" data-node="'+i+'"><span class="px">P'+i+'</span>'+NODES[i].crumb+'</button>';}
+  bc.innerHTML=html;
+  bc.querySelectorAll('.crumb').forEach(function(b){b.addEventListener('click',function(){state.node=parseInt(b.dataset.node);saveHash();render();});});
+}
+
+function render(){
+  var i=state.node, d=NODES[i];
+  document.getElementById('r-tag').textContent='Portal '+i+' of 3';
+  document.getElementById('r-name').textContent=d.name;
+  document.getElementById('r-sub').textContent=d.sub;
+  var sv='';
+  d.stats.forEach(function(s){sv+='<div class="statrow"><span class="k">'+s[0]+'</span><span class="v">'+s[1]+'</span></div>';});
+  document.getElementById('stats').innerHTML=sv;
+  document.getElementById('r-desc').textContent=d.desc;
+  document.getElementById('m-head').textContent=d.mh;
+  document.getElementById('m-body').textContent=d.mb;
+
+  // breadcrumb active
+  document.querySelectorAll('#breadcrumb .crumb').forEach(function(b){b.classList.toggle('active',parseInt(b.dataset.node)===i);});
+
+  // node highlighting
+  for(var k=0;k<4;k++){
+    var ring=document.getElementById('n'+k+'r');
+    var lbl=document.getElementById('n'+k+'t');
+    var cur=(k===i), visited=(k<=i);
+    var col = cur ? 'var(--teal-glow)' : (k===3 ? (visited?'var(--gold)':'var(--rim)') : (visited?'var(--teal)':'var(--rim)'));
+    if(ring){ ring.setAttribute('stroke',col); ring.style.filter = cur ? 'drop-shadow(0 0 7px rgba(52,230,224,.55))' : 'none'; }
+    if(lbl){ lbl.setAttribute('fill', cur ? 'var(--teal-glow)' : (visited?'var(--body)':'var(--muted)')); }
+    var dot=document.getElementById('n'+k+'d'); if(dot)dot.setAttribute('fill',visited?'var(--teal)':'var(--rim)');
+  }
+  // links visited
+  for(var L=0;L<3;L++){ var lk=document.getElementById('lk'+L); if(lk)lk.setAttribute('stroke', L<i ? 'var(--teal)' : 'var(--rim)'); }
+
+  // traveller marker
+  var here=document.getElementById('here');
+  here.setAttribute('cx',POS[i][0]); here.setAttribute('cy',POS[i][1]);
+
+  document.getElementById('btn-prev').disabled=(i<=0);
+  document.getElementById('btn-next').disabled=(i>=3);
+  document.getElementById('btn-next').textContent = i>=3 ? 'End of chain' : 'Traverse →';
+}
+
+function wire(){
+  document.querySelectorAll('#map-svg .node').forEach(function(g){g.addEventListener('click',function(){state.node=parseInt(g.dataset.node);saveHash();render();});});
+  document.getElementById('btn-prev').addEventListener('click',function(){if(state.node>0){state.node--;saveHash();render();}});
+  document.getElementById('btn-next').addEventListener('click',function(){if(state.node<3){state.node++;saveHash();render();}});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();buildCrumb();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

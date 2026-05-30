@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+  Synthetic-Body Spec Sheet — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon (§35 / §37)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synthetic-Body Spec Sheet — New Tripoli Sim Catalogue</title>
+<meta name="description" content="At the Wake, eight billion people return in synthetic bodies. Toggle the skeleton material and watch the consequences — an osmium skeleton makes you nearly half a tonne: you can't swim, can't ride a bicycle, and can't be repaired in the field.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--plum:#23ff88;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:18px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:660px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.matrow{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 20px}
+.mat-btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.mat-btn:hover{color:var(--teal-glow);border-color:var(--teal)}
+.mat-btn.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.mat-btn .d{display:block;font-size:9px;color:var(--dim);margin-top:2px}
+.mat-btn.active .d{color:rgba(5,8,10,.7)}
+.stage{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px;align-items:start}
+@media(max-width:760px){.stage{grid-template-columns:1fr}}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px}
+.fig svg{display:block;width:100%;height:auto}
+.readout{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.mass-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.mass-num{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:2.6rem;color:var(--teal-glow);line-height:1}
+.mass-num .s{font-size:1rem;color:var(--muted);font-weight:500}
+.mass-sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-glow);margin:4px 0 14px}
+.verdict{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px dotted var(--border)}
+.verdict:last-child{border-bottom:none}
+.verdict .vi{width:24px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:14px;text-align:center}
+.verdict .vk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.verdict .vv{font-size:13.5px;color:var(--text);line-height:1.5}
+.ok{color:var(--teal)}.warn{color:var(--amber)}.bad{color:var(--red)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:30px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Synthetic-Body Spec Sheet</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Synthetic-Body Spec Sheet</h1>
+    <p class="tool-subtitle">At the Wake (§35), everyone returns in a durable synthetic body. The canon build uses an osmium skeleton — extraordinary toughness at a brutal price. Toggle the skeleton material and watch what your body can and can't do.</p>
+    <span class="tier-badge">◆ In-world canon · §35 / §37</span>
+  </header>
+
+  <div class="matrow" id="matrow"></div>
+  <p style="font-size:14px;color:var(--body);line-height:1.65;margin:0 0 20px;max-width:70ch">The skeleton is most of the body's mass, so the material you pick cascades into everything else — what you weigh, whether you float, what you can ride, how hard you are to break, and what it takes to fix you. The ETI chose <strong style="color:var(--text)">osmium</strong> for sheer durability; the cost is a body that behaves like a small engine block. Switch materials below and read the consequences.</p>
+
+  <div class="stage">
+    <div class="fig">
+      <svg id="body-svg" viewBox="0 0 220 320" role="img" aria-label="A synthetic body with a highlighted skeleton, shown against a waterline.">
+        <!-- waterline -->
+        <line x1="0" y1="250" x2="220" y2="250" class="lbl" stroke="var(--rim)" stroke-width="1" stroke-dasharray="4 5"/>
+        <text class="lbl" x="6" y="246">waterline</text>
+        <!-- body outline -->
+        <g id="body-grp">
+          <circle cx="110" cy="40" r="20" fill="none" stroke="var(--edge)" stroke-width="1.5"/>
+          <path d="M92 64 q18 -8 36 0 l8 70 q-4 8 -12 6 l-4 -40 v44 l10 86 q-6 6 -14 2 l-10 -84 l-10 84 q-8 4 -14 -2 l10 -86 v-44 l-4 40 q-8 2 -12 -6 z" fill="none" stroke="var(--edge)" stroke-width="1.5"/>
+        </g>
+        <!-- skeleton (material colored) -->
+        <g id="skel" stroke="var(--teal)" stroke-width="2.2" fill="none" stroke-linecap="round">
+          <circle cx="110" cy="40" r="11" stroke-width="1.8"/>
+          <line x1="110" y1="58" x2="110" y2="150"/>
+          <line x1="86" y1="78" x2="134" y2="78"/><line x1="90" y1="96" x2="130" y2="96"/><line x1="94" y1="112" x2="126" y2="112"/>
+          <line x1="110" y1="70" x2="78" y2="128"/><line x1="110" y1="70" x2="142" y2="128"/>
+          <line x1="110" y1="150" x2="92" y2="240"/><line x1="110" y1="150" x2="128" y2="240"/>
+        </g>
+        <text class="lbl" id="skel-lbl" x="110" y="300" text-anchor="middle" style="fill:var(--teal-glow)">OSMIUM SKELETON</text>
+        <!-- sink/float arrow -->
+        <g id="buoy"><path id="buoy-arr" d="M180 230 v30" stroke="var(--red)" stroke-width="2" marker-end=""/><polygon id="buoy-head" points="176,256 184,256 180,266" fill="var(--red)"/></g>
+      </svg>
+    </div>
+
+    <div class="readout">
+      <div class="mass-tag">Total body mass</div>
+      <div class="mass-num" id="mass-kg">204<span class="s"> kg</span></div>
+      <div class="mass-sub" id="mass-sub">450 lb · ≈ 3× an adult human</div>
+      <div id="verdicts"></div>
+    </div>
+  </div>
+
+  <section class="section-card" style="background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-top:24px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--border)">FIG // Why the skeleton material decides everything</div>
+    <svg id="dens-svg" viewBox="0 0 520 156" role="img" aria-label="Density of candidate skeleton materials versus the float line of water." style="display:block;width:100%;height:auto;max-width:520px;margin:0 auto">
+      <g id="db-bars"></g>
+      <line id="db-water" class="lbl" x1="0" y1="16" x2="0" y2="146" stroke="var(--gold-glow)" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text id="db-waterlbl" x="0" y="12" text-anchor="middle" style="fill:var(--gold-glow);font-family:'JetBrains Mono',monospace;font-size:8.5px">water · float line</text>
+    </svg>
+    <div style="font-size:13.5px;color:var(--body);line-height:1.65;padding:13px 16px;background:rgba(5,8,10,.45);border-radius:6px;border-left:2px solid var(--gold);margin-top:10px">Everything to the right of the float line sinks. For scale, bone is about 1.8 g/cm³; an <strong style="color:var(--gold-glow)">osmium</strong> skeleton is <strong style="color:var(--gold-glow)">22.6</strong> — over twenty times denser than water — which is why the canon body is so heavy and so completely unsinkable. Lighter skeletons creep back toward the float line, trading away durability for the ability to swim and ride.</div>
+  </section>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this spec</button>
+    <div class="about-body" id="about-body">
+      <p>The canon body (§35) uses an <strong>osmium skeleton</strong> — osmium is the densest stable element at <code>22.59 g/cm³</code>, about 3× iron and 5× titanium — giving a total mass around <code>450 lb (204 kg)</code>, roughly three adult humans. Mass here scales with skeleton density (the skeleton dominates), anchored to the canon osmium figure; it's illustrative, not a structural FEA.</p>
+      <p>Consequences are canon: minimum viable personal vehicle is a heavy-duty motorcycle; entering water means "immediate forceful sinking"; recharge runs an <code>8-hour</code> cycle for ~<code>2 weeks</code> of continuous motion, with a "go to sleep" safety mode. Crucially, the brain and deep osmium structure are <strong>irreparable in the field</strong> — the precision fabrication needed doesn't exist until the bootstrap tech-tree reaches it (§36). Lighter skeletons trade away durability for mobility and buoyancy.</p>
+      <p>Pairs with the <a href="ring-density.html">Ring-Pack Density</a> and <a href="feasibility.html">Feasibility</a> tools — the body is what the preserved population wakes into.</p>
+      <p class="meta-line">v1.0 — Canon §35 / §37 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script src="../data/canon.js"></script>
+<script>
+"use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
+var SB=(C&&C.synthBody)?C.synthBody:{materials:{osmium:22.59,steel:7.85,titanium:4.5,aluminum:2.70,carbonComposite:1.6},totalMassKg:204,avgHumanKg:70};
+var MATS=[
+  {id:"osmium",name:"Osmium",d:SB.materials.osmium,color:"#86f6f2"},
+  {id:"steel",name:"Steel",d:SB.materials.steel,color:"#7dffb8"},
+  {id:"titanium",name:"Titanium",d:SB.materials.titanium,color:"#ffc24d"},
+  {id:"aluminum",name:"Aluminum",d:SB.materials.aluminum,color:"#ff9a5a"},
+  {id:"carbonComposite",name:"Carbon composite",d:SB.materials.carbonComposite,color:"#b69cff"}
+];
+var OSMIUM_KG=SB.totalMassKg||204, OSMIUM_D=SB.materials.osmium||22.59, HUMAN=SB.avgHumanKg||70;
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={m:"osmium"};
+function loadHash(){var p=getHash();if(p.m&&SB.materials[p.m]!==undefined)state.m=p.m;}
+function saveHash(){setHash({m:state.m});}
+
+function verdicts(massKg,d,name){
+  var rows=[];
+  if(d>=12) rows.push(["bad","↓","Buoyancy","Far denser than water, so you drop like an anchor — the canon's “immediate, forceful sinking.” Crossing a river means walking the bottom, not swimming."]);
+  else if(d>=6) rows.push(["bad","↓","Buoyancy","Roughly 6–8× the density of water; you sink fast and can't tread. Any deep water needs a powered exo-rig or a boat."]);
+  else if(d>=3) rows.push(["warn","↓","Buoyancy","Several times denser than water — you still sink, but slowly enough for a controlled descent or a hard kick to shore."]);
+  else rows.push(["ok","≈","Buoyancy","Close to water's density: light enough to actually float and swim. The only builds that can."]);
+  if(massKg>=150) rows.push(["warn","◍","Ground vehicle","At nearly half a tonne, your minimum viable personal vehicle is a heavy-duty motorcycle — a bicycle frame folds under the load."]);
+  else if(massKg>=90) rows.push(["warn","◍","Ground vehicle","Around an adult's mass and up: a reinforced bicycle carries you, but standard frames are right at their limit."]);
+  else rows.push(["ok","◍","Ground vehicle","Light enough that ordinary bicycles — and running — work normally."]);
+  if(d>=12) rows.push(["ok","▣","Durability","The flip side of all that weight: an osmium frame shrugs off small-arms fire and most impacts. Nearly indestructible — the thing you're buying with the mass."]);
+  else if(d>=6) rows.push(["ok","▣","Durability","Tough and impact-resistant, though not bulletproof. A reasonable middle ground."]);
+  else rows.push(["warn","▣","Durability","Light and comparatively fragile — easier to dent, easier to break. Mobility paid for in toughness."]);
+  rows.push(["bad","✕","Field repair","Surface dents and hairline cracks get patched at a waystation, but the brain and deep skeletal structure are irreparable until the bootstrap tech-tree rebuilds precision manufacturing (§36). Serious internal damage is, for now, permanent — which quietly raises the stakes of every risk."]);
+  rows.push(["ok","⚡","Power","No food, no sleep, no fatigue. An 8-hour charge at a waystation or HSS bay buys ~2 weeks of continuous motion, with a “go to sleep” safety mode if the battery runs down."]);
+  rows.push(["ok","✦","Senses","Reaction time and sensory resolution beyond any pre-Intake human — the one place the synthetic body is strictly an upgrade, whatever the skeleton.","const"]);
+  return rows;
+}
+
+function render(){
+  var mat=MATS.filter(function(m){return m.id===state.m;})[0]||MATS[0];
+  var massKg=OSMIUM_KG*(mat.d/OSMIUM_D);
+  var lb=massKg*2.2046;
+  document.getElementById('mass-kg').innerHTML=Math.round(massKg)+'<span class="s"> kg</span>';
+  document.getElementById('mass-sub').textContent=Math.round(lb)+' lb · '+(massKg/HUMAN).toFixed(1)+'× an adult human';
+  // skeleton color + label
+  document.getElementById('skel').setAttribute('stroke',mat.color);
+  var sl=document.getElementById('skel-lbl'); sl.textContent=mat.name.toUpperCase()+' SKELETON'; sl.setAttribute('fill',mat.color);
+  // buoyancy arrow direction
+  var arr=document.getElementById('buoy-arr'),head=document.getElementById('buoy-head');
+  if(mat.d>=3){ arr.setAttribute('d','M180 230 v30'); arr.setAttribute('stroke','var(--red)'); head.setAttribute('points','176,256 184,256 180,266'); head.setAttribute('fill','var(--red)'); }
+  else { arr.setAttribute('d','M180 260 v-30'); arr.setAttribute('stroke','var(--teal)'); head.setAttribute('points','176,234 184,234 180,224'); head.setAttribute('fill','var(--teal)'); }
+  // verdicts
+  var vs=verdicts(massKg,mat.d,mat.name),html='';
+  vs.forEach(function(r){html+='<div class="verdict"><div class="vi '+r[0]+'">'+r[1]+'</div><div><div class="vk">'+r[2]+'</div><div class="vv">'+r[3]+'</div></div></div>';});
+  document.getElementById('verdicts').innerHTML=html;
+  // buttons
+  document.querySelectorAll('.mat-btn').forEach(function(b){b.classList.toggle('active',b.dataset.m===state.m);});
+
+  // density comparison bars
+  var maxD=22.59, bx0=120, bw=372, bh='';
+  MATS.forEach(function(m2,i){var y=18+i*24;var w=bw*m2.d/maxD;var cur=m2.id===state.m;
+    bh+='<text x="10" y="'+(y+11)+'" style="fill:'+(cur?'var(--teal-glow)':'var(--muted)')+";font-family:'JetBrains Mono',monospace;font-size:9px"+'">'+m2.name+'</text>';
+    bh+='<rect x="'+bx0+'" y="'+y+'" width="'+w.toFixed(1)+'" height="14" rx="3" fill="'+(cur?m2.color:'var(--edge)')+'"/>';
+    bh+='<text x="'+(bx0+w+6).toFixed(1)+'" y="'+(y+11)+'" style="fill:'+(cur?'var(--text)':'var(--muted)')+";font-family:'JetBrains Mono',monospace;font-size:8.5px"+'">'+m2.d+' g/cm³</text>';
+  });
+  document.getElementById('db-bars').innerHTML=bh;
+  var wx=bx0+bw*1.0/maxD;
+  document.getElementById('db-water').setAttribute('x1',wx.toFixed(1));document.getElementById('db-water').setAttribute('x2',wx.toFixed(1));
+  document.getElementById('db-waterlbl').setAttribute('x',wx.toFixed(1));
+}
+function wire(){
+  var row=document.getElementById('matrow'),html='';
+  MATS.forEach(function(m){html+='<button class="mat-btn" data-m="'+m.id+'">'+m.name+'<span class="d">'+m.d+' g/cm³</span></button>';});
+  row.innerHTML=html;
+  row.querySelectorAll('.mat-btn').forEach(function(b){b.addEventListener('click',function(){state.m=b.dataset.m;saveHash();render();});});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

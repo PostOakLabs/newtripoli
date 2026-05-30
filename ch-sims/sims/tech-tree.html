@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!--
+  Bootstrap Tech-Tree — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ✦ Speculative feasibility · ◆ canon (§34 / §36 / §37)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bootstrap Tech-Tree — New Tripoli Sim Catalogue</title>
+<meta name="description" content="From garage tools to a femtoscale assembler. A buildable dependency graph of the post-Wake reindustrialization — you can't skip a rung, because you need precision machines to build precision machines.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--plum:#b69cff;--amber:#ffc24d;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1100px;margin:0 auto;padding:34px 26px 80px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:680px}
+.tier-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor}
+.tb-spec{color:var(--gold-glow);background:rgba(35,255,136,.08)}.tb-canon{color:var(--teal);background:rgba(52,230,224,.08)}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0 12px}
+.progress{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.progress b{color:var(--teal-glow)}
+.tb-btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px 13px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.tb-btn:hover{color:var(--teal-glow);border-color:var(--teal)}
+.tb-btn.gold{color:var(--gold-glow);border-color:rgba(35,255,136,.4)}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.55),rgba(8,13,12,.5));padding:10px;overflow-x:auto}
+.fig svg{display:block;width:100%;min-width:900px;height:auto}
+svg .edge{stroke:var(--edge);stroke-width:1.2;fill:none}
+svg .edge.any{stroke-dasharray:3 4}
+svg .edge.lit{stroke:var(--teal);stroke-width:1.6}
+svg .tierlbl{fill:var(--dim);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
+svg .node rect{transition:fill .15s,stroke .15s}
+svg .node{cursor:pointer}
+svg .nlabel{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.02em;pointer-events:none}
+.detail{margin-top:18px;background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:20px 22px;min-height:120px}
+.d-status{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.d-status.built{color:var(--teal)}.d-status.avail{color:var(--gold-glow)}.d-status.locked{color:var(--amber)}
+.d-name{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.5rem;color:var(--text);line-height:1.1}
+.d-desc{font-size:14px;color:var(--body);line-height:1.65;margin:10px 0}
+.d-prereq{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);line-height:1.8}
+.d-prereq .met{color:var(--teal)}.d-prereq .unmet{color:var(--amber)}
+.d-build{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px;border-radius:8px;border:none;background:var(--teal);color:var(--void);font-weight:700;cursor:pointer}
+.d-build:disabled{background:var(--edge);color:var(--dim);cursor:default}
+.lockmsg{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber);min-height:16px}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:24px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 14px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Bootstrap Tech-Tree</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Bootstrap Tech-Tree</h1>
+    <p class="tool-subtitle">After the Wake, eight billion synthetic humans must rebuild industrial civilization — from garage tools up to a femtoscale assembler — using the ETI's corrected textbook. Click a node to build it. You can't skip a rung: <em>you need precision machines to build precision machines.</em></p>
+    <div class="tier-badges"><span class="tier-badge tb-spec">✦ Speculative feasibility</span><span class="tier-badge tb-canon">◆ Canon · §34 / §36</span></div>
+  </header>
+
+  <div class="toolbar">
+    <span class="progress" id="progress">Built <b>5</b> / 35</span>
+    <button class="tb-btn gold" id="btn-path">Highlight path → Femtoscale</button>
+    <button class="tb-btn" id="btn-reset">Reset to Wake Day</button>
+  </div>
+
+  <ol class="howto" style="list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px 18px;margin:6px 0 16px;padding:16px 18px;background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px">
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--teal);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">1</span>
+      Five capabilities are <strong style="color:var(--teal-glow)">already running on Wake Day</strong> — the solar array, your eight billion workers, garage tools, hydrogen aircraft, and the ETI's corrected knowledge base (shown filled green).</li>
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--teal);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">2</span>
+      <strong style="color:var(--gold-glow)">Gold-outlined nodes are buildable now.</strong> Click one to build it; its dependents unlock as you go.</li>
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--teal);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">3</span>
+      <strong style="color:var(--text)">Dim nodes are locked.</strong> Click one and the panel lists exactly which prerequisites it's still missing.</li>
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--teal);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">4</span>
+      <strong style="color:var(--text)">You can't skip a rung.</strong> Precision needs the lathe; the chip needs the cleanroom, the optics and the metrology first.</li>
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--teal);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">5</span>
+      Stuck? Hit <strong style="color:var(--gold-glow)">Highlight path → Femtoscale</strong> to light up the critical chain you have to climb.</li>
+    <li style="counter-increment:s;font-size:13px;color:var(--body);line-height:1.5;position:relative;padding-left:30px">
+      <span style="position:absolute;left:0;top:-1px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--void);background:var(--gold);width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center" aria-hidden="true">6</span>
+      <strong style="color:var(--gold-glow)">Goal:</strong> light up the <strong style="color:var(--text)">Femtoscale Assembler</strong> — the same technology that built the world you woke up in.</li>
+  </ol>
+
+  <div class="fig">
+    <svg id="tree" viewBox="0 0 1185 460" role="img" aria-label="Dependency graph of the bootstrap tech tree from raw materials to a femtoscale assembler.">
+      <g id="edges"></g>
+      <g id="tierlabels"></g>
+      <g id="nodes"></g>
+    </svg>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--teal)"></i>built / on Wake Day</span>
+    <span><i style="background:transparent;border:1.5px solid var(--gold-glow)"></i>available to build</span>
+    <span><i style="background:transparent;border:1.5px solid var(--rim)"></i>locked</span>
+    <span>— dashed edge = either prerequisite suffices</span>
+  </div>
+
+  <div class="detail" id="detail">
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      <svg id="d-icon" viewBox="0 0 20 20" width="40" height="40" style="flex-shrink:0;margin-top:3px" stroke="var(--rim)" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+      <div style="flex:1;min-width:0">
+        <div class="d-status" id="d-status"></div>
+        <div class="d-name" id="d-name">Select a node</div>
+      </div>
+    </div>
+    <div class="d-desc" id="d-desc">Click any node in the tree. Green nodes are already running on Wake Day; gold-outlined nodes are buildable now; dim nodes are still locked behind prerequisites.</div>
+    <div class="d-prereq" id="d-prereq"></div>
+    <button class="d-build" id="d-build" disabled>Build</button>
+    <div class="lockmsg" id="lockmsg"></div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this tech tree</button>
+    <div class="about-body" id="about-body">
+      <p>This is the post-Wake reindustrialization of <em>New Anasis</em> (§36), played as the same resource-management tree the whole series is built around (§34 — explicitly compared to <em>Factorio</em> and <em>Dwarf Fortress</em>). Five capabilities are already running on Wake Day: the 30-million-km² solar array, eight billion synthetic workers, garage bays of industrial-grade tools, hydrogen aircraft, and the ETI's validated pre-Intake knowledge base. Everything else must be built in order.</p>
+      <p>The canon bootstrapping sequence (T0–T5): raw extraction → smelting → machine tools → electrical → chemical → optics → cleanroom → CMOS. The <strong>Restart East Asian Fabs</strong> node is the Act-2 fork shortcut.</p>
+      <p><strong>T6 — CMOS Era (now):</strong> Gate-All-Around (GAA) nanosheet transistors entered mass production in 2025 (TSMC N2, ~2nm). ~250–300 MTr/mm². <strong>T7 — Sub-1nm (~2030s):</strong> Forksheet A7 (~0.7nm, ~2030), CFET A5 (~0.5nm, ~2032), Angstrom-scale A2 (2D channels, ~2036) per the IMEC roadmap. CFET may prove too difficult. <strong>T8 — Nanoscale (~2040s+):</strong> NEMS, DNA origami, ALD + STM atom manipulation. Scaling STM to manufacturing: open problem as of 2025. <strong>T9 — Speculative (amber ? nodes):</strong> Picoscale = intra-atomic bond manipulation; no roadmap. Femtoscale = nuclear engineering; strong-force energies in MeV; no known pathway. The ETI built this. We don't know how.</p>
+      <p>Pairs with <a href="feasibility.html">Feasibility</a> and the <a href="synthetic-body.html">Synthetic-Body Spec</a>.</p>
+      <p style="font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> IMEC Future Summit (2022). "Sub-1nm Process Roadmap Until 2036." IEEE IRDS 2023 (International Roadmap for Devices and Systems). Freitas, R.A. (1980). "A Self-Reproducing Interstellar Probe." JBIS 33, 251–264 — the von Neumann probe concept underlying the ETI delivery system that built the femtoscale assembler humanity is trying to reverse-engineer.</p>
+      <p class="meta-line">v2.0 — Canon §34 / §36 / §37 · 35 nodes T0–T9 · IMEC roadmap grounding · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// id, tier(column 0..6), label, desc, prereq (string=required, array=any-of), given
+var NODES=[
+  // T0 — Wake-Day inventory (given)
+  {id:"solar",t:0,l:"Solar Array",given:1,d:"30 million km² of panels across the world's deserts. Power is the one resource never in short supply."},
+  {id:"labor",t:0,l:"Synthetic Labor",given:1,d:"8 billion synthetic bodies with better reaction time and senses than any human. The manpower problem does not exist."},
+  {id:"garage",t:0,l:"Garage Bays",given:1,d:"Hand tools, welders, lathes, mills, a hydraulic press — industrial grade, not precision grade. Where everything starts."},
+  {id:"knowledge",t:0,l:"Validated Knowledge",given:1,d:"The ETI's corrected pre-Intake tech tree: all human science, scrubbed of error. The textbook, not the instructions."},
+  {id:"aircraft",t:0,l:"Hydrogen Aircraft",given:1,d:"Green-hydrogen jets, helicopters and drones worldwide. Long-range reconnaissance and logistics."},
+  // T1 — survey & extraction
+  {id:"survey",t:1,l:"Geological Survey",prereq:["knowledge","aircraft"],d:"Find the iron, copper, silicon and rare earths. Scholar mineralogy says where and how."},
+  {id:"mining",t:1,l:"Ore Extraction",prereq:["survey","garage"],d:"Locate and mine raw ore. Nothing downstream exists until feedstock does."},
+  {id:"refractory",t:1,l:"Refractory Lining",prereq:["mining"],d:"Heat-proof furnace linings. You can't smelt without something that survives the smelt."},
+  // T2 — metallurgy
+  {id:"smelting",t:2,l:"Smelting & Furnaces",prereq:["mining","refractory"],d:"Basic metallurgy: turn ore into the first usable metal."},
+  {id:"steel",t:2,l:"Steel",prereq:["smelting"],d:"Structural metal for everything heavier than a hand tool."},
+  {id:"copper",t:2,l:"Copper Wire",prereq:["smelting"],d:"Drawn wire — the nervous system of an electrical civilization."},
+  // T3 — machine tools & power
+  {id:"lathe",t:3,l:"Machine Tools",prereq:["steel","garage"],d:"The first machine tool, built from smelted metal and the garage press."},
+  {id:"precision",t:3,l:"Precision Machines",prereq:["lathe"],d:"Use the lathe to build a better lathe. Iterate. THE bottleneck — precision machines build precision machines."},
+  {id:"grid",t:3,l:"Electrical Grid",prereq:["copper","lathe"],d:"Wire the industrial zone; distribute the solar power you already have."},
+  {id:"aluminum",t:3,l:"Aluminum",prereq:["smelting","grid"],d:"Electrolytic smelting — cheap once you have abundant power."},
+  {id:"motors",t:3,l:"Motors & Transformers",prereq:["grid","precision"],d:"Generators, motors, transformers from known designs."},
+  {id:"nuclear",t:3,l:"Reconnect Nuclear",prereq:["grid","precision"],d:"Bring the intact fission plants back online. A power accelerator — not required, since the solar array already suffices."},
+  // T4 — chemistry & precision instruments
+  {id:"chem",t:4,l:"Chemical Industry",prereq:["precision","grid"],d:"Acids, solvents, lubricants, dopants. Built from machine tools; feeds everything precise."},
+  {id:"vacuum",t:4,l:"Vacuum Systems",prereq:["precision","chem"],d:"Required for deposition and clean processing."},
+  {id:"optics",t:4,l:"Optics & Instruments",prereq:["precision","chem"],d:"Glass grinding, interferometry, vibration isolation. The eyes of lithography."},
+  {id:"metrology",t:4,l:"Metrology",prereq:["optics","motors"],d:"Measure to the nanometre. You cannot build what you cannot measure."},
+  // T5 — cleanroom & semiconductors
+  {id:"cleanroom",t:5,l:"Cleanroom",prereq:["chem","vacuum","motors"],d:"Temperature, humidity and particulate control — HVAC built from every prior step."},
+  {id:"silicon",t:5,l:"Ultra-pure Wafers",prereq:["chem","cleanroom"],d:"Ultra-pure silicon, grown and polished into wafers — the canvas."},
+  {id:"litho",t:5,l:"Photolithography",prereq:["optics","cleanroom","silicon","metrology"],d:"Pattern the wafer. Optics, cleanroom, wafers and metrology all converge here."},
+  {id:"restart",t:5,l:"Restart E-Asia Fabs",prereq:["aircraft","grid","cleanroom","chem"],d:"Fly to the sealed TSMC/Samsung cleanrooms and restart them instead of building from scratch. The book's Act-2 debate: restart or rebuild?"},
+  {id:"cmos",t:5,l:"CMOS Fab",prereq:["litho","vacuum","cleanroom"],d:"Modern CMOS semiconductor fabrication — the summit of the book's tech tree. Getting here from the garage bays IS the arc."},
+  // T6a — GAA / sub-1nm (IMEC roadmap, 2025-2031)
+  {id:"compute",t:6,l:"Advanced Compute",prereq:[["cmos","restart"]],d:"High-end computing on your own chips — or on the restarted fabs' output. A2 GPU equivalent: unlocks everything above this tier."},
+  {id:"gaa",t:6,l:"GAA Nanosheet (2nm)",prereq:[["cmos","restart"]],d:"Gate-All-Around transistor architecture — gate wraps entirely around the channel nanosheet for better electrostatic control. TSMC N2 node; in mass production since 2025. Density ~250-300 MTr/mm². Required for A14 and below."},
+  // T7 — sub-1nm (IMEC roadmap, ~2030-2036)
+  {id:"forksheet",t:7,l:"Forksheet / A7 (~0.7nm)",prereq:["gaa","compute"],d:"N-type and P-type transistors share a dielectric wall, reducing footprint ~20%. IMEC roadmap target ~2030-2031. Not on any known production schedule yet. Density target ~700 MTr/mm²."},
+  {id:"cfet",t:7,l:"CFET / A5 (~0.5nm)",prereq:["forksheet"],d:"Complementary FET: n-channel and p-channel transistors stacked vertically. Dramatic area savings. IMEC projects ~2032-2033. Requires manufacturing precision beyond current demonstration. Density ~1000+ MTr/mm². May prove too difficult for mass production — a genuine open question."},
+  {id:"angstrom",t:7,l:"Angstrom-scale (A2, ~0.2nm)",prereq:["cfet","metrology"],d:"2D channel materials only (MoS₂, WS₂). At this scale, channels are 1-2 atoms thick. IMEC roadmap endpoint ~2035-2036. Research-stage demonstrations exist; manufacturing at scale does not. True atomic-precision fabrication."},
+  // T8 — true nanoscale (atom-by-atom)
+  {id:"mems",t:8,l:"NEMS / DNA Origami",prereq:["angstrom","compute"],d:"Nano-electromechanical systems and DNA origami scaffolds for sub-10nm device positioning. Research state in 2025: NIST programs, slow progress. DNA origami enables precise spatial control but not yet integrated with semiconductor processes at scale."},
+  {id:"nano",t:8,l:"Nanoscale Fab (STM/ALD)",prereq:["mems","angstrom"],d:"Atomic Layer Deposition and scanning tunneling microscope-based atom manipulation. Research state: STM can position individual atoms (demonstrated 1989, still slow). ALD already in production. 'Nanoscale fab' as a scalable manufacturing technology: estimated 2040s+, highly speculative."},
+  // T9 — speculative (no roadmap — ? nodes)
+  {id:"pico",t:9,l:"? Picoscale (~2060+?)",prereq:["nano"],d:"Picoscale = intra-atomic geometry: manipulating individual chemical bonds at sub-bond-length precision. Would require controlling individual electron orbitals. Currently theoretical. No engineering roadmap exists. No known pathway. May be impossible with any technology based on conventional chemical bonding. Estimated: 2060+ at the most optimistic."},
+  {id:"femto",t:9,l:"? Femtoscale (???)",prereq:["pico","compute"],d:"Femtoscale = atomic nucleus territory. A proton is ~0.85 femtometres across. 'Manufacturing' at this scale means rearranging protons and neutrons — nuclear engineering, not chemistry. Strong-force interactions require millions of electron-volts per event. No known pathway to deliberate femtoscale construction exists in current physics. The ETI built this. Humanity must learn how. THE GOAL."}
+];
+var TIER_NAMES=["Wake Day","Extract","Metallurgy","Tools & Power","Chemistry & Optics","Semiconductors","CMOS Era (now)","Sub-1nm (~2030s)","Nanoscale (~2040s+)","? Speculative (no roadmap)"];
+// RTS-style age icons (inner SVG markup, drawn in a 0..20 box, stroke=currentColor)
+var TIER_ICONS=[
+  '<circle cx="10" cy="10" r="3.4"/><path d="M10 1.6v2.6M10 15.8v2.6M1.6 10h2.6M15.8 10h2.6M4 4l1.8 1.8M16 4l-1.8 1.8M4 16l1.8-1.8M16 16l-1.8-1.8"/>',           // T0 sun / power
+  '<path d="M10 3 L16 6.5 L10 10 L4 6.5 Z"/><path d="M4 6.5 L10 17 L16 6.5 M10 10 V17"/>',
+  '<path d="M10 3 C13 7 14 9 14 12 a4 4 0 0 1 -8 0 c0 -2 1 -3 2 -4 c0 1.6 1 2.6 2 2.6 c-1 -3 0 -5 0 -7.6 z"/>',
+  '<path d="M15 3 a3.6 3.6 0 0 0 -4.6 4.6 L4 14 l2 2 6.4 -6.4 A3.6 3.6 0 0 0 17 9 l-2.2 2.2 -1.8 -1.8 z"/>',
+  '<path d="M8 3 h4 M9.2 3 v5 L5 16 a1.8 1.8 0 0 0 1.6 2.7 h6.8 a1.8 1.8 0 0 0 1.6 -2.7 L12.8 8 V3"/><path d="M7 13 h6"/>',
+  '<rect x="6" y="6" width="8" height="8" rx="1"/><path d="M8.5 6V3.5M11.5 6V3.5M8.5 16.5V14M11.5 16.5V14M6 8.5H3.5M6 11.5H3.5M16.5 8.5H14M16.5 11.5H14"/>',
+  '<circle cx="10" cy="10" r="1.4"/><ellipse cx="10" cy="10" rx="8" ry="3.3"/><ellipse cx="10" cy="10" rx="8" ry="3.3" transform="rotate(60 10 10)"/><ellipse cx="10" cy="10" rx="8" ry="3.3" transform="rotate(120 10 10)"/>',
+  '<path d="M5 5 h10 v10 h-10 z M5 5 L15 15 M15 5 L5 15" stroke-width="1.4"/>',
+  '<path d="M3 10 h14 M10 3 v14 M5 5 l10 10 M15 5 L5 15" stroke-width="1" opacity=".8"/>',
+  '<text x="5" y="14" style="font-family:monospace;font-size:10px;fill:currentColor;stroke:none">?</text>'
+];
+
+// layout — 10 tiers (T0-T9), reduced COLW to fit
+var COLW=116, X0=10, ROWH=46, Y0=40, BW=106, BH=28;
+var rowsByTier={};
+NODES.forEach(function(n){rowsByTier[n.t]=(rowsByTier[n.t]||0)+1; n._row=rowsByTier[n.t]-1;});
+function nx(n){return X0+n.t*COLW;}
+function ny(n){return Y0+n._row*ROWH;}
+function ncx(n){return nx(n)+BW/2;}
+function ncy(n){return ny(n)+BH/2;}
+function byId(id){for(var i=0;i<NODES.length;i++)if(NODES[i].id===id)return NODES[i];return null;}
+function prereqGroups(n){return (n.prereq||[]).map(function(p){return (typeof p==="string")?[p]:p;});}
+
+var built={}, selected=null, pathSet={};
+function reset(){built={};NODES.forEach(function(n){if(n.given)built[n.id]=1;});}
+function groupMet(g){for(var i=0;i<g.length;i++)if(built[g[i]])return true;return false;}
+function available(n){if(built[n.id])return false;var gs=prereqGroups(n);for(var i=0;i<gs.length;i++)if(!groupMet(gs[i]))return false;return true;}
+function unmet(n){var out=[];prereqGroups(n).forEach(function(g){if(!groupMet(g))out.push(g);});return out;}
+function statusOf(n){return built[n.id]?(n.given?"given":"built"):(available(n)?"avail":"locked");}
+
+function computePath(){
+  pathSet={}; var stack=["femto"];
+  while(stack.length){var id=stack.pop();if(pathSet[id])continue;pathSet[id]=1;var n=byId(id);prereqGroups(n).forEach(function(g){var pick=g[0]; stack.push(pick);});}
+}
+
+function render(){
+  var nTotal=NODES.length, nBuilt=NODES.filter(function(n){return built[n.id];}).length;
+  document.getElementById('progress').innerHTML='Built <b>'+nBuilt+'</b> / '+nTotal;
+
+  // tier labels
+  var maxT=0; NODES.forEach(function(n){if(n.t>maxT)maxT=n.t;});
+  var tl='';
+  for(var t=0;t<=maxT;t++){
+    var rows=NODES.filter(function(n){return n.t===t;}).length;
+    var h=rows*ROWH;
+    tl+='<text class="tierlbl" x="'+(X0+t*COLW+BW/2)+'" y="28" text-anchor="middle">'+(TIER_NAMES[t]||'T'+t)+'</text>';
+    tl+='<line x1="'+(X0+t*COLW-4)+'" y1="32" x2="'+(X0+t*COLW+BW+4)+'" y2="32" stroke="var(--edge)" stroke-width="1"/>';
+    // tier divider
+    if(t===5){tl+='<line x1="'+(X0+t*COLW+BW+6)+'" y1="30" x2="'+(X0+t*COLW+BW+6)+'" y2="'+(Y0+rows*ROWH+10)+'" stroke="var(--edge)" stroke-width="1" stroke-dasharray="4 4"/>';}
+    if(t===8){tl+='<line x1="'+(X0+t*COLW+BW+6)+'" y1="30" x2="'+(X0+t*COLW+BW+6)+'" y2="'+(Y0+rows*ROWH+10)+'" stroke="rgba(255,194,77,.3)" stroke-width="1.5" stroke-dasharray="3 4"/>';
+      tl+='<text x="'+(X0+9*COLW+BW/2)+'" y="16" text-anchor="middle" style="fill:rgba(255,194,77,.5);font-family:JetBrains Mono,monospace;font-size:7.5px;letter-spacing:.1em">NO KNOWN ROADMAP</text>';}
+  }
+  document.getElementById('tierlabels').innerHTML=tl;
+
+  // edges
+  var eh='';
+  NODES.forEach(function(n){
+    prereqGroups(n).forEach(function(g){
+      g.forEach(function(pid,gi){
+        var p=byId(pid);if(!p)return;
+        var lit=pathSet[n.id]&&pathSet[pid];
+        var cls='edge'+(g.length>1&&gi>0?' any':'')+(lit?' lit':'');
+        eh+='<line class="'+cls+'" x1="'+(ncx(p)+BW/2-8)+'" y1="'+ncy(p)+'" x2="'+ncx(n)+'" y2="'+ncy(n)+'"/>';
+      });
+    });
+  });
+  // speculative dashed links to ? nodes
+  NODES.forEach(function(n){
+    if(n.id==='pico'||n.id==='femto'){
+      prereqGroups(n).forEach(function(g){
+        g.forEach(function(pid){
+          var p=byId(pid);if(!p)return;
+          eh+='<line stroke="rgba(255,194,77,.35)" stroke-width="1.2" stroke-dasharray="4 4" fill="none" x1="'+(ncx(p)+BW/2-8)+'" y1="'+ncy(p)+'" x2="'+ncx(n)+'" y2="'+ncy(n)+'"/>';
+        });
+      });
+    }
+  });
+  document.getElementById('edges').innerHTML=eh;
+
+  // nodes
+  var nh='';
+  NODES.forEach(function(n){
+    var st=statusOf(n);
+    var isSpeculative = n.id==='pico'||n.id==='femto';
+    var fill = (st==="built"||st==="given")?'var(--teal)':(isSpeculative?'rgba(255,194,77,.08)':'rgba(12,19,17,.85)');
+    var stroke = (st==="avail")?'var(--gold-glow)':((st==="built"||st==="given")?'var(--teal)':(isSpeculative?'rgba(255,194,77,.55)':'var(--rim)'));
+    var txtcol = (st==="built"||st==="given")?'#05080a':((st==="avail")?'var(--gold-glow)':(isSpeculative?'var(--amber-glow)':'var(--muted)'));
+    var glow = pathSet[n.id] ? ' filter="drop-shadow(0 0 4px rgba(52,230,224,.6))"' : '';
+    var sel = selected===n.id ? ' stroke-width="2.4"' : ' stroke-width="1.4"';
+    nh+='<g class="node" data-id="'+n.id+'">';
+    nh+='<rect x="'+nx(n)+'" y="'+ny(n)+'" width="'+BW+'" height="'+BH+'" rx="6" fill="'+fill+'" stroke="'+stroke+'"'+sel+glow+'></rect>';
+    var words=n.l.split(' '),line1=words[0],line2='';
+    for(var i=1;i<words.length;i++){ if((line1+' '+words[i]).length<=15 && !line2) line1+=' '+words[i]; else line2+=(line2?' ':'')+words[i]; }
+    if(line2){
+      nh+='<text class="nlabel" x="'+ncx(n)+'" y="'+(ny(n)+12)+'" text-anchor="middle" fill="'+txtcol+'">'+line1+'</text>';
+      nh+='<text class="nlabel" x="'+ncx(n)+'" y="'+(ny(n)+22)+'" text-anchor="middle" fill="'+txtcol+'">'+line2+'</text>';
+    } else {
+      nh+='<text class="nlabel" x="'+ncx(n)+'" y="'+(ny(n)+17)+'" text-anchor="middle" fill="'+txtcol+'">'+line1+'</text>';
+    }
+    nh+='</g>';
+  });
+  document.getElementById('nodes').innerHTML=nh;
+  document.querySelectorAll('#nodes .node').forEach(function(g){g.addEventListener('click',function(){select(g.dataset.id);});});
+  renderDetail();
+}
+
+function renderDetail(){
+  var n = selected?byId(selected):null;
+  var ds=document.getElementById('d-status'),dn=document.getElementById('d-name'),dd=document.getElementById('d-desc'),dp=document.getElementById('d-prereq'),db=document.getElementById('d-build'),lm=document.getElementById('lockmsg');
+  if(!n){return;}
+  var st=statusOf(n);
+  var di=document.getElementById('d-icon');
+  var iconIdx=Math.min(n.t, TIER_ICONS.length-1);
+  if(di){di.innerHTML=TIER_ICONS[iconIdx];di.setAttribute('stroke',(st==="locked")?'var(--rim)':((st==="avail")?'var(--gold-glow)':'var(--teal-glow)'));}
+  ds.className='d-status '+(st==="locked"?"locked":(st==="avail"?"avail":"built"));
+  ds.textContent = st==="given"?"Running on Wake Day":(st==="built"?"Built":(st==="avail"?"Available to build":"Locked"));
+  if(n.id==='pico'||n.id==='femto'){ds.textContent+=' · No known real-world pathway';}
+  dn.textContent=n.l;
+  dd.textContent=n.d;
+  if(n.given||!(n.prereq&&n.prereq.length)){dp.innerHTML='<span class="met">No prerequisites.</span>';}
+  else{
+    var parts=prereqGroups(n).map(function(g){
+      var met=groupMet(g);
+      var names=g.map(function(id){return byId(id).l;}).join(g.length>1?' OR ':' ');
+      return '<span class="'+(met?'met':'unmet')+'">'+(met?'✓':'✕')+' '+names+'</span>';
+    });
+    dp.innerHTML='Requires: '+parts.join(' &nbsp; ');
+  }
+  db.disabled = !(st==="avail");
+  db.textContent = (st==="built"||st==="given")?"Already built":"Build "+n.l;
+  lm.textContent='';
+}
+
+function select(id){
+  selected=id; var n=byId(id); render();
+  if(!available(n) && !built[n.id]){
+    var u=unmet(n); var miss=u.map(function(g){return g.map(function(x){return byId(x).l;}).join('/');}).join(', ');
+    document.getElementById('lockmsg').textContent='Locked. Missing: '+miss+'.';
+  }
+}
+function buildSelected(){
+  if(!selected)return; var n=byId(selected);
+  if(available(n)){ built[n.id]=1; render();
+    if(n.id==="femto"){ document.getElementById('lockmsg').innerHTML='<span style="color:var(--gold-glow)">Femtoscale assembler online. Humanity rebuilt the technology that built the HSS — from a corrected textbook.</span>'; }
+  }
+}
+
+function wire(){
+  document.getElementById('d-build').addEventListener('click',buildSelected);
+  document.getElementById('btn-reset').addEventListener('click',function(){reset();pathSet={};selected=null;render();document.getElementById('d-name').textContent='Select a node';document.getElementById('d-status').textContent='';document.getElementById('d-desc').textContent='Click any node.';document.getElementById('d-prereq').innerHTML='';document.getElementById('d-build').disabled=true;document.getElementById('lockmsg').textContent='';});
+  document.getElementById('btn-path').addEventListener('click',function(){if(Object.keys(pathSet).length){pathSet={};}else{computePath();}render();});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){reset();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

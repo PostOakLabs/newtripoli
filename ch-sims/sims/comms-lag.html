@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--
+  Cross-Tier Comms Lag — New Tripoli Sim Catalogue
+  Code: MIT · Prose: CC BY 4.0 · Register: ◆ In-world canon (§18 / §20 / §9)
+  No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cross-Tier Comms Lag — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Two residents running at different dilation rates can't really talk. Watch a conversation degrade from real-time chat to letters as the speed gap widens — and why the Universal Sabbath is the only time it closes.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--plum:#23ff88;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 6%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 50%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 25%,#000 35%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header{margin-bottom:16px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:660px}
+.tier-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid var(--teal);color:var(--teal);background:rgba(52,230,224,.08);margin-top:12px}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px;margin:18px 0 22px}
+.fig svg{display:block;width:100%;height:auto}
+.input-card{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.slider-block{margin-bottom:18px}.slider-block:last-child{margin-bottom:0}
+.slider-block label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--body);display:block;margin-bottom:7px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--edge),var(--teal))}
+.slider-row.gold input[type=range]{background:linear-gradient(90deg,var(--edge),var(--gold))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-row.gold input[type=range]::-webkit-slider-thumb{background:var(--gold-glow)}
+.slider-row input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--teal-glow);cursor:pointer;border:none}
+.slider-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--teal-glow);min-width:120px;text-align:right;white-space:nowrap}
+.slider-value.gold{color:var(--gold-glow)}
+.headline{background:linear-gradient(135deg,rgba(52,230,224,.10),rgba(8,13,12,.4));border:1px solid var(--plum);border-radius:12px;padding:22px 28px;margin-bottom:24px;text-align:center}
+.headline-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.headline-text{font-family:'Chakra Petch',sans-serif;font-size:21px;color:var(--text);line-height:1.4}
+.headline-text .v{color:var(--gold-glow);font-weight:600}
+.mode{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-top:12px;padding:5px 13px;border-radius:5px;border:1px solid currentColor}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.stat-card{background:rgba(12,19,17,.55);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.stat-card .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px}
+.stat-card .value{font-family:'Chakra Petch',sans-serif;font-size:19px;font-weight:600;color:var(--teal-glow)}
+.stat-card.gold .value{color:var(--gold-glow)}
+.sc-note{font-size:13.5px;color:var(--body);line-height:1.65;padding:13px 16px;background:rgba(5,8,10,.45);border-radius:6px;border-left:2px solid var(--plum);margin-bottom:24px}
+.sc-note strong{color:var(--plum-glow)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:8px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px;color:var(--body)}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:680px){.tool-header h1{font-size:23px}.container{padding:24px 16px 60px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Cross-Tier Comms Lag</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Cross-Tier Comms Lag</h1>
+    <p class="tool-subtitle">The HSS adds only a few milliseconds of physical latency between two residents — but each of them multiplies it by their own clock. Put two people on different speed tiers and watch a conversation fall apart (§18, §20).</p>
+    <span class="tier-badge">◆ In-world canon · §18 / §20 / §9</span>
+  </header>
+
+  <div class="fig">
+    <svg viewBox="0 0 560 150" role="img" aria-label="Two residents exchanging a message across a latency link.">
+      <!-- left avatar (you) -->
+      <circle cx="60" cy="70" r="22" fill="none" stroke="var(--teal)" stroke-width="1.6"/>
+      <circle cx="60" cy="64" r="7" fill="none" stroke="var(--teal)" stroke-width="1.4"/>
+      <path d="M48 82 q12 -10 24 0" fill="none" stroke="var(--teal)" stroke-width="1.4"/>
+      <text x="60" y="110" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--teal-glow)">YOU · <tspan id="av-you">50×</tspan></text>
+      <!-- right avatar (them) -->
+      <circle cx="500" cy="70" r="22" fill="none" stroke="var(--gold)" stroke-width="1.6"/>
+      <circle cx="500" cy="64" r="7" fill="none" stroke="var(--gold)" stroke-width="1.4"/>
+      <path d="M488 82 q12 -10 24 0" fill="none" stroke="var(--gold)" stroke-width="1.4"/>
+      <text x="500" y="110" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--gold-glow)">THEM · <tspan id="av-them">1,000,000×</tspan></text>
+      <!-- wire -->
+      <line x1="84" y1="70" x2="476" y2="70" stroke="var(--rim)" stroke-width="1.2" stroke-dasharray="3 5"/>
+      <!-- travelling packet -->
+      <rect x="84" y="64" width="14" height="12" rx="2" fill="var(--teal-glow)" id="packet"/>
+      <text x="280" y="44" text-anchor="middle" id="fig-mode" style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;fill:var(--muted)">— message in flight —</text>
+      <text x="280" y="134" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:8.5px;fill:var(--dim)">physical link: a few ms · felt time = ms × your own clock</text>
+    </svg>
+  </div>
+
+  <section class="input-card">
+    <div class="card-title">The two of you</div>
+    <div class="slider-block">
+      <label>Your dilation rate</label>
+      <div class="slider-row"><input type="range" id="you-slider" min="0" max="9" step="0.01" value="1.699"><span class="slider-value" id="you-val">50×</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Their dilation rate</label>
+      <div class="slider-row gold"><input type="range" id="them-slider" min="0" max="9" step="0.01" value="6"><span class="slider-value gold" id="them-val">1,000,000×</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Physical one-way latency in the HSS</label>
+      <div class="slider-row"><input type="range" id="lat-slider" min="1" max="200" step="1" value="50"><span class="slider-value" id="lat-val">50 ms</span></div>
+    </div>
+  </section>
+
+  <section class="headline">
+    <div class="headline-label">What a reply costs the faster of you</div>
+    <div class="headline-text" id="headline-text">computing…</div>
+    <div id="mode-wrap"></div>
+  </section>
+
+  <section class="grid2">
+    <div class="stat-card"><div class="label">You wait, per reply</div><div class="value" id="s-you">—</div></div>
+    <div class="stat-card gold"><div class="label">They wait, per reply</div><div class="value" id="s-them">—</div></div>
+  </section>
+
+  <div class="sc-note" id="note">—</div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this simulator</button>
+    <div class="about-body" id="about-body">
+      <p>Inside the Human Server Stadium the physical round-trip between two fridge-containers is a few milliseconds — trivial. But a resident running at <code>R×</code> experiences that wait <code>R</code> times longer: the canon worked example is <code>50 ms × 50× = 2.5 subjective seconds</code>. The faster you run, the more a fixed physical delay stretches into your felt time.</p>
+      <p>So conversation across a speed gap degrades by tier. A pair near the same rate chat normally. Widen the gap and replies stretch to minutes, then a day's wait, then — at the extremes — months of subjective life between messages. This is why §18 calls speed tiers "civilisational fault lines," and why cross-tier relationships are carried on in composed letters rather than talk.</p>
+      <p>At very high dilation rates, every exchange is asynchronous by necessity — and multiple characters in the later series name this openly as reverting to <strong>"snail mail."</strong> The subjective gap between sending and receiving a reply is measured in years, then centuries of felt time. Characters describe composing messages carefully, sending, and then experiencing the equivalent of a lifetime before any reply arrives. The irony is consistent: the technologically most advanced residents end up with communication habits that would have been unremarkable to a 19th-century letter-writer. The difference is that the Victorian correspondent didn't know they'd still be alive when the reply came.</p>
+      <p>Two partial escapes exist in canon: the <strong>Universal Sabbath</strong> (§9), the maintenance window when every resident is briefly returned to 1× and real-time conversation is possible again; and <strong>"close-to-metal" acquaintances</strong> — NPCs run on local computronium beside you, at near-zero latency, which is part of why high-tier residents drift toward synthetic company. Neither solves the problem. They make its edges liveable.</p>
+      <p>Pairs with the <a href="time-dilation.html">Time Dilation Instrument</a> and the <a href="birthday-sacrifice.html">Birthday-Sacrifice</a> calculator — three views of the same problem: a clock that is freedom for one person and distance between two.</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Hafele, J.C., &amp; Keating, R.E. (1972). "Around-the-World Atomic Clocks: Observed Relativistic Time Gains." <em>Science</em>, 177(4044), 168–170 — the actual experiment that confirmed time dilation is real: flying atomic clocks around the world and comparing them to stationary ones. Yee, N. (2006). "The Psychology of Massively Multi-User Online Role-Playing Games." In R. Schroeder &amp; A. Axelsson (Eds.), <em>Avatars at Work and Play</em>. Springer — on how latency and synchrony shape social identity in online communities; precursor to the speed-tier dynamics of §18.</p>
+      <p class="meta-line">v1.0 — Canon §18 / §20 / §9 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+var pktDur=3, pktColor="#86f6f2", pktStart=Date.now();
+function animatePacket(){
+  var p=document.getElementById('packet');
+  if(p){
+    var t=((Date.now()-pktStart)/1000)/pktDur;
+    var f=t%2; if(f>1)f=2-f;            // ping-pong: message out, reply back
+    p.setAttribute('x',(84+f*(462-84)).toFixed(1));
+    p.style.fill=pktColor;
+  }
+  requestAnimationFrame(animatePacket);
+}
+function rFromSlider(v){return Math.round(Math.pow(10,v));}
+function sliderFromR(R){return Math.log10(Math.max(R,1));}
+function fmtRate(R){if(R<1000)return R+'×';if(R<1e6)return Math.round(R).toLocaleString()+'×';if(R===1e6)return '1,000,000×';if(R===1e9)return '1,000,000,000×';return (R/1e6).toFixed(0)+'M×';}
+function fmtTime(s){
+  if(s<1)return (s*1000).toFixed(0)+' ms';
+  if(s<60)return (Math.round(s*10)/10)+' s';
+  if(s<3600)return (s/60).toFixed(1)+' min';
+  if(s<86400)return (s/3600).toFixed(1)+' h';
+  if(s<31557600)return (s/86400).toFixed(1)+' days';
+  var y=s/31557600;
+  if(y<1000)return (Math.round(y*10)/10)+' yr';
+  if(y<1e6)return Math.round(y).toLocaleString()+' yr';
+  return (y/1e6).toFixed(1)+' Myr';
+}
+function modeOf(s){
+  if(s<2)return["a normal real-time conversation","var(--teal)"];
+  if(s<30)return["stilted — an awkward pause after every line","var(--teal)"];
+  if(s<300)return["walkie-talkie / push-to-talk","var(--amber)"];
+  if(s<7200)return["voice-mail tag","var(--amber)"];
+  if(s<172800)return["daily letters","var(--gold-glow)"];
+  if(s<3.15e9)return["correspondence across a gulf — a reply is a rare event","var(--red)"];
+  return["effectively no contact between Sabbaths","var(--red)"];
+}
+
+function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={you:50,them:1000000,lat:50};
+function loadHash(){var p=getHash();if(p.you)state.you=Math.min(1e9,Math.max(1,parseFloat(p.you)));if(p.them)state.them=Math.min(1e9,Math.max(1,parseFloat(p.them)));if(p.lat)state.lat=Math.min(200,Math.max(1,parseFloat(p.lat)));}
+function saveHash(){setHash({you:state.you,them:state.them,lat:state.lat});}
+
+function render(){
+  document.getElementById('you-val').textContent=fmtRate(state.you);
+  document.getElementById('them-val').textContent=fmtRate(state.them);
+  document.getElementById('lat-val').textContent=state.lat+' ms';
+  document.getElementById('av-you').textContent=fmtRate(state.you);
+  document.getElementById('av-them').textContent=fmtRate(state.them);
+
+  var rt=2*state.lat/1000; // round-trip seconds, physical
+  var youWait=rt*state.you, themWait=rt*state.them;
+  document.getElementById('s-you').textContent=fmtTime(youWait);
+  document.getElementById('s-them').textContent=fmtTime(themWait);
+
+  var worst=Math.max(youWait,themWait);
+  var faster=state.them>=state.you?'faster runner':'you';
+  var m=modeOf(worst);
+  document.getElementById('headline-text').innerHTML='Each reply arrives after <span class="v">'+fmtTime(worst)+'</span> of subjective waiting for the '+(state.them===state.you?'either of you':faster)+'.';
+  document.getElementById('mode-wrap').innerHTML='<span class="mode" style="color:'+m[1]+'">'+m[0]+'</span>';
+  document.getElementById('fig-mode').textContent='— '+m[0]+' —';
+  document.getElementById('fig-mode').setAttribute('fill',m[1]);
+  // packet speed: snappier chat → fast packet; long lag → it crawls. Wide range so the change is obvious.
+  pktDur=Math.max(0.5,Math.min(13,0.5+Math.log10(worst+1)*1.75));
+  pktColor=m[1];
+
+  var note=document.getElementById('note');
+  if(worst<2){
+    note.innerHTML='Close enough in tempo to just <strong>talk</strong>. This is the easy case — and the rare one once people start opting into high dilation.';
+  } else if(worst<7200){
+    note.innerHTML='The gap is opening. Real-time is gone; you’re leaving each other messages and waiting. Manageable, but no longer a conversation.';
+  } else {
+    note.innerHTML='At this gap, talking is impossible — the faster of you lives <strong>'+fmtTime(worst)+'</strong> between your lines. Relationships across this distance survive as composed letters, or not at all, until the <strong>Universal Sabbath</strong> snaps everyone back to 1× for a shared moment (§9).';
+  }
+}
+function wire(){
+  var y=document.getElementById('you-slider'),t=document.getElementById('them-slider'),l=document.getElementById('lat-slider');
+  y.value=sliderFromR(state.you).toFixed(2); t.value=sliderFromR(state.them).toFixed(2); l.value=state.lat;
+  y.addEventListener('input',function(){state.you=rFromSlider(parseFloat(y.value));saveHash();render();});
+  t.addEventListener('input',function(){state.them=rFromSlider(parseFloat(t.value));saveHash();render();});
+  l.addEventListener('input',function(){state.lat=parseFloat(l.value);saveHash();render();});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();wire();render();requestAnimationFrame(animatePacket);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

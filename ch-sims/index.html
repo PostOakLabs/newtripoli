@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!--
+  New Tripoli — Sim Catalogue
+  Cognitive Husbandry series · interactive companion
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+  Aesthetic: "Simulation Terminal" — phosphor green console on green-black, SVG schematics, CRT texture.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Tripoli — Sim Catalogue</title>
+<meta name="description" content="An interactive companion to the Cognitive Husbandry / New Tripoli series. Browse the in-world sim catalogue and run the instruments behind the fiction — time dilation, feasibility, the layer stack. Client-side, zero PII.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--deep:#080d0c;--panel:#0c1311;--panel-2:#101a16;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;--teal-glow:#7dffb8;--signal:#34e6e0;
+  --border:rgba(52,230,224,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+/* CRT texture: faint grid + scanlines + vignette, all non-interactive overlays */
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(52,230,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.025) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.10) 3px,rgba(0,0,0,0) 4px),
+  radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.45) 100%)}
+.wrap{position:relative;z-index:3}
+a{color:var(--green-glow);text-decoration:none;transition:color .15s}
+a:hover{color:var(--teal-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.12;letter-spacing:.01em}
+
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+.nav-inner{max-width:1180px;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13.5px;letter-spacing:.06em;color:var(--text);display:flex;align-items:center;gap:9px}
+.nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.4s steps(1) infinite}
+@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.35}}
+.nav-brand span{color:var(--green)}
+.nav-links{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
+.nav-links a:hover{color:var(--green-glow)}
+
+/* ── HERO: split, schematic on the right ── */
+.hero{max-width:1180px;margin:0 auto;padding:60px 28px 36px;display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:center}
+@media (max-width:900px){.hero{grid-template-columns:1fr;gap:30px;padding:40px 18px 26px}}
+.hero .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:18px;display:inline-flex;align-items:center;gap:10px}
+.hero .eyebrow::before{content:'';width:26px;height:1px;background:var(--green)}
+.hero h1{font-size:clamp(2rem,4.2vw,3.1rem);color:var(--text);margin-bottom:18px;letter-spacing:0;text-transform:none}
+.hero h1 .accent{color:var(--green);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.hero .lede{font-size:1.04rem;color:var(--body);max-width:54ch;line-height:1.7;margin-bottom:24px}
+.hero .lede strong{color:var(--text);font-weight:500}
+.statusline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);display:flex;flex-wrap:wrap;gap:7px 14px}
+.statusline span{color:var(--body)}
+.statusline b{color:var(--green);font-weight:400}
+.hero-fig{border:1px solid var(--border);border-radius:10px;background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));padding:14px;position:relative;overflow:hidden}
+.hero-fig::before{content:'SECTION // NEW TRIPOLI · TUNA-CAN CAVERN';position:absolute;top:10px;left:14px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:var(--muted)}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* SVG theming classes */
+svg .s-ph{stroke:var(--green);fill:none}
+svg .s-tl{stroke:var(--teal);fill:none}
+svg .s-dim{stroke:var(--rim);fill:none}
+svg .s-mut{stroke:var(--muted);fill:none}
+svg .f-ph{fill:var(--green)}
+svg .f-tl{fill:var(--teal)}
+svg .f-panel{fill:var(--panel)}
+svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em}
+svg .lbl-ph{fill:var(--green);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em}
+
+.section{max-width:1180px;margin:0 auto;padding:46px 28px 8px}
+.section-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:500}
+.section-head h2{font-size:clamp(1.4rem,2.4vw,1.9rem);color:var(--text);margin-top:8px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.02em}
+.section-head p{color:var(--body);max-width:68ch;font-size:.97rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin-top:24px}
+
+.card{--accent:#34e6e0;--accent-glow:#86f6f2;background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--edge);border-radius:10px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:11px;text-decoration:none;color:var(--body);transition:border-color .15s,transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+/* per-group accent: teal = New Tripoli world/physics · green = CH/ETI & speculative · amber = real-science companion */
+.card.g-teal{--accent:#34e6e0;--accent-glow:#86f6f2}
+.card.g-green{--accent:#23ff88;--accent-glow:#7dffb8}
+.card.g-amber{--accent:#ffc24d;--accent-glow:#ffe09a}
+.card::after{content:'';position:absolute;top:0;left:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .2s}
+a.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 22px color-mix(in srgb,var(--accent) 22%,transparent)}
+a.card:hover::after{opacity:.85}
+.card .glyph{transition:border-color .15s,background .15s}
+a.card:hover .glyph{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.card.static{cursor:default}
+.colorkey{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px}
+.colorkey .ck{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.colorkey .ck i{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.worlds-wrap{margin-top:24px;display:flex;flex-direction:column;gap:30px}
+.world-block .world-h{--accent:#34e6e0;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.world-block .world-h.g-teal{--accent:#34e6e0}
+.world-block .world-h.g-green{--accent:#23ff88}
+.world-block .world-h.g-amber{--accent:#ffc24d}
+.world-block .world-h span{color:var(--muted);font-weight:400}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.glyph{width:42px;height:42px;border:1px solid var(--edge);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(52,230,224,.03)}
+.glyph svg{width:24px;height:24px}
+.card-reg{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.status{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.status.live{color:var(--signal);background:rgba(52,230,224,.1);border:1px solid rgba(52,230,224,.4)}
+.status.soon{color:var(--body);background:rgba(143,176,162,.06);border:1px solid var(--edge)}
+.status.canon{color:var(--teal-glow);background:rgba(35,255,136,.08);border:1px solid rgba(35,255,136,.3)}
+.card h3{font-size:1.14rem;color:var(--text);line-height:1.25;text-transform:none;letter-spacing:0}
+.card p{font-size:.85rem;color:var(--body);line-height:1.6;flex:1}
+.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;padding-top:12px;border-top:1px solid var(--edge)}
+.chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:3px 8px;border:1px solid var(--edge);border-radius:3px}
+.card-cta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-glow);margin-top:2px}
+
+.legend{max-width:1180px;margin:40px auto 0;padding:0 28px}
+.legend-inner{display:flex;flex-wrap:wrap;gap:22px;padding:20px 24px;background:rgba(12,19,17,.5);border:1px solid var(--border);border-radius:10px}
+.legend-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;max-width:30ch}
+.legend-item .sym{font-family:'JetBrains Mono',monospace;font-size:14px;flex-shrink:0}
+.legend-item .sym.canon{color:var(--green-glow)}
+.legend-item .sym.spec{color:var(--teal-glow)}
+.legend-item .sym.narr{color:var(--signal)}
+.legend-item strong{color:var(--text);display:block;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+
+footer{max-width:1180px;margin:60px auto 0;padding:28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;color:var(--text);letter-spacing:.04em}
+.foot-copy{font-size:13px;color:var(--muted);max-width:46ch;margin-top:6px;line-height:1.6}
+.foot-links{display:flex;flex-direction:column;gap:6px;font-size:13px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><span class="dot"></span>NEW <span>TRIPOLI</span> :: SIM_CATALOGUE</a>
+    <div class="nav-links">
+      <a href="#instruments">Instruments</a>
+      <a href="#walkthrough">Walkthrough</a>
+      <a href="#sims">Sims</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div>
+    <span class="eyebrow">Cognitive Husbandry · interactive companion</span>
+    <h1>The sim catalogue <span class="accent">eight billion people</span> wake up to.</h1>
+    <p class="lede">
+      After the Intake, every resident of New Tripoli wakes inside a deep catalogue of <strong>sims</strong> — worlds to live in, at whatever speed they choose. This is that catalogue, made browsable, paired with <strong>instruments</strong> that let you operate the real ideas underneath: how much life a dilation rate actually buys you, why the Universal Sabbath matters, what the world would cost to build.
+    </p>
+    <div class="statusline">
+      <span>◆ <b>canon-grounded</b></span><span>▸ <b>client-side</b></span><span>▸ <b>zero PII</b></span><span>▸ <b>no network</b></span><span>▸ <b>CC&nbsp;BY&nbsp;4.0</b></span>
+    </div>
+  </div>
+
+  <!-- ── SIGNATURE HERO SCHEMATIC: cross-section of the New Tripoli cavern ── -->
+  <div class="hero-fig">
+    <svg viewBox="0 0 540 430" role="img" aria-label="Cross-section schematic of the New Tripoli cavern: Saharan solar array on the surface, a 150-metre soil cap, the 600-metre-tall, 1000-km-wide cavern with a downtown core of towers and residential rings, and sub-level transit.">
+      <!-- frame corner ticks -->
+      <g class="s-dim" stroke-width="1">
+        <path d="M16 16 h22 M16 16 v22"/><path d="M524 16 h-22 M524 16 v22"/>
+        <path d="M16 414 h22 M16 414 v-22"/><path d="M524 414 h-22 M524 414 v-22"/>
+      </g>
+
+      <!-- SURFACE: solar array + sun -->
+      <g transform="translate(0,0)">
+        <circle class="f-ph" cx="470" cy="58" r="9" opacity=".9"/>
+        <g class="s-ph" stroke-width="1" opacity=".7">
+          <path d="M470 40 v-8 M470 84 v8 M452 58 h-8 M488 58 h8 M457 45 l-6 -6 M483 45 l6 -6 M457 71 l-6 6 M483 71 l6 6"/>
+        </g>
+        <line class="s-mut" x1="40" y1="78" x2="430" y2="78" stroke-width="1"/>
+        <g class="s-ph" stroke-width="1.3" opacity=".85">
+          <path d="M60 78 l14 -12 v0 M74 66 l14 12"/>
+          <path d="M104 78 l14 -12 M118 66 l14 12"/>
+          <path d="M148 78 l14 -12 M162 66 l14 12"/>
+          <path d="M192 78 l14 -12 M206 66 l14 12"/>
+        </g>
+        <text class="lbl" x="40" y="56">SOLAR ARRAY · EARTH PRIME</text>
+      </g>
+
+      <!-- SOIL CAP (150 m), diagonal hatch -->
+      <g class="s-dim" stroke-width="1" opacity=".6">
+        <line x1="40" y1="86" x2="500" y2="86"/>
+        <line x1="40" y1="104" x2="500" y2="104"/>
+        <path d="M40 104 l18 -18 M80 104 l18 -18 M120 104 l18 -18 M160 104 l18 -18 M200 104 l18 -18 M240 104 l18 -18 M280 104 l18 -18 M320 104 l18 -18 M360 104 l18 -18 M400 104 l18 -18 M440 104 l18 -18 M480 104 l16 -16"/>
+      </g>
+      <text class="lbl" x="404" y="99" opacity=".8">150 m CAP</text>
+
+      <!-- CAVERN shell: shallow wide dome -->
+      <path class="s-ph" stroke-width="1.6" d="M40 104 C40 104 40 360 120 360 L420 360 C500 360 500 104 500 104"/>
+      <line class="s-ph" x1="40" y1="360" x2="500" y2="360" stroke-width="1.6"/>
+
+      <!-- artificial sky lights along ceiling -->
+      <g class="f-ph">
+        <circle cx="150" cy="120" r="2" opacity=".5"/><circle cx="210" cy="115" r="2" opacity=".5"/>
+        <circle cx="270" cy="113" r="2.4" opacity=".7"/><circle cx="330" cy="115" r="2" opacity=".5"/>
+        <circle cx="390" cy="120" r="2" opacity=".5"/>
+      </g>
+      <text class="lbl" x="232" y="135" opacity=".7">ARTIFICIAL SKY</text>
+
+      <!-- vertical dimension marker 600 m -->
+      <g class="s-mut" stroke-width="1" opacity=".8">
+        <line x1="30" y1="112" x2="30" y2="352"/><path d="M26 116 l4 -6 l4 6 M26 348 l4 6 l4 -6"/>
+      </g>
+      <text class="lbl" x="6" y="236" transform="rotate(-90 14 236)">600 m</text>
+
+      <!-- LEFT RING (residential blocks) -->
+      <g class="s-tl" stroke-width="1.2" opacity=".9">
+        <rect x="78" y="330" width="14" height="30"/><rect x="96" y="324" width="14" height="36"/>
+        <rect x="114" y="332" width="14" height="28"/><rect x="132" y="326" width="14" height="34"/>
+      </g>
+      <text class="lbl" x="84" y="378">RING</text>
+
+      <!-- RIGHT RING -->
+      <g class="s-tl" stroke-width="1.2" opacity=".9">
+        <rect x="396" y="330" width="14" height="30"/><rect x="414" y="324" width="14" height="36"/>
+        <rect x="432" y="332" width="14" height="28"/><rect x="450" y="326" width="14" height="34"/>
+      </g>
+      <text class="lbl" x="406" y="378">RING</text>
+
+      <!-- DOWNTOWN CORE: cluster of towers center -->
+      <g class="s-ph" stroke-width="1.3">
+        <rect x="232" y="284" width="13" height="76"/><rect x="248" y="258" width="13" height="102"/>
+        <rect x="264" y="240" width="14" height="120"/><rect x="281" y="266" width="13" height="94"/>
+        <rect x="297" y="290" width="13" height="70"/>
+      </g>
+      <!-- core glow pulse -->
+      <circle class="f-ph" cx="271" cy="232" r="3.2">
+        <animate attributeName="opacity" values=".3;1;.3" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="2.6;4;2.6" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text class="lbl-ph" x="246" y="226">CORE</text>
+
+      <!-- SUB-LEVEL transit (vactrain) -->
+      <line class="s-dim" x1="60" y1="384" x2="480" y2="384" stroke-width="1" stroke-dasharray="5 6"/>
+      <circle class="f-tl" cx="60" cy="384" r="3">
+        <animate attributeName="cx" values="60;480;60" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <text class="lbl" x="60" y="402" opacity=".7">SUB-LEVEL · VACTRAIN ~1000 mph</text>
+
+      <!-- HSS callout (the real servers, off-frame) -->
+      <g class="s-mut" stroke-width="1" opacity=".7">
+        <path d="M500 150 h22" stroke-dasharray="3 3"/>
+      </g>
+      <text class="lbl" x="468" y="166" opacity=".7">→ HSS</text>
+
+      <!-- scanline sweep -->
+      <rect x="40" y="104" width="460" height="3" class="f-ph" opacity=".10">
+        <animate attributeName="y" values="104;360;104" dur="7s" repeatCount="indefinite"/>
+      </rect>
+    </svg>
+  </div>
+</header>
+
+<div class="section" id="instruments">
+  <div class="section-head">
+    <span class="kicker">Instruments · operate the ideas</span>
+    <h2>The math behind the world</h2>
+    <p>Each instrument is a single self-contained page — adjust the inputs, watch the canon numbers move, share the URL with your settings baked in.</p>
+    <div class="colorkey">
+      <span class="ck"><i style="background:#34e6e0"></i>New Tripoli · world &amp; physics</span>
+      <span class="ck"><i style="background:#23ff88"></i>Cognitive Husbandry · ETI &amp; speculative</span>
+      <span class="ck"><i style="background:#ffc24d"></i>Real-science companion</span>
+    </div>
+  </div>
+  <div class="grid">
+
+    <a class="card g-teal" href="sims/time-dilation.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.5" cx="12" cy="12" r="9"/><path class="s-ph" stroke-width="1.5" stroke-linecap="round" d="M12 12 V6 M12 12 l5 3"/><circle class="f-ph" cx="12" cy="12" r="1.2"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · ✦ Feasibility</span>
+      <h3>Time Dilation Instrument</h3>
+      <p>Pick a dilation rate — from the 50× New Tripoli ceiling to New Andromeda's billion-fold — and see the subjective life you live per real second, the gap between Universal Sabbaths, and how fast you blow past every human limit on the people you can know.</p>
+      <div class="card-meta"><span class="chip">§18 Dilation</span><span class="chip">§9 Sabbath</span><span class="chip">§30 Contact list</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-green" href="sims/feasibility.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><rect class="s-ph" stroke-width="1.5" x="5" y="3" width="14" height="18" rx="2"/><line class="s-ph" stroke-width="1.5" x1="5" y1="11" x2="19" y2="11"/><circle class="f-ph" cx="12" cy="7" r="1.4"/><path class="s-ph" stroke-width="1.3" d="M9 15 h6 M9 18 h6"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Feasibility · ◆ Canon</span>
+      <h3>Brain-in-a-Vat Feasibility Calculator</h3>
+      <p>Could you actually run 8 billion preserved brains off the Sahara? The 90/10 substrate split, the power budget, and the surprise: energy is the easy part — biology is the real ceiling.</p>
+      <div class="card-meta"><span class="chip">CH · Feasibility</span><span class="chip">Sahara solar</span><span class="chip">§26 split</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/layer-stack.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><rect class="s-ph" stroke-width="1.5" x="3" y="3" width="18" height="18" rx="1.5"/><rect class="s-ph" stroke-width="1.3" x="7" y="7" width="10" height="10" rx="1"/><rect class="f-ph" x="10.5" y="10.5" width="3" height="3"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon</span>
+      <h3>Matryoshka Layer Stack</h3>
+      <p>Click down through the nested reality of New Tripoli — Earth Prime → the cavern → the holodeck residence → the dedicated Sim Room — and see exactly how many layers deep from the physical world a resident is sitting.</p>
+      <div class="card-meta"><span class="chip">§15 Sim Stack</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/azure-janus.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><ellipse class="s-ph" stroke-width="1.5" cx="12" cy="12" rx="5" ry="9"/><ellipse class="s-tl" stroke-width="1.2" cx="12" cy="12" rx="9" ry="9" opacity=".6"/><path class="s-ph" stroke-width="1.3" d="M7 12 h10"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · ▣ Sim</span>
+      <h3>Azure Janus Portal Map</h3>
+      <p>An explorable node map of the portal chain — California → Azure Janus → Rust-Mars → Novo Alexandria — with the traversal rules, the hangar mystery, and the black-hole-powered library at the end of the line.</p>
+      <div class="card-meta"><span class="chip">§17 Novo Alexandria</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/ring-density.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.5" cx="12" cy="12" r="9"/><circle class="s-ph" stroke-width="1.3" cx="12" cy="12" r="4"/><rect class="f-tl" x="10.6" y="9.5" width="2.8" height="5"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §5</span>
+      <h3>Ring-Pack Density</h3>
+      <p>Could the residential ring actually hold 8.1 billion? Slide its width and watch — the famous skyline houses almost nobody; the mid-rise ring does all the work.</p>
+      <div class="card-meta"><span class="chip">§5 Geography</span><span class="chip">Housing math</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/synthetic-body.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.5" cx="12" cy="6" r="3"/><path class="s-ph" stroke-width="1.4" stroke-linecap="round" d="M12 9 v8 M12 11 l-5 4 M12 11 l5 4 M12 17 l-4 5 M12 17 l4 5"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §35</span>
+      <h3>Synthetic-Body Spec Sheet</h3>
+      <p>Toggle the skeleton material and watch the consequences: an osmium build hits ~450 lb — you can't swim, can't ride a bicycle, and can't be repaired in the field.</p>
+      <div class="card-meta"><span class="chip">§35 Wake</span><span class="chip">Osmium</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/birthday-sacrifice.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="f-ph" cx="5" cy="12" r="1.8"/><path class="s-ph" stroke-width="1.4" d="M6.5 12 H12"/><path class="s-ph" stroke-width="1.4" d="M12 12 l7 -6"/><path class="s-tl" stroke-width="1.4" d="M12 12 l7 6"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §28</span>
+      <h3>Birthday-Sacrifice</h3>
+      <p>Love measured in the enclave's hardest currency. When a faster friend slows down to stay with you, see exactly how many subjective years they give up — the 1,500-year number.</p>
+      <div class="card-meta"><span class="chip">§28 Family</span><span class="chip">Dilation cost</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-green" href="sims/kinetic-probe.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.3" stroke-dasharray="2 2" d="M3 5 Q12 9 18 16"/><circle class="f-ph" cx="18" cy="16" r="2"/><path class="s-tl" stroke-width="1.2" d="M18 16 l3.5 3.5 M21.5 16 l-3.5 3.5"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Feasibility · ◆ Canon</span>
+      <h3>Kinetic Probe Delivery</h3>
+      <p>How the Intake arrives: a mass-driver fling across light-years. Set the launch, watch the travel time and impact energy, choose which worlds survive, and pick the ETI's branch.</p>
+      <div class="card-meta"><span class="chip">CH Delivery</span><span class="chip">3 branches</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/tech-tree.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><g class="f-ph"><circle cx="5" cy="6" r="1.8"/><circle cx="5" cy="18" r="1.8"/><circle cx="13" cy="12" r="1.8"/><circle cx="20" cy="12" r="1.8"/></g><g class="s-ph" stroke-width="1.2"><path d="M6.6 6.7 L11.4 11.3 M6.6 17.3 L11.4 12.7 M14.8 12 H18.2"/></g></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Feasibility · ◆ Canon</span>
+      <h3>Bootstrap Tech-Tree</h3>
+      <p>From garage tools to a femtoscale assembler — a buildable 31-node dependency graph of the post-Wake reindustrialization. You can't skip a rung.</p>
+      <div class="card-meta"><span class="chip">§34 / §36</span><span class="chip">31 nodes</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-amber" href="sims/molecular-assembler.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><g class="f-ph"><circle cx="6" cy="19" r="1.7"/><circle cx="12" cy="19" r="1.7"/><circle cx="18" cy="19" r="1.7"/><circle cx="12" cy="7" r="1.7"/></g><g class="s-ph" stroke-width="1.2"><path d="M12 4 V10 M12 10 L12 16 M9.5 16 H14.5"/></g></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Feasibility · ◆ Canon</span>
+      <h3>The Molecular Assembler</h3>
+      <p>Drexler's dream of a machine that builds matter — and itself — atom by atom. The vision, Smalley's objections, the real 2025 state of the art, and an honest "how far?". Companion to the Tech-Tree's endpoint.</p>
+      <div class="card-meta"><span class="chip">§34 / §36</span><span class="chip">6 views</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/comms-lag.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="f-ph" cx="5" cy="12" r="2.2"/><circle class="f-tl" cx="19" cy="12" r="2.2"/><path class="s-ph" stroke-width="1.3" stroke-dasharray="2 2" d="M8 12 q4 -5 8 0"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §18 / §20</span>
+      <h3>Cross-Tier Comms Lag</h3>
+      <p>Put two residents on different speed tiers and watch a conversation degrade from real-time chat to letters — and why the Universal Sabbath is the only time it closes.</p>
+      <div class="card-meta"><span class="chip">§18 Dilation</span><span class="chip">§20 Comms</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-green" href="sims/selection-sorter.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><rect class="f-ph" x="4" y="4" width="6" height="6" rx="1"/><rect class="s-ph" stroke-width="1.3" x="14" y="4" width="6" height="6" rx="1"/><rect class="s-ph" stroke-width="1.3" x="4" y="14" width="6" height="6" rx="1"/><rect class="f-ph" x="14" y="14" width="6" height="6" rx="1"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Speculative · the selection problem</span>
+      <h3>Selection Sorter</h3>
+      <p>If the ETI could only keep some of humanity, who makes the cut? Pick a criterion, watch who's deleted — and notice it always, conveniently, spares you.</p>
+      <div class="card-meta"><span class="chip">CH · Selection</span><span class="chip">Ethics</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/hss-section.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><rect class="s-ph" stroke-width="1.5" x="3" y="5" width="18" height="14" rx="1.5"/><rect class="f-ph" x="9" y="9" width="6" height="6" rx="1"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §27</span>
+      <h3>HSS Cross-Section</h3>
+      <p>The real machine in the Libyan desert: an 800-million fridge core inside a 7.2-billion laptop ring. The 90/10 split isn't a statistic — it's physical geography you can never perceive.</p>
+      <div class="card-meta"><span class="chip">§27 HSS</span><span class="chip">90/10 split</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/wake-earth.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.5" cx="12" cy="12" r="9"/><path class="s-tl" stroke-width="1.2" d="M3 12 h18"/><ellipse class="s-tl" stroke-width="1.2" cx="12" cy="12" rx="4" ry="9"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §37</span>
+      <h3>Wake-Day Earth Map</h3>
+      <p>The planet eight billion synthetic humans wake to: continent-sized solar arrays, 200+ waystations, sealed fabs, rewilded cities, CO₂ back to 1990. Preserved despite us, not for us.</p>
+      <div class="card-meta"><span class="chip">§37 Wake</span><span class="chip">Rewilded</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-teal" href="sims/ganymede-cube.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.4" d="M12 3 l8 4.5 v9 l-8 4.5 l-8 -4.5 v-9 z"/><path class="s-tl" stroke-width="1.2" d="M12 3 l8 4.5 l-8 4.5 l-8 -4.5 z"/><path class="s-tl" stroke-width="1.2" d="M12 12 v9"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">◆ Canon · §24</span>
+      <h3>New Ganymede Cube Explorer</h3>
+      <p>Zoom out from your apartment to a cube the size of a continent and watch home shrink to a rounding error — residential space is 0.000042% of the volume.</p>
+      <div class="card-meta"><span class="chip">§24 Ganymede</span><span class="chip">0.000042%</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-green" href="sims/spectrum.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.4" stroke-linecap="round" d="M3 20 V14 M7 20 V8 M11 20 V11 M15 20 V5 M19 20 V13"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Speculative · Catalogue Genre II</span>
+      <h3>The Spectrum</h3>
+      <p>A well-equipped lab, an anomaly to explain, no instructions. Four instances — three solvable, one TAC would rather not discuss; the last hides six absorption features whose spacing converges on φ.</p>
+      <div class="card-meta"><span class="chip">Cat. §II Spectrum</span><span class="chip">4 instances</span><span class="chip">φ = 1.618</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-green" href="sims/deep-field.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="f-ph" cx="6" cy="7" r="1.3"/><circle class="f-tl" cx="17" cy="6" r="1"/><circle class="f-ph" cx="12" cy="13" r="1.1"/><circle class="f-tl" cx="8" cy="18" r="1"/><circle class="f-ph" cx="19" cy="16" r="1.4"/><circle class="s-ph" stroke-width="1" cx="14" cy="9" r="2.3"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">✦ Speculative · Catalogue Genre II</span>
+      <h3>Deep Field</h3>
+      <p>Build the instruments, work the data, argue what it means. 42 objects in the field; one produced a finding the ETI called "unexpectedly sophisticated" — and no one was told which.</p>
+      <div class="card-meta"><span class="chip">Cat. §II Deep Field</span><span class="chip">42 objects</span><span class="chip">collaborative</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+    <a class="card g-amber" href="sims/cryonics.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-tl" stroke-width="1.3" stroke-linecap="round" d="M12 3 V21 M3 12 H21 M5.5 5.5 L18.5 18.5 M18.5 5.5 L5.5 18.5"/></svg></div>
+        <span class="status live">Live</span>
+      </div>
+      <span class="card-reg">🧊 Real science · CH</span>
+      <h3>Cryonics — State of the Science</h3>
+      <p>The real science behind the "fridge-container": why cryonics works in principle, why no one has ever been revived, and how Alcor's dewars compare to the HSS.</p>
+      <div class="card-meta"><span class="chip">Real science</span><span class="chip">HSS fridge</span><span class="chip">Alcor</span></div>
+      <span class="card-cta">Open instrument →</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="section" id="walkthrough">
+  <div class="section-head">
+    <span class="kicker">Guided walkthroughs · arguments you walk</span>
+    <h2>Chained, not just catalogued</h2>
+    <p>Each walkthrough sequences the instruments above into a single argument — every step deep-links into a live tool with its inputs preset. Not cutscenes; reasoning you operate.</p>
+  </div>
+  <div class="grid">
+
+    <a class="card" href="demos/why-are-we-waiting.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12" class="s-dim" stroke-width="1.2" stroke-dasharray="2 3"/><circle class="f-ph" cx="4" cy="12" r="2"/><circle class="f-ph" cx="12" cy="12" r="2"/><circle class="s-ph" stroke-width="1.4" cx="20" cy="12" r="2.4"/></svg></div>
+        <span class="status live">6 steps</span>
+      </div>
+      <span class="card-reg">▸ The provocation</span>
+      <h3>Why Are We Waiting?</h3>
+      <p>Energy → biology → augmentation → time → the question. San Junipero is on humanity's own tech tree — so what exactly are we waiting for?</p>
+      <span class="card-cta">Start the walkthrough →</span>
+    </a>
+
+    <a class="card" href="demos/could-this-exist.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.5" d="M5 13 l4 4 l10 -11"/></svg></div>
+        <span class="status live">4 checks</span>
+      </div>
+      <span class="card-reg">▸ The engineering</span>
+      <h3>Could This World Exist?</h3>
+      <p>Four checks — energy, housing, the body, the supply chain. Run each one and watch the scenario turn from science fiction into an unbuilt program.</p>
+      <span class="card-cta">Start the walkthrough →</span>
+    </a>
+
+    <a class="card" href="demos/collected-not-conquered.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="f-ph" cx="4" cy="6" r="1.8"/><path class="s-ph" stroke-width="1.3" d="M5.5 7 Q12 11 14 12"/><circle class="s-tl" stroke-width="1.4" cx="18" cy="12" rx="3" r="3"/><circle class="f-tl" cx="18" cy="12" r="1.3"/></svg></div>
+        <span class="status live">4 moves</span>
+      </div>
+      <span class="card-reg">▸ The ETI thesis</span>
+      <h3>Collected, Not Conquered</h3>
+      <p>From a thrown probe to a black-hole library: the case that a mature intelligence doesn't conquer — it samples cognitive diversity and keeps it.</p>
+      <span class="card-cta">Start the walkthrough →</span>
+    </a>
+
+    <a class="card" href="demos/physics-of-friendship.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.4" cx="7" cy="12" r="4"/><path class="s-ph" stroke-width="1.3" d="M7 12 V9"/><circle class="s-tl" stroke-width="1.4" cx="17" cy="12" r="4"/><path class="s-tl" stroke-width="1.3" d="M17 12 l2 -1.5"/></svg></div>
+        <span class="status live">3 steps</span>
+      </div>
+      <span class="card-reg">▸ The cost of a clock</span>
+      <h3>The Physics of Friendship</h3>
+      <p>Dilation is sold as freedom — but you don't live alone. How running fast turns conversation into letters and closeness into sacrifice.</p>
+      <span class="card-cta">Start the walkthrough →</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="section" id="sims">
+  <div class="section-head">
+    <span class="kicker">Sims · the in-world catalogue</span>
+    <h2>What's on offer in New Tripoli</h2>
+    <p>The headline entries from the resident catalogue the novels tour (§17). These are narrative descriptions of in-world experiences — the texture of the place, not playable builds.</p>
+  </div>
+  <div class="grid">
+
+    <div class="card static">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-tl" stroke-width="1.4" d="M3 17 q5 -4 9 0 t9 0"/><path class="s-ph" stroke-width="1.4" d="M9 14 q1 -7 5 -9 M14 5 q-4 0 -5 4 M14 5 q3 1 4 5"/></svg></div>
+        <span class="status canon">Day 1 catalogue</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim</span>
+      <h3>Jurassic — Four-Island Remix</h3>
+      <p>All four canonical islands connected by the films' own transport. The tone is deliberately wrong-footed: no catastrophe, just small mysteries and interpersonal drama inside a functioning park. So popular the ETI later added the real islands to the airport map.</p>
+      <div class="card-meta"><span class="chip">IP Remix</span><span class="chip">Book 2 mission</span></div>
+    </div>
+
+    <div class="card static">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.4" d="M6 9 h12 l-2 8 h-8 z"/><path class="s-tl" stroke-width="1.3" d="M3 19 q4 -2 9 0 t9 0"/><line class="s-ph" stroke-width="1.4" x1="12" y1="9" x2="12" y2="4"/><circle class="f-ph" cx="12" cy="4" r="1.3"/></svg></div>
+        <span class="status canon">Recurring</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim</span>
+      <h3>The Sovereign Sea Platform</h3>
+      <p>The "007 Floating Lair" — a conical-frustum seasteading megastructure, 26 inches of Yamato-plating, torpedo tubes loaded with robotic sharks. Every floor wider than the one above. Drops you in <em>Fortnite</em>-style and dares you to find a way inside.</p>
+      <div class="card-meta"><span class="chip">FPS</span><span class="chip">Lifestyle dwelling</span></div>
+    </div>
+
+    <div class="card static">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.4" d="M5 16 l7 -10 l7 10 z"/><path class="s-tl" stroke-width="1.3" d="M3 19 q4 -2 9 0 t9 0"/><path class="s-ph" stroke-width="1.4" stroke-linecap="round" d="M12 6 v-3 M10 5 l2 -2 l2 2"/></svg></div>
+        <span class="status canon">Pre-Singularity</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim</span>
+      <h3>Thalassa's Rise</h3>
+      <p>A volcanic island surfaces off Ecuador; a family builds a sovereign nation from 5,000 tonnes of reclaimed ocean garbage and a half-installed molecular assembler. Nation-building, pirate repulsion, or Bond-villain aesthetic — your pick of mod.</p>
+      <div class="card-meta"><span class="chip">Survival</span><span class="chip">Nation-build</span></div>
+    </div>
+
+    <div class="card static">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><path class="s-ph" stroke-width="1.3" d="M12 3 l2.4 4.8 l5.3 .8 l-3.85 3.75 l.9 5.3 l-4.75 -2.5 l-4.75 2.5 l.9 -5.3 l-3.85 -3.75 l5.3 -.8 z"/><circle class="f-ph" cx="12" cy="11" r="1.4"/></svg></div>
+        <span class="status canon">Day 1 catalogue</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim</span>
+      <h3>Old West — Tombstone &amp; the Zombie Variant</h3>
+      <p>Learn to ride, read terrain, and hold a town against bandits in a period-accurate frontier — or the <em>Pride, Prejudice &amp; Zombies</em>-styled undead variant. Quietly the first deposit in the series-spanning tech-tree arc: metallurgy you don't yet know you'll need.</p>
+      <div class="card-meta"><span class="chip">Frontier</span><span class="chip">Tech-tree clue</span></div>
+    </div>
+
+    <div class="card static">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.4" cx="12" cy="12" r="9"/><path class="s-tl" stroke-width="1.3" d="M7 15 q3 -3 5 -1 t5 -1"/><circle class="f-ph" cx="9" cy="9" r="1.1"/></svg></div>
+        <span class="status canon">Tech-tree spine</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim</span>
+      <h3>Space Robinsonade</h3>
+      <p>Marooned alone with a wrecked ship and a planet's raw materials — the isolated-individual counterpart to <em>The Last City</em>'s collective rebuild. Same tech-tree logic, entirely different solitude: every tool you need, you make from what you can find.</p>
+      <div class="card-meta"><span class="chip">Survival</span><span class="chip">Tech-tree clue</span></div>
+    </div>
+
+    <a class="card g-teal" href="sims/azure-janus.html">
+      <div class="card-top">
+        <div class="glyph"><svg viewBox="0 0 24 24"><circle class="s-ph" stroke-width="1.4" cx="5" cy="12" r="2"/><circle class="s-tl" stroke-width="1.4" cx="12" cy="12" r="2"/><circle class="s-ph" stroke-width="1.4" cx="19" cy="12" r="2.4"/><path class="s-dim" stroke-width="1.2" d="M7 12 H10 M14 12 H16.6"/></svg></div>
+        <span class="status canon">Late series</span>
+      </div>
+      <span class="card-reg">▣ Narrative sim · ▸ has instrument</span>
+      <h3>Novo Alexandria — the Azure Janus Chain</h3>
+      <p>The most philosophically weighted sim in the catalogue: a portal chain that ends not at a battle but at a black-hole-powered library with no closing time, extending a standing open enrollment. Late in the series, characters argue it was the ETI's honest advertisement all along.</p>
+      <div class="card-meta"><span class="chip">§17 Portal chain</span><span class="chip">Open the map →</span></div>
+    </a>
+
+  </div>
+</div>
+
+<div class="section" id="worlds">
+  <div class="section-head">
+    <span class="kicker">Worlds · the source texts</span>
+    <h2>The corpus behind the sims</h2>
+    <p>The prose the instruments draw on — world bibles, canon, and the in-world scenarios. This section is generated from the corpus manifest, so it stays in sync as the writing grows.</p>
+    <div class="colorkey">
+      <span class="ck"><i style="background:#34e6e0"></i>New Tripoli</span>
+      <span class="ck"><i style="background:#23ff88"></i>Cognitive Husbandry</span>
+      <span class="ck"><i style="background:#ffc24d"></i>Alt-history sims</span>
+    </div>
+  </div>
+  <div id="worlds-render" class="worlds-wrap"></div>
+</div>
+
+<footer>
+  <div>
+    <div class="foot-brand">NEW TRIPOLI <span style="color:var(--green)">// SIM CATALOGUE</span></div>
+    <p class="foot-copy">An interactive companion to the Cognitive Husbandry / New Tripoli series. Client-side, zero PII, no runtime network calls (web fonts excepted). Code MIT · Prose CC BY 4.0.</p>
+  </div>
+  <div class="foot-links">
+    <a href="#instruments">Instruments</a>
+    <a href="#walkthrough">Walkthroughs</a>
+    <a href="#sims">In-world catalogue</a>
+    <a href="#worlds">Source texts</a>
+    <a href="about.html">About</a>
+  </div>
+</footer>
+</div>
+
+<script src="data/manifest.js"></script>
+<script>
+(function(){
+  var m = window.WB_MANIFEST, host = document.getElementById('worlds-render');
+  if (!m || !host) { if(host) host.innerHTML='<p style="color:var(--muted);font-size:13px">Run scripts/build-manifest.py to generate the corpus index.</p>'; return; }
+  var GROUP = { 'new-tripoli':'g-teal', 'cognitive-husbandry':'g-green', 'alt-history':'g-amber' };
+  var TYPE = { canon:'Canon', bible:'World bible', catalogue:'Sim catalogue', 'sim-scenario':'Scenario' };
+  function title(p){ return p.split('/').pop().replace(/\.md$/,'').replace(/ - /g,' — '); }
+  function esc(s){ return (s||'').replace(/[&<>]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+  var html = '';
+  (m.worlds || []).forEach(function(w){
+    var docs = m.documents.filter(function(d){ return d.world === w; });
+    if (!docs.length) return;
+    html += '<div class="world-block">'
+      + '<h3 class="world-h ' + (GROUP[w]||'g-teal') + '">' + esc((m.worldLabels && m.worldLabels[w]) || w) + ' <span>· ' + docs.length + '</span></h3>'
+      + '<div class="grid">';
+    docs.forEach(function(d){
+      var kb = Math.round((d.bytes||0)/1024), words = (d.words||0).toLocaleString();
+      html += '<a class="card ' + (GROUP[w]||'g-teal') + '" href="../' + encodeURI(d.path) + '">'
+        + '<div class="card-top"><span class="card-reg">' + esc(TYPE[d.type]||d.type||'Doc') + '</span>'
+        + '<span class="status live">' + esc(d.status||'') + '</span></div>'
+        + '<h3>' + esc(title(d.path)) + '</h3>'
+        + '<p>' + esc(d.summary||'') + '</p>'
+        + '<div class="card-meta"><span class="chip">' + words + ' words</span><span class="chip">' + kb + ' KB</span>'
+        + (d.novella === 'true' ? '<span class="chip">novelization</span>' : '') + '</div>'
+        + '<span class="card-cta">Open source text →</span></a>';
+    });
+    html += '</div></div>';
+  });
+  host.innerHTML = html;
+})();
+</script>
+</body>
+</html>
