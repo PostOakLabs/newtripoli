@@ -1,0 +1,136 @@
+name: Deploy to DreamHost
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run preflight checks only — skip the deploy step'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Pre-flight checks ───────────────────────────────────────────────────────
+  preflight:
+    name: Pre-flight checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Line-ending guard — confirm no CRLF in committed files
+        run: |
+          BAD=$(git ls-files '*.html' '*.json' '*.yml' '*.js' '*.css' '*.md' \
+                | xargs grep -rlP '\r' 2>/dev/null || true)
+          if [ -n "$BAD" ]; then
+            echo "CRLF line endings detected in:"
+            echo "$BAD"
+            echo ""
+            echo "Run: git add --renormalize . && git commit -m 'chore: normalise line endings'"
+            echo "(Warning only — deploy will still proceed)"
+          else
+            echo "All text files use LF line endings"
+          fi
+
+  # ── Deploy ──────────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to DreamHost
+    runs-on: ubuntu-latest
+    needs: preflight
+    if: ${{ github.event_name != 'workflow_dispatch' || !inputs.dry_run }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup SSH Key & Host
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DH_SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DH_SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          echo "Key header : $(head -1 ~/.ssh/deploy_key)"
+          echo "Key footer : $(tail -1 ~/.ssh/deploy_key)"
+          echo "Permissions: $(stat -c %a ~/.ssh/deploy_key)"
+
+      - name: Test SSH connection to DreamHost
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=10 \
+            ${{ secrets.DH_SSH_USER }}@${{ secrets.DH_SSH_HOST }} "echo 'SSH connection confirmed'"
+
+      - name: Dry-run rsync (shows what will change — no writes)
+        run: |
+          rsync -avz --delete --dry-run --omit-dir-times \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.gitattributes' \
+            --exclude='.gitignore' \
+            --exclude='scripts/' \
+            --exclude='CLAUDE.md' \
+            --exclude='MAPPING-scenario-to-sim.md' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            --exclude='__pycache__/' \
+            --exclude='*.pyc' \
+            --exclude='node_modules/' \
+            --exclude='ch-sims/palette-compare.html' \
+            ./ ${{ secrets.DH_SSH_USER }}@${{ secrets.DH_SSH_HOST }}:${{ secrets.DH_WEB_ROOT }}/
+
+      - name: Sync to DreamHost via rsync
+        run: |
+          rsync -avz --delete --omit-dir-times \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.gitattributes' \
+            --exclude='.gitignore' \
+            --exclude='scripts/' \
+            --exclude='CLAUDE.md' \
+            --exclude='MAPPING-scenario-to-sim.md' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            --exclude='__pycache__/' \
+            --exclude='*.pyc' \
+            --exclude='node_modules/' \
+            --exclude='ch-sims/palette-compare.html' \
+            ./ ${{ secrets.DH_SSH_USER }}@${{ secrets.DH_SSH_HOST }}:${{ secrets.DH_WEB_ROOT }}/
+
+          echo "rsync completed successfully."
+
+      - name: Smoke test — homepage responds
+        run: |
+          if [ -z "${{ secrets.DH_SITE_URL }}" ]; then
+            echo "DH_SITE_URL secret not set — skipping smoke test"
+            exit 0
+          fi
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 15 "${{ secrets.DH_SITE_URL }}")
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "Site responded with HTTP $HTTP_CODE"
+          else
+            echo "Site returned HTTP $HTTP_CODE — deploy may have failed"
+            exit 1
+          fi
+
+      - name: Deploy summary
+        run: |
+          echo "## Deploy complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Site | ${{ secrets.DH_SITE_URL }} |" >> $GITHUB_STEP_SUMMARY
