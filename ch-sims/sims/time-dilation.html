@@ -424,4 +424,68 @@ function render(){
   rows.forEach(function(row){
     var name=row[0], cap=row[1];
     var mult=peoplePerRealYr/cap;
-    var frac=Math.
+    var frac=Math.min(1, mult);
+    var pct=(frac*100).toFixed(1);
+    var multLabel=mult<0.01?'<0.1×':mult<10?mult.toFixed(1)+'×':fmtNum(Math.round(mult))+'×';
+    html+='<div class="cap-bar"><span class="cap-name">'+name+'</span><div class="cap-track"><div class="cap-fill" style="width:'+pct+'%"></div></div><span class="cap-mult">'+multLabel+'</span></div>';
+  });
+  document.getElementById('cap-bars').innerHTML=html;
+
+  var acqNote=document.getElementById('acq-note');
+  var overDunbar=peoplePerRealYr/caps.dunbar;
+  if(R<=1){
+    acqNote.innerHTML='At <strong>1× (no dilation)</strong> you accumulate contacts at a normal pace. The contact-list problem does not apply.';
+  } else if(overDunbar<1){
+    acqNote.innerHTML='Even at <strong>'+fmtRate(R)+'</strong> you meet only '+fmtNum(peoplePerRealYr)+' people per real year — still below Dunbar’s number. Social triage is unnecessary.';
+  } else {
+    acqNote.innerHTML='At <strong>'+fmtRate(R)+'</strong> you accumulate <strong>'+fmtNum(Math.round(peoplePerRealYr))+'</strong> contacts per real year — <strong>'+overDunbar.toFixed(1)+'×</strong> Dunbar’s number. This is the §30 premise: AI contact-triage systems exist because no human social faculty was built for this scale.';
+  }
+
+  // active states
+  document.querySelectorAll('.preset-btn').forEach(function(b){
+    b.classList.toggle('active', parseFloat(b.dataset.rate)===R);
+  });
+  document.querySelectorAll('.toggle-btn').forEach(function(b){
+    b.classList.toggle('active', parseInt(b.dataset.reset)===state.resetMonths);
+  });
+
+  saveHash();
+}
+
+// ── events ───────────────────────────────────────────────────────────────
+var rSlider=document.getElementById('rate-slider');
+rSlider.addEventListener('input',function(){state.R=rFromSlider(parseFloat(this.value));render();});
+
+var acqSlider=document.getElementById('acq-slider');
+acqSlider.addEventListener('input',function(){state.acq=parseInt(this.value);render();});
+
+document.querySelectorAll('.preset-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.R=parseFloat(this.dataset.rate);
+    if(this.dataset.reset)state.resetMonths=parseInt(this.dataset.reset);
+    rSlider.value=sliderFromR(state.R).toFixed(4);
+    render();
+  });
+});
+
+document.querySelectorAll('.toggle-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    state.resetMonths=parseInt(this.dataset.reset);
+    render();
+  });
+});
+
+document.getElementById('about-toggle').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('about-body').classList.toggle('open');
+});
+
+// ── init ─────────────────────────────────────────────────────────────────
+loadHash();
+rSlider.value=sliderFromR(state.R).toFixed(4);
+acqSlider.value=state.acq;
+buildGauge();
+render();
+</script>
+</body>
+</html>
