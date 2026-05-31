@@ -1,0 +1,7 @@
+# New Tripoli — Apache config
+# Clean URLs: /terminal → /terminal.html etc.
+Options +MultiViews
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
