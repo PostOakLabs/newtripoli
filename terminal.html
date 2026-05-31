@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!--
+  New Tripoli — NT://TERMINAL
+  Client-side only. No backend, no maintenance.
+  Aesthetic: Simulation Terminal — phosphor green on near-black.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NT://TERMINAL — New Tripoli</title>
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--panel:#0c1311;--edge:#1b2722;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;
+  --border:rgba(52,230,224,0.15);--amber:#ffc24d;--plum:#a47dd6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+
+body{
+  background:var(--bg);color:var(--body);
+  font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column;
+}
+
+/* CRT */
+body::before{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(52,230,224,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(52,230,224,.025) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.08) 3px,rgba(0,0,0,0) 4px),
+    radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.35) 100%);
+}
+
+/* NAV */
+.nav{
+  border-bottom:1px solid var(--border);
+  background:rgba(5,8,10,.9);backdrop-filter:blur(8px);
+  padding:10px 24px;display:flex;align-items:center;gap:16px;
+  flex-shrink:0;position:relative;z-index:10;
+}
+.nav-brand{font-size:12px;font-weight:500;letter-spacing:.07em;color:var(--text);display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);animation:blink 2.4s steps(1) infinite;flex-shrink:0}
+@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.3}}
+.nav-links{margin-left:auto;display:flex;gap:20px;font-size:11px;letter-spacing:.09em}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--green-glow)}
+
+/* TERMINAL WRAP */
+.terminal{
+  flex:1;display:flex;flex-direction:column;
+  position:relative;z-index:3;overflow:hidden;
+  padding:0 0 0 0;
+}
+
+/* OUTPUT */
+.output{
+  flex:1;overflow-y:auto;
+  padding:20px 28px 8px;
+  scroll-behavior:smooth;
+}
+.output::-webkit-scrollbar{width:4px}
+.output::-webkit-scrollbar-track{background:transparent}
+.output::-webkit-scrollbar-thumb{background:var(--edge);border-radius:2px}
+
+.line{margin-bottom:2px;white-space:pre-wrap;word-break:break-word}
+.line.system{color:var(--muted)}
+.line.prompt{color:var(--body)}
+.line.prompt .cmd{color:var(--text)}
+.line.response{color:var(--body)}
+.line.green{color:var(--green)}
+.line.glow{color:var(--green-glow)}
+.line.teal{color:var(--teal)}
+.line.dim{color:var(--dim)}
+.line.amber{color:var(--amber)}
+.line.err{color:#e05050}
+.line.blank{height:6px}
+
+/* INPUT ROW */
+.input-row{
+  display:flex;align-items:center;gap:0;
+  padding:10px 28px 16px;
+  border-top:1px solid var(--border);
+  background:rgba(5,8,10,.6);
+  flex-shrink:0;position:relative;z-index:3;
+}
+.prompt-label{color:var(--green);font-size:13px;font-weight:500;letter-spacing:.04em;white-space:nowrap;margin-right:8px}
+#cmd-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'JetBrains Mono',monospace;
+  font-size:13px;caret-color:var(--green);
+}
+#cmd-input::placeholder{color:var(--dim)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand"><span class="dot"></span>NEW <span style="color:var(--green);margin-left:3px">TRIPOLI</span><span style="color:var(--muted);margin-left:6px;font-weight:300">// NT://TERMINAL</span></div>
+  <div class="nav-links">
+    <a href="/">HOME</a>
+    <a href="/ch-sims/">CATALOGUE</a>
+    <a href="/ch-sims/about.html">ABOUT</a>
+  </div>
+</nav>
+
+<div class="terminal">
+  <div class="output" id="output"></div>
+  <div class="input-row">
+    <span class="prompt-label">NT://&gt;&nbsp;</span>
+    <input id="cmd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type 'help' for commands">
+  </div>
+</div>
+
+<script>
+// ── SIM REGISTRY ──────────────────────────────────────────────────────────────
+const SIMS = {
+  'time-dilation': {
+    title: 'Time Dilation Instrument',
+    desc: 'Calculate subjective vs. real elapsed time across all HSS tiers. Input a duration and watch it diverge across rings. The numbers are not metaphors.'
+  },
+  'feasibility': {
+    title: 'Brain-in-a-Vat Feasibility Calculator',
+    desc: 'Hard-numbers feasibility check: Sahara solar array, power draw, substrate compute — how far are we from the §26 split? The gap is smaller than you think.'
+  },
+  'layer-stack': {
+    title: 'Matryoshka Layer Stack',
+    desc: 'Click down through the nested reality of New Tripoli — Earth Prime → cavern → holodeck → Sim Room. Counts exactly how many layers deep a resident sits from physical ground.'
+  },
+  'azure-janus': {
+    title: 'Azure Janus Portal Map',
+    desc: 'Explorable node map of the portal chain: California → Azure Janus → Rust-Mars → Novo Alexandria. Traversal rules, the hangar mystery, and the black-hole-powered library at the end of the line.'
+  },
+  'ring-density': {
+    title: 'Ring-Pack Density',
+    desc: 'Can the residential ring actually hold 8.1 billion? Slide its width and find out — the famous skyline houses almost nobody; the mid-rise ring does all the work.'
+  },
+  'synthetic-body': {
+    title: 'Synthetic-Body Spec Sheet',
+    desc: 'Specification tool for the osmium-alloy synthetic bodies of the Wake. Mass, density, sensory bandwidth, projected lifespan — the vessel for post-HSS consciousness.'
+  },
+  'birthday-sacrifice': {
+    title: 'Birthday-Sacrifice Calculator',
+    desc: 'The compounding cost of gifting subjective years to another resident. Enter ages, ring, and gift size — the calculator shows what it costs you over time.'
+  },
+  'kinetic-probe': {
+    title: 'Kinetic Probe Delivery',
+    desc: 'Models the ETI probe\'s Earth-approach trajectory: kinetic energy, deceleration profile, atmospheric entry. Physics-grounded entry for the event that changed everything.'
+  },
+  'tech-tree': {
+    title: 'Bootstrap Tech-Tree',
+    desc: 'A buildable 31-node dependency graph of post-Wake reindustrialization — from garage tools to a femtoscale assembler. You cannot skip a rung.'
+  },
+  'molecular-assembler': {
+    title: 'The Molecular Assembler',
+    desc: 'Drexler\'s dream — a machine that builds matter atom by atom. The vision, Smalley\'s objections, the 2025 state of the art, and an honest assessment. Companion to the Tech-Tree endpoint.'
+  },
+  'comms-lag': {
+    title: 'Cross-Tier Comms Lag',
+    desc: 'Latency calculator for messages crossing ring boundaries. A message sent from Amber to Citadel arrives in a subjectively different era. The math is in §18 and §20.'
+  },
+  'selection-sorter': {
+    title: 'Selection Sorter',
+    desc: 'The ETI\'s selection problem — who gets uploaded, who doesn\'t, and by what criteria. Sort and weight the variables. There is no clean answer.'
+  },
+  'hss-section': {
+    title: 'HSS Cross-Section',
+    desc: 'Interactive cross-section of the Human Server Stadium. 200km diameter, 8.1 billion substrate slots. Residential, transit, library, and museum levels — all underground.'
+  },
+  'wake-earth': {
+    title: 'Wake-Day Earth Map',
+    desc: 'The state of Earth Prime on Wake Day — solar infrastructure, waystation positions, deconstructed vs. preserved inventory, and the Libyan plains where the HSS sits.'
+  },
+  'ganymede-cube': {
+    title: 'New Ganymede Cube Explorer',
+    desc: 'The second enclave — a cube the volume of Ganymede, 100× dilation ceiling, annual Sabbath. Home-integrated teleporters by default. The next step after New Tripoli.'
+  },
+  'spectrum': {
+    title: 'The Spectrum',
+    desc: 'Electromagnetic spectrum explorer grounded in the ETI harvest and physics of the enclave. From radio to gamma — what New Tripoli can and cannot see.'
+  },
+  'deep-field': {
+    title: 'Deep Field',
+    desc: 'The view from the enclave\'s observational sim — deep cosmological time, galaxy formation, and the ETI contact horizon. How far can eight billion minds look?'
+  },
+  'cryonics': {
+    title: 'Cryonics — State of the Science',
+    desc: 'Where cryonics actually stood before the Intake — vitrification, information-theoretic death, the legal grey zone. Companion context for the substrate transition.'
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const STATE = {
+  mode: 'normal',   // 'normal' | 'yn_nav' | 'yn_describe'
+  pendingSim: null
+};
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const output = document.getElementById('output');
+const input  = document.getElementById('cmd-input');
+
+function line(text, cls = 'response') {
+  const el = document.createElement('div');
+  el.className = 'line ' + cls;
+  el.textContent = text;
+  output.appendChild(el);
+}
+function blank() {
+  const el = document.createElement('div');
+  el.className = 'line blank';
+  output.appendChild(el);
+}
+function scroll() {
+  output.scrollTop = output.scrollHeight;
+}
+function echo(cmd) {
+  const el = document.createElement('div');
+  el.className = 'line prompt';
+  el.innerHTML = 'NT://&gt; <span class="cmd">' + escHtml(cmd) + '</span>';
+  output.appendChild(el);
+}
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function sabbathCountdown() {
+  const now  = new Date();
+  const yr   = now.getFullYear();
+  const candidates = [
+    new Date(yr,   0, 1),
+    new Date(yr,   6, 1),
+    new Date(yr+1, 0, 1),
+    new Date(yr+1, 6, 1)
+  ];
+  const next = candidates.find(d => d > now);
+  const ms   = next - now;
+  const d    = Math.floor(ms / 86400000);
+  const h    = Math.floor((ms % 86400000) / 3600000);
+  const m    = Math.floor((ms % 3600000)  / 60000);
+  const s    = Math.floor((ms % 60000)    / 1000);
+  return `${d}D ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function inWorldDate() {
+  const now = new Date();
+  const yr  = 2231 + (now.getFullYear() - 2025);
+  const mo  = String(now.getMonth() + 1).padStart(2, '0');
+  const dy  = String(now.getDate()).padStart(2, '0');
+  return `${yr}.${mo}.${dy}`;
+}
+
+function findSim(query) {
+  const q = query.toLowerCase().trim();
+  if (SIMS[q]) return q;
+  // partial slug match
+  const slugMatch = Object.keys(SIMS).find(k => k.includes(q) || q.includes(k.split('-')[0]));
+  if (slugMatch) return slugMatch;
+  // title word match
+  const titleMatch = Object.keys(SIMS).find(k =>
+    SIMS[k].title.toLowerCase().includes(q)
+  );
+  return titleMatch || null;
+}
+
+// ── COMMANDS ──────────────────────────────────────────────────────────────────
+const COMMANDS = {
+
+  help() {
+    blank();
+    line('AVAILABLE COMMANDS', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    line('  help              this list');
+    line('  status            enclave system status');
+    line('  date              current enclave date');
+    line('  sabbath           next Universal Sabbath countdown');
+    line('  list              all available sims');
+    line('  enter <sim>       navigate to or describe a sim');
+    line('  catalogue         go to the sim catalogue');
+    line('  about             about New Tripoli');
+    line('  scan              scan enclave sectors');
+    line('  clear             clear terminal');
+    blank();
+    line('TIP: partial sim names work. try: enter time', 'dim');
+    blank();
+  },
+
+  status() {
+    blank();
+    line('// SYSTEM STATUS', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    line('  ENCLAVE          New Tripoli · EST. 2231');
+    line('  ENCLAVE STATUS   STABLE', 'teal');
+    line('  DATA FEED        LIVE', 'teal');
+    line('  DILATION FIELD   NOMINAL', 'green');
+    line('  SABBATH CLOCK    ' + sabbathCountdown());
+    line('  SYSTEM DATE      ' + inWorldDate());
+    line('  RESIDENTS        8,100,000,000');
+    line('  SIMS ONLINE      ' + Object.keys(SIMS).length);
+    blank();
+  },
+
+  date() {
+    blank();
+    line('ENCLAVE DATE: ' + inWorldDate(), 'glow');
+    blank();
+  },
+
+  sabbath() {
+    blank();
+    line('// UNIVERSAL SABBATH', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    line('  NEXT SABBATH IN  ' + sabbathCountdown(), 'glow');
+    blank();
+    line('  All tiers reset to ×1.00 for 24 hours.', 'system');
+    line('  Eight billion minds. One clock.', 'system');
+    blank();
+  },
+
+  list() {
+    blank();
+    line('// AVAILABLE SIMS — ' + Object.keys(SIMS).length + ' INSTRUMENTS', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    Object.entries(SIMS).forEach(([slug, sim]) => {
+      line('  ' + slug.padEnd(24) + sim.title);
+    });
+    blank();
+    line('  enter <slug> to navigate or read description', 'dim');
+    blank();
+  },
+
+  enter(args) {
+    if (!args) {
+      line('USAGE: enter <sim-name>', 'err');
+      line('       example: enter time-dilation', 'dim');
+      return;
+    }
+    const slug = findSim(args);
+    if (!slug) {
+      blank();
+      line('SIM NOT FOUND: ' + args, 'err');
+      line('Run "list" to see available sims.', 'dim');
+      blank();
+      return;
+    }
+    const sim = SIMS[slug];
+    blank();
+    line('SIM LOCATED: ' + sim.title, 'glow');
+    line('─────────────────────────────────────────', 'dim');
+    line('NAVIGATE TO SIM? [Y/N]', 'green');
+    blank();
+    STATE.mode = 'yn_nav';
+    STATE.pendingSim = slug;
+  },
+
+  catalogue() {
+    line('');
+    line('Redirecting to sim catalogue…', 'system');
+    setTimeout(() => { window.location.href = '/ch-sims/'; }, 600);
+  },
+
+  about() {
+    blank();
+    line('// ABOUT NEW TRIPOLI', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    line('  New Tripoli is a simulated enclave housing');
+    line('  eight billion human minds — uploaded by an');
+    line('  ETI probe at an event residents call the Intake.');
+    blank();
+    line('  The enclave is 200 km across. Beneath its');
+    line('  surface: libraries, transit, museums, and a');
+    line('  sim stack that runs at up to 50× real time.');
+    blank();
+    line('  Every six months: the Universal Sabbath.');
+    line('  All sims pause. All tiers sync. One day.');
+    line('  Then New Tripoli resumes.', 'system');
+    blank();
+  },
+
+  scan() {
+    blank();
+    line('// ENCLAVE SCAN IN PROGRESS…', 'green');
+    line('─────────────────────────────────────────', 'dim');
+    setTimeout(() => {
+      line('  SECTOR A · CITADEL (PLUM)       NOMINAL', 'system');
+    }, 180);
+    setTimeout(() => {
+      line('  SECTOR B · CORE (TEAL)          NOMINAL', 'system');
+    }, 380);
+    setTimeout(() => {
+      line('  SECTOR C · MID-RING (JADE)      NOMINAL', 'system');
+    }, 560);
+    setTimeout(() => {
+      line('  SECTOR D · OUTER RING (AMBER)   NOMINAL', 'system');
+    }, 740);
+    setTimeout(() => {
+      line('  HSS SUBSTRATE                   NOMINAL', 'system');
+      line('  DILATION FIELD                  STABLE', 'system');
+    }, 940);
+    setTimeout(() => {
+      blank();
+      line('SCAN COMPLETE. NO ANOMALIES DETECTED.', 'glow');
+      blank();
+      scroll();
+    }, 1200);
+  },
+
+  clear() {
+    output.innerHTML = '';
+  }
+};
+
+// ── INPUT HANDLER ─────────────────────────────────────────────────────────────
+function handleYN(raw) {
+  const r = raw.trim().toLowerCase();
+
+  if (STATE.mode === 'yn_nav') {
+    if (r === 'y' || r === 'yes') {
+      line('Navigating…', 'system');
+      blank();
+      setTimeout(() => {
+        window.location.href = '/ch-sims/sims/' + STATE.pendingSim + '.html';
+      }, 500);
+    } else if (r === 'n' || r === 'no') {
+      const sim = SIMS[STATE.pendingSim];
+      blank();
+      line('// ' + sim.title.toUpperCase(), 'green');
+      line('─────────────────────────────────────────', 'dim');
+      line('  ' + sim.desc);
+      blank();
+      line('  Slug: ' + STATE.pendingSim, 'dim');
+      blank();
+      STATE.mode = 'normal';
+      STATE.pendingSim = null;
+    } else {
+      line('NAVIGATE TO SIM? [Y/N]', 'green');
+    }
+    return;
+  }
+}
+
+input.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const raw = input.value;
+  input.value = '';
+
+  if (!raw.trim()) return;
+
+  echo(raw);
+
+  if (STATE.mode !== 'normal') {
+    handleYN(raw);
+    scroll();
+    return;
+  }
+
+  const parts = raw.trim().split(/\s+/);
+  const cmd   = parts[0].toLowerCase();
+  const args  = parts.slice(1).join(' ');
+
+  if (COMMANDS[cmd]) {
+    COMMANDS[cmd](args);
+  } else {
+    blank();
+    line('UNKNOWN COMMAND: ' + cmd, 'err');
+    line('Type "help" for available commands.', 'dim');
+    blank();
+  }
+  scroll();
+});
+
+// Tab completion
+input.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  e.preventDefault();
+  const val  = input.value.toLowerCase();
+  const parts = val.trim().split(/\s+/);
+  if (parts[0] === 'enter' && parts[1]) {
+    const q = parts[1];
+    const match = Object.keys(SIMS).find(k => k.startsWith(q));
+    if (match) input.value = 'enter ' + match;
+  } else {
+    const cmds = Object.keys(COMMANDS);
+    const match = cmds.find(c => c.startsWith(val));
+    if (match) input.value = match;
+  }
+});
+
+// ── BOOT SEQUENCE ─────────────────────────────────────────────────────────────
+(function boot() {
+  const msgs = [
+    { t:   0, text: 'NT://TERMINAL v2.3.1', cls: 'glow' },
+    { t: 120, text: 'ENCLAVE: NEW TRIPOLI · EST. 2231', cls: 'system' },
+    { t: 240, text: 'SYSTEM DATE: ' + inWorldDate(), cls: 'system' },
+    { t: 360, text: 'DILATION FIELD: NOMINAL', cls: 'system' },
+    { t: 480, text: 'NEXT SABBATH: ' + sabbathCountdown(), cls: 'system' },
+    { t: 640, text: '', cls: 'blank' },
+    { t: 780, text: 'TERMINAL READY.', cls: 'green' },
+    { t: 900, text: "Type 'help' for available commands.", cls: 'dim' },
+    { t: 900, text: '', cls: 'blank' },
+  ];
+  msgs.forEach(m => {
+    setTimeout(() => {
+      if (m.cls === 'blank') blank();
+      else line(m.text, m.cls);
+      scroll();
+    }, m.t);
+  });
+  setTimeout(() => input.focus(), 950);
+})();
+</script>
+</body>
+</html>
