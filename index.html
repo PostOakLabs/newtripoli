@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <!--
-  New Tripoli — World Portal · Landing
-  Cognitive Husbandry series · newtripoli.xyz
+  New Tripoli — Landing Page
+  newtripoli.xyz · Cognitive Husbandry series
   Code: MIT · Prose: CC BY 4.0 · No PII, no runtime network calls (fonts excepted).
-  Aesthetic: "Simulation Terminal" — phosphor green/teal console on near-black, CRT texture.
+  Aesthetic: "Simulation Terminal" — phosphor green/teal on near-black, CRT texture.
+  TODO: Key Truths #1 and #2 are HSS-specific — revise for NT in next iteration.
 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Tripoli</title>
-<meta name="description" content="New Tripoli — a speculative world in the Cognitive Husbandry series. Explore the sim catalogue, run the instruments behind the fiction, and read the canon.">
+<meta name="description" content="New Tripoli — a simulated city for eight billion minds. Explore the sim catalogue and run the instruments behind the fiction.">
 <meta name="color-scheme" content="dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,19 +22,17 @@
   --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
   --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;--teal-glow:#7dffb8;--signal:#34e6e0;
   --border:rgba(52,230,224,0.15);
+  --plum:#a47dd6;--jade:#23ff88;--amber:#ffc24d;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;height:100%}
-
+html{scroll-behavior:smooth}
 body{
   background:var(--bg);color:var(--body);
-  font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;line-height:1.55;
   min-height:100vh;-webkit-font-smoothing:antialiased;
   position:relative;overflow-x:hidden;
-  display:flex;flex-direction:column;
 }
-
-/* CRT grid */
 body::before{
   content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
   background-image:linear-gradient(rgba(52,230,224,.025) 1px,transparent 1px),
@@ -42,114 +41,192 @@ body::before{
   mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%);
   -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%);
 }
-/* Scanlines + vignette */
 body::after{
   content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
   background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.10) 3px,rgba(0,0,0,0) 4px),
     radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.45) 100%);
 }
+.wrap{position:relative;z-index:3}
+a{color:var(--green-glow);text-decoration:none;transition:opacity .15s}
+a:hover{opacity:.75}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.12}
 
-.wrap{position:relative;z-index:3;flex:1;display:flex;flex-direction:column}
-a{color:var(--green-glow);text-decoration:none;transition:color .15s}
-a:hover{color:var(--teal-glow)}
-h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.12;letter-spacing:.01em}
-
-/* ── NAV ── */
-.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
-.nav-inner{max-width:1180px;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13.5px;letter-spacing:.06em;color:var(--text);display:flex;align-items:center;gap:9px}
-.nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.4s steps(1) infinite}
-.nav-brand span{color:var(--green)}
+/* NAV */
+.nav{
+  border-bottom:1px solid var(--border);
+  background:rgba(5,8,10,.85);backdrop-filter:blur(8px);
+  position:sticky;top:0;z-index:50;
+}
+.nav-inner{
+  max-width:1400px;margin:0 auto;
+  padding:12px 32px;
+  display:flex;align-items:center;gap:20px;
+}
+.nav-brand{
+  font-family:'JetBrains Mono',monospace;font-weight:500;
+  font-size:13px;letter-spacing:.07em;
+  color:var(--text);display:flex;align-items:center;gap:10px;
+}
+.nav-brand .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:blink 2.4s steps(1) infinite;flex-shrink:0;
+}
 @keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.35}}
-.nav-links{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
-.nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
-.nav-links a:hover{color:var(--green-glow)}
-
-/* ── HERO ── */
-.hero{
-  flex:1;max-width:900px;margin:0 auto;
-  padding:100px 28px 80px;
-  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+.nav-brand .slash{color:var(--muted);font-weight:300;margin-left:2px}
+.nav-links{
+  margin-left:auto;display:flex;gap:24px;
+  font-size:11px;letter-spacing:.1em;
 }
-@media(max-width:640px){.hero{padding:64px 18px 56px}}
+.nav-links a{color:var(--muted)}
+.nav-links a:hover{color:var(--green-glow);opacity:1}
 
-.eyebrow{
-  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--green);margin-bottom:22px;
+/* PAGE */
+.page{max-width:1400px;margin:0 auto}
+
+/* MAIN 3-COL */
+.main{
+  display:grid;
+  grid-template-columns:360px 1fr 268px;
+  border-bottom:1px solid var(--border);
+  min-height:620px;
+}
+
+/* LEFT */
+.col-left{
+  border-right:1px solid var(--border);
+  padding:36px 28px 32px 32px;
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(8,13,12,.4),transparent);
+}
+.row-num{font-size:10px;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;display:block}
+.eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--green);margin-bottom:16px}
+.hero-head{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:clamp(2rem,3vw,3rem);
+  font-weight:700;letter-spacing:-.01em;line-height:.95;
+  color:var(--text);margin-bottom:24px;
+  text-shadow:0 0 40px rgba(52,230,224,.12);
+}
+.hero-body{
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;color:var(--body);line-height:1.75;
+  margin-bottom:28px;max-width:28ch;
+}
+.cta{
   display:inline-flex;align-items:center;gap:10px;
+  border:1px solid rgba(52,230,224,.3);
+  padding:11px 18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;letter-spacing:.12em;
+  color:var(--green-glow);
+  background:rgba(52,230,224,.04);
+  cursor:pointer;
+  transition:border-color .15s,background .15s,box-shadow .15s;
+  margin-bottom:auto;
+  text-decoration:none;
 }
-.eyebrow::before{content:'';width:26px;height:1px;background:var(--green)}
+.cta:hover{
+  border-color:var(--green);
+  background:rgba(52,230,224,.09);
+  box-shadow:0 0 18px rgba(52,230,224,.12);
+  opacity:1;
+}
+.status-panel{margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
+.panel-head{font-size:9.5px;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
+.status-row{display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:8px}
+.status-row .key{color:var(--muted);letter-spacing:.04em}
+.status-row .val{color:var(--body);font-weight:500}
+.status-row .val.live{color:var(--teal);text-shadow:0 0 8px rgba(35,255,136,.4)}
+.status-row .val.stable{color:var(--teal);text-shadow:0 0 8px rgba(35,255,136,.4)}
+.status-row .val.nominal{color:var(--green)}
 
-.hero h1{
-  font-size:clamp(2.8rem,7vw,5.5rem);
-  color:var(--text);margin-bottom:10px;letter-spacing:-.01em;
+/* CENTER */
+.col-center{display:flex;flex-direction:column;align-items:center;padding:24px 16px 0}
+.enclave-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;letter-spacing:.18em;text-align:center;
+  color:var(--muted);margin-bottom:4px;
 }
-.hero h1 .accent{color:var(--green);text-shadow:0 0 28px rgba(52,230,224,.4)}
+.enclave-label span{display:block;color:var(--dim);letter-spacing:.08em}
+.enclave-img{width:100%;max-width:640px;object-fit:contain;display:block}
+.tier-bar{width:100%;max-width:580px;padding:12px 0 20px}
+.tier-labels{display:flex;justify-content:space-between;margin-bottom:10px}
+.tier-item{text-align:center}
+.tier-name{font-size:10px;letter-spacing:.12em;display:flex;align-items:center;gap:5px;justify-content:center;margin-bottom:3px}
+.tier-dt{font-size:10px;color:var(--muted)}
+.tier-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.td-plum{background:var(--plum);box-shadow:0 0 6px var(--plum)}
+.td-teal{background:var(--green);box-shadow:0 0 6px var(--green)}
+.td-jade{background:var(--jade);box-shadow:0 0 6px var(--jade)}
+.td-amber{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.tier-item.plum .tier-name{color:var(--plum)}
+.tier-item.teal-t .tier-name{color:var(--green-glow)}
+.tier-item.jade .tier-name{color:var(--teal-glow)}
+.tier-item.amber .tier-name{color:var(--amber)}
+.scale-track{position:relative;height:2px;background:var(--edge);margin:6px 0 10px;border-radius:1px;overflow:hidden}
+.scale-track::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--plum),var(--green),var(--jade),var(--amber));opacity:.6}
+.scale-ticks{display:flex;justify-content:space-between}
+.scale-ticks span{font-size:9px;color:var(--dim)}
+.scale-label{text-align:center;font-size:9px;letter-spacing:.12em;color:var(--dim);margin-top:5px}
 
-.sub{
-  font-family:'Chakra Petch',sans-serif;font-size:clamp(1rem,2vw,1.35rem);
-  color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
-  margin-bottom:32px;
+/* RIGHT */
+.col-right{
+  border-left:1px solid var(--border);
+  padding:28px 22px;
+  display:flex;flex-direction:column;gap:22px;
+  background:linear-gradient(180deg,rgba(8,13,12,.4),transparent);
 }
+.truth-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding-bottom:15px;border-bottom:1px solid var(--border);margin-bottom:1px;
+}
+.truth-item:last-child{border-bottom:none;padding-bottom:0}
+.truth-icon{
+  width:30px;height:30px;border:1px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:rgba(52,230,224,.04);
+}
+.truth-icon svg{width:14px;height:14px;stroke:var(--green)}
+.truth-text{font-size:10.5px;letter-spacing:.06em;line-height:1.55;color:var(--body)}
+.map-svg-wrap{border:1px solid var(--border);border-radius:4px;padding:10px;background:rgba(8,13,12,.6);margin-top:10px}
+.map-legend{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.map-leg-row{display:flex;align-items:center;gap:8px;font-size:9.5px;letter-spacing:.06em;color:var(--muted)}
+.map-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-.lede{
-  font-size:1.08rem;color:var(--body);max-width:60ch;
-  line-height:1.75;margin-bottom:44px;
+/* BOTTOM */
+.bottom{display:grid;grid-template-columns:1fr 1fr 1.6fr 1fr}
+.b-panel{
+  padding:22px 26px;
+  border-right:1px solid var(--border);
+  border-top:1px solid var(--border);
+  background:rgba(8,13,12,.3);
 }
-.lede strong{color:var(--text);font-weight:500}
-
-/* ── ENTRY CARDS ── */
-.entries{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:52px}
-.entry{
-  display:flex;align-items:center;gap:14px;
-  padding:18px 24px;border:1px solid var(--edge);border-radius:10px;
-  background:linear-gradient(135deg,rgba(12,19,17,.8),rgba(8,13,12,.6));
-  color:var(--body);text-decoration:none;
-  transition:border-color .15s,transform .15s,box-shadow .15s;
-  position:relative;overflow:hidden;min-width:220px;
+.b-panel:last-child{border-right:none}
+.b-label{font-size:9px;letter-spacing:.2em;color:var(--green);margin-bottom:14px}
+.directive-text{
+  font-family:'Chakra Petch',sans-serif;
+  font-size:13px;font-weight:600;color:var(--text);
+  line-height:1.4;margin-bottom:14px;letter-spacing:.04em;
 }
-.entry::after{
-  content:'';position:absolute;top:0;left:0;width:100%;height:1px;
-  background:linear-gradient(90deg,transparent,var(--entry-accent, var(--green)),transparent);
-  opacity:0;transition:opacity .2s;
+.directive-attr{font-size:9.5px;color:var(--muted);letter-spacing:.06em;border-top:1px solid var(--border);padding-top:10px}
+.terminal-body{font-size:11.5px;color:var(--green);line-height:1.7;text-shadow:0 0 8px rgba(52,230,224,.3)}
+.terminal-cursor{animation:cur .9s steps(1) infinite}
+@keyframes cur{0%,49%{opacity:1}50%,100%{opacity:0}}
+.entries-list{display:flex;flex-direction:column;gap:9px}
+.entry-row{display:flex;gap:10px;font-size:10px}
+.entry-date{color:var(--green);flex-shrink:0;letter-spacing:.04em}
+.entry-text{color:var(--body)}
+.nt-brand{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.nt-glyph{
+  width:38px;height:38px;border:1px solid rgba(52,230,224,.3);
+  border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:700;
+  color:var(--green);background:rgba(52,230,224,.04);
+  box-shadow:0 0 14px rgba(52,230,224,.08);margin-bottom:10px;
 }
-.entry:hover{border-color:var(--entry-accent, var(--green));transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 22px color-mix(in srgb,var(--entry-accent,var(--green)) 18%,transparent)}
-.entry:hover::after{opacity:.9}
-.entry.primary{--entry-accent:var(--green)}
-.entry.secondary{--entry-accent:var(--teal)}
-
-.entry-icon{
-  width:40px;height:40px;border:1px solid var(--edge);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  background:rgba(52,230,224,.04);transition:border-color .15s;
-}
-.entry:hover .entry-icon{border-color:var(--entry-accent,var(--green))}
-.entry-icon svg{width:20px;height:20px}
-
-.entry-text{display:flex;flex-direction:column;gap:3px}
-.entry-label{font-family:'Chakra Petch',sans-serif;font-size:1rem;font-weight:600;color:var(--text);line-height:1.2}
-.entry-desc{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-
-/* ── STATUS BAR ── */
-.statusline{
-  font-family:'JetBrains Mono',monospace;font-size:11px;
-  letter-spacing:.04em;color:var(--muted);
-  display:flex;flex-wrap:wrap;gap:6px 18px;
-  padding-top:28px;border-top:1px solid var(--border);
-  width:100%;max-width:60ch;
-}
-.statusline b{color:var(--green);font-weight:400}
-
-/* ── FOOTER ── */
-footer{
-  max-width:1180px;margin:0 auto;width:100%;
-  padding:22px 28px;border-top:1px solid var(--border);
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
-}
-.foot-brand{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:.04em}
-.foot-links{display:flex;gap:18px}
-.foot-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
-.foot-links a:hover{color:var(--body)}
+.nt-name{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.06em;margin-bottom:6px}
+.nt-tagline{font-size:10px;letter-spacing:.08em;color:var(--body);line-height:1.6}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
@@ -159,69 +236,191 @@ footer{
 
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-brand"><span class="dot"></span>NEW <span>TRIPOLI</span></div>
+    <div class="nav-brand">
+      <span class="dot"></span>
+      NEW <span style="color:var(--green);margin-left:4px">TRIPOLI</span>
+      <span class="slash">// OFFICIAL SIM CATALOGUE</span>
+    </div>
     <div class="nav-links">
-      <a href="/ch-sims/">Sim Catalogue</a>
-      <a href="/content/">Canon</a>
+      <a href="/ch-sims/">CATALOGUE</a>
+      <a href="#">WORLD</a>
+      <a href="#">CHRONICLES</a>
+      <a href="/ch-sims/about.html">ABOUT</a>
     </div>
   </div>
 </nav>
 
-<main class="hero">
-  <div class="eyebrow">Cognitive Husbandry Series</div>
+<div class="page">
 
-  <h1>New <span class="accent">Tripoli</span></h1>
-  <div class="sub">A Speculative World</div>
+  <div class="main">
 
-  <p class="lede">
-    A self-governing city-state built on radical ideas about intelligence, time, and collective survival.
-    <strong>New Tripoli</strong> is the fictional setting — and the instruments here are real enough to run.
-    Explore the sim catalogue, interrogate the canon, or just let the numbers speak.
-  </p>
+    <!-- LEFT -->
+    <div class="col-left">
+      <div class="eyebrow">IN NEW TRIPOLI</div>
+      <span class="row-num">01</span>
 
-  <div class="entries">
-    <a class="entry primary" href="/ch-sims/">
-      <div class="entry-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-          <path d="M7 8h2M11 8h6M7 11h4M13 11h4"/>
-        </svg>
+      <h1 class="hero-head">TWO HUNDRED KILOMETRES ACROSS. EIGHT BILLION RESIDENTS. ONE CITY.</h1>
+
+      <span class="row-num">02</span>
+      <div class="hero-body">
+        New Tripoli was built to outlast every city that came before it. Libraries, transit, parks — and a sim stack beneath the surface that runs at up to 50× real time.<br><br>
+        Every six months, the Universal Sabbath runs for twenty-four hours. Eight billion minds, one clock. Then New Tripoli resumes.
       </div>
-      <div class="entry-text">
-        <div class="entry-label">Sim Catalogue</div>
-        <div class="entry-desc">18 instruments · run the fiction</div>
+
+      <span class="row-num">03</span>
+      <a class="cta" href="/ch-sims/">EXPLORE THE SIM CATALOGUE &nbsp;→</a>
+
+      <div class="status-panel">
+        <div class="panel-head">// SYSTEM STATUS</div>
+        <div class="status-row"><span class="key">DILATION FIELD:</span><span class="val nominal">NOMINAL</span></div>
+        <div class="status-row"><span class="key">SABBATH CLOCK:</span><span class="val">6D 14:22:37</span></div>
+        <div class="status-row"><span class="key">DATA FEED:</span><span class="val live">LIVE</span></div>
+        <div class="status-row"><span class="key">ENCLAVE STATUS:</span><span class="val stable">STABLE</span></div>
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div class="col-center">
+      <div class="enclave-label">
+        NEW TRIPOLI ENCLAVE
+        <span>EST. 2231</span>
+      </div>
+
+      <img
+        class="enclave-img"
+        src="images/dark new tripoli chatgpt.png"
+        alt="New Tripoli Enclave — isometric view"
+      >
+
+      <div class="tier-bar">
+        <div class="tier-labels">
+          <div class="tier-item plum">
+            <div class="tier-name"><span class="tier-dot td-plum"></span>PLUM</div>
+            <div class="tier-dt">Δt ×0.01</div>
+          </div>
+          <div class="tier-item teal-t">
+            <div class="tier-name"><span class="tier-dot td-teal"></span>TEAL</div>
+            <div class="tier-dt">Δt ×0.10</div>
+          </div>
+          <div class="tier-item jade">
+            <div class="tier-name"><span class="tier-dot td-jade"></span>JADE</div>
+            <div class="tier-dt">Δt ×1.00</div>
+          </div>
+          <div class="tier-item amber">
+            <div class="tier-name"><span class="tier-dot td-amber"></span>AMBER</div>
+            <div class="tier-dt">Δt ×10.00</div>
+          </div>
+        </div>
+        <div class="scale-track"></div>
+        <div class="scale-ticks">
+          <span>10⁻²</span><span>10⁻¹</span><span>10⁰</span><span>10¹</span><span>10²</span>
+        </div>
+        <div class="scale-label">SUBJECTIVE TIME DILATION (Δt)</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-right">
+
+      <div>
+        <div class="panel-head">// KEY TRUTHS</div>
+        <div class="truth-item">
+          <div class="truth-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="truth-text">YOUR PRIME RING IS YOUR CEILING.<br>YOUR CEILING IS YOUR FUTURE.</div>
+        </div>
+        <div class="truth-item">
+          <div class="truth-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="truth-text">A METRE OUTWARD IS A YEAR OF DRIFT.<br>THE MATH IS UNFORGIVING.</div>
+        </div>
+        <div class="truth-item">
+          <div class="truth-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="truth-text">THE SABBATH<br>RESETS THE GAP.<br>FOR A MOMENT.</div>
+        </div>
+        <div class="truth-item">
+          <div class="truth-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8C.344 8 .344 16 5.44 16c5.606 0 7.644-8 12.738-8z"/></svg>
+          </div>
+          <div class="truth-text">PROGRESS IS<br>COMPOUNDED.<br>FOREVER.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel-head">// ENCLAVE MAP</div>
+        <div class="map-svg-wrap">
+          <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+            <circle cx="90" cy="65" r="52" fill="none" stroke="rgba(52,230,224,.12)" stroke-width="1"/>
+            <circle cx="90" cy="65" r="40" fill="none" stroke="rgba(52,230,224,.14)" stroke-width="1"/>
+            <circle cx="90" cy="65" r="27" fill="none" stroke="rgba(52,230,224,.18)" stroke-width="1"/>
+            <circle cx="90" cy="65" r="14" fill="none" stroke="rgba(52,230,224,.25)" stroke-width="1"/>
+            <circle cx="90" cy="65" r="4"  fill="none" stroke="var(--green)" stroke-width="1"/>
+            <line x1="90" y1="61" x2="90" y2="13" stroke="rgba(220,243,230,.4)" stroke-width=".7"/>
+            <circle cx="90" cy="13" r="1.5" fill="var(--green-glow)"/>
+            <circle cx="90" cy="51" r="3" fill="var(--plum)" style="filter:drop-shadow(0 0 3px var(--plum))"/>
+            <circle cx="90" cy="38" r="3" fill="var(--green)" style="filter:drop-shadow(0 0 3px var(--green))"/>
+            <circle cx="117" cy="65" r="3" fill="var(--jade)" style="filter:drop-shadow(0 0 3px var(--jade))"/>
+            <circle cx="142" cy="65" r="3" fill="var(--amber)" style="filter:drop-shadow(0 0 3px var(--amber))"/>
+            <line x1="90" y1="6" x2="90" y2="116" stroke="rgba(52,230,224,.08)" stroke-width=".5" stroke-dasharray="2,4"/>
+            <line x1="28" y1="65" x2="152" y2="65" stroke="rgba(52,230,224,.08)" stroke-width=".5" stroke-dasharray="2,4"/>
+          </svg>
+        </div>
+        <div class="map-legend">
+          <div class="map-leg-row"><span class="map-leg-dot" style="background:var(--amber);box-shadow:0 0 4px var(--amber)"></span>AMBER &nbsp; OUTER RING</div>
+          <div class="map-leg-row"><span class="map-leg-dot" style="background:var(--jade);box-shadow:0 0 4px var(--jade)"></span>JADE &nbsp;&nbsp; MID RING</div>
+          <div class="map-leg-row"><span class="map-leg-dot" style="background:var(--green);box-shadow:0 0 4px var(--green)"></span>TEAL &nbsp;&nbsp; CORE</div>
+          <div class="map-leg-row"><span class="map-leg-dot" style="background:var(--plum);box-shadow:0 0 4px var(--plum)"></span>PLUM &nbsp;&nbsp; CITADEL</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /main -->
+
+  <div class="bottom">
+
+    <div class="b-panel">
+      <div class="b-label">// DIRECTIVE</div>
+      <div class="directive-text">EIGHT BILLION MINDS.<br>ONE ENCLAVE.<br>THE PACE IS NEGOTIABLE.</div>
+      <div class="directive-attr">— THE FOUNDERS' CHARTER</div>
+    </div>
+
+    <a class="b-panel" href="/terminal" style="text-decoration:none;display:block;cursor:pointer">
+      <div class="b-label">// TERMINAL</div>
+      <div class="terminal-body">
+        WELCOME, RESIDENT.<br>
+        SELECT A MODULE<br>TO BEGIN.<br>
+        &gt;<span class="terminal-cursor">_</span>
       </div>
     </a>
 
-    <a class="entry secondary" href="/content/new-tripoli/Canon - New Tripoli.md">
-      <div class="entry-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-        </svg>
+    <div class="b-panel">
+      <div class="b-label">// RECENT ENTRIES</div>
+      <div class="entries-list">
+        <div class="entry-row"><span class="entry-date">[2231.10.12]</span><span class="entry-text">SABBATH OBSERVANCE COMPLETE</span></div>
+        <div class="entry-row"><span class="entry-date">[2231.10.05]</span><span class="entry-text">TIER ADJUSTMENT WINDOW CLOSED</span></div>
+        <div class="entry-row"><span class="entry-date">[2231.09.28]</span><span class="entry-text">COGNITIVE HUSBANDRY REPORT: Q3</span></div>
+        <div class="entry-row"><span class="entry-date">[2231.09.21]</span><span class="entry-text">NEW SIM: BIRTHDAY SACRIFICE CALCULATOR</span></div>
       </div>
-      <div class="entry-text">
-        <div class="entry-label">World Canon</div>
-        <div class="entry-desc">214 KB · source of truth</div>
+    </div>
+
+    <div class="b-panel">
+      <div class="nt-brand">
+        <div>
+          <div class="nt-glyph">NT</div>
+          <div class="nt-name">NEW TRIPOLI</div>
+          <div class="nt-tagline">THE INFRASTRUCTURE<br>IS GIVEN.<br>THE SPEED IS OURS.</div>
+        </div>
       </div>
-    </a>
-  </div>
+    </div>
 
-  <div class="statusline">
-    <span>SECTOR <b>NEW-TRIPOLI</b></span>
-    <span>SIMS <b>18</b></span>
-    <span>STATUS <b>NOMINAL</b></span>
-    <span>SERIES <b>COGNITIVE HUSBANDRY</b></span>
-  </div>
-</main>
+  </div><!-- /bottom -->
 
-<footer>
-  <div class="foot-brand">NEWTRIPOLI.XYZ — Post Oak Labs</div>
-  <div class="foot-links">
-    <a href="/ch-sims/">Sims</a>
-    <a href="/ch-sims/about.html">About</a>
-  </div>
-</footer>
-
-</div>
+</div><!-- /page -->
+</div><!-- /wrap -->
 </body>
 </html>
