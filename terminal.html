@@ -303,7 +303,8 @@ const COMMANDS = {
     line('  ENCLAVE          New Tripoli · EST. 2231');
     line('  ENCLAVE STATUS   STABLE', 'teal');
     line('  DATA FEED        LIVE', 'teal');
-    line('  DILATION FIELD   NOMINAL', 'green');
+    line('  SIM STACK        NOMINAL', 'green');
+    line('  SIM CEILING      50×');
     line('  SABBATH CLOCK    ' + sabbathCountdown());
     line('  SYSTEM DATE      ' + inWorldDate());
     line('  RESIDENTS        8,100,000,000');
@@ -393,20 +394,20 @@ const COMMANDS = {
     line('// ENCLAVE SCAN IN PROGRESS…', 'green');
     line('─────────────────────────────────────────', 'dim');
     setTimeout(() => {
-      line('  SECTOR A · CITADEL (PLUM)       NOMINAL', 'system');
+      line('  RESIDENTIAL LAYER               NOMINAL', 'system');
     }, 180);
     setTimeout(() => {
-      line('  SECTOR B · CORE (TEAL)          NOMINAL', 'system');
+      line('  TRANSIT CONCOURSE               NOMINAL', 'system');
     }, 380);
     setTimeout(() => {
-      line('  SECTOR C · MID-RING (JADE)      NOMINAL', 'system');
+      line('  LIBRARY & MUSEUM LEVELS         NOMINAL', 'system');
     }, 560);
     setTimeout(() => {
-      line('  SECTOR D · OUTER RING (AMBER)   NOMINAL', 'system');
+      line('  REGIONAL TRANSIT (LEVEL -4)     NOMINAL', 'system');
     }, 740);
     setTimeout(() => {
       line('  HSS SUBSTRATE                   NOMINAL', 'system');
-      line('  DILATION FIELD                  STABLE', 'system');
+      line('  SIM STACK                       NOMINAL', 'system');
     }, 940);
     setTimeout(() => {
       blank();
