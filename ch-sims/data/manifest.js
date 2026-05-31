@@ -23,7 +23,7 @@ window.WB_MANIFEST = {
       "summary": "Core world bible for the ETI / Cognitive Husbandry scenario family — transcension motivation, kinetic-probe delivery, the three branches, feasibility, and the selection problem.",
       "words": 7885,
       "bytes": 53368,
-      "path": "content/cognitive-husbandry/Cognitive Husbandry.md"
+      "path": null
     },
     {
       "world": "cognitive-husbandry",
@@ -35,7 +35,7 @@ window.WB_MANIFEST = {
       "summary": "Branching variants of the ETI probe landing in a specific geopolitical location (North Korea most developed; Russia rougher) rather than distributing across Earth.",
       "words": 7332,
       "bytes": 49333,
-      "path": "content/cognitive-husbandry/Alt History - Targeted Landing Scenarios (Russia and North Korea Variants).md"
+      "path": null
     },
     {
       "world": "new-tripoli",
@@ -46,7 +46,7 @@ window.WB_MANIFEST = {
       "summary": "The single source of truth for the New Tripoli five-book series and New Anasis — geography, dilation, the sim stack, the ETI, and the tech-tree arc.",
       "words": 33795,
       "bytes": 221860,
-      "path": "content/new-tripoli/Canon - New Tripoli.md"
+      "path": null
     },
     {
       "world": "new-tripoli",
@@ -57,7 +57,7 @@ window.WB_MANIFEST = {
       "summary": "Eight first-principles sim genres extending Canon section 17, derived from the ETI's harvest and tech-tree agenda; source for built and future instruments.",
       "words": 12421,
       "bytes": 84614,
-      "path": "content/new-tripoli/New Tripoli - Sim Catalogue (Extended).md"
+      "path": null
     },
     {
       "world": "alt-history",
@@ -69,7 +69,7 @@ window.WB_MANIFEST = {
       "summary": "July 1914 divergence — the six Great Powers meet in Vienna and jointly dismember the Ottoman Empire instead of fighting each other. The most complete alt-history scenario.",
       "words": 8729,
       "bytes": 56434,
-      "path": "content/alt-history/Alt History - What if WW1 had been avoided.md"
+      "path": null
     },
     {
       "world": "alt-history",
@@ -81,7 +81,7 @@ window.WB_MANIFEST = {
       "summary": "Late August 1939 — Ribbentrop and ~100 senior Nazis are arrested and tried; Weimar is restored. Framed as a 1980s historian's reconstruction of a German nuclear strike on the USSR.",
       "words": 3238,
       "bytes": 21982,
-      "path": "content/alt-history/Alt History - The Ribbentrop Arrest (August 1939 Divergence).md"
+      "path": null
     },
     {
       "world": "alt-history",
@@ -93,7 +93,7 @@ window.WB_MANIFEST = {
       "summary": "May–June 1945 — a feigned wind-down of the Manhattan Project conceals a secret program aimed at a nuclear decapitation of the Soviet leadership. Structural rhyme to the Ribbentrop sim.",
       "words": 3992,
       "bytes": 26434,
-      "path": "content/alt-history/Alt History - The Undisclosed Program (US Nuclear Decapitation, 1945-46).md"
+      "path": null
     },
     {
       "world": "alt-history",
@@ -105,7 +105,7 @@ window.WB_MANIFEST = {
       "summary": "December 1850 — Hong Xiuquan becomes a modernizing reformer instead of a messiah-rebel, pulling the Self-Strengthening Movement forward a decade and sparing China the Taiping catastrophe.",
       "words": 2080,
       "bytes": 14172,
-      "path": "content/alt-history/Alt History - China 1850 Divergence (Hong Xiuquan Modernization).md"
+      "path": null
     }
   ]
 };
