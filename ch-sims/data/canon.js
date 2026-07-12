@@ -11,6 +11,12 @@
 "use strict";
 
 const CH_CANON = {
+  // ── Canon version (hash input; see NEWTRIPOLI-MCP-SPEC §2/§9.1) ────────────
+  // Bump when any figure below changes. Read by provenance.html (falls back to
+  // this literal if absent) and vendored into the MCP worker as a hash preimage field.
+  CANON_VERSION: "2026.07.12",
+  version: "2026.07.12",   // mirror for provenance.html:141 (C.version) compat
+
   // ── Series dilation ceilings and reset cadence (§18) ──────────────────────
   // resetMonths: real-time months between maintenance windows ("Universal Sabbath", §9)
   series: [
@@ -27,6 +33,10 @@ const CH_CANON = {
 
   // New Pluto doubling schedule (§4 / §18): 200× doubling every 6 months across ~8 cycles.
   plutoDoublingSchedule: [200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200],
+
+  // Max coherent simulated-story length per 6-month Tripoli block (§18):
+  // 50× ceiling × 0.5 yr real = 25 simulated years. Used by birthday-sacrifice.
+  simYearsPerBlock: 25,
 
   // ── Social / cognitive caps (§30) ─────────────────────────────────────────
   // Used by the contact-list panel to contextualize how dilation explodes acquaintance counts.
@@ -53,15 +63,27 @@ const CH_CANON = {
     // Per the napkin math: ~40 W at 2x, ~100 W at 5x → metabolic load scales with speed.
     supportOverhead: 3,        // fridge-unit life-support + active cooling multiplier (assumption)
     digitalMindWatts: 50,      // "laptop-sized" compute unit per fully-digitized mind (assumption)
+    lifespanYr: 122,           // demonstrated neuronal-lifespan ceiling, yr (Audit §4.8; Calment). upload_required threshold for nt_time_dilation.
+    landauerJ: 3e-21,          // Landauer limit ≈ kT ln2 at 310 K (~2.97e-21 J/bit); digital-mind pricing floor (Audit §5).
+    neurons: 8.6e10,           // ~86 billion neurons (interface-bandwidth denominator).
+    neuralinkChannels: 1024,   // present-day BCI channel count (interface-bandwidth numerator).
+    alphaFrameMs: 100,         // ~10 Hz alpha-band perceptual frame, ms (comms-lag frame budget).
     // Augmentation spectrum: realistic subjective-acceleration ceiling by how much
     // biological substrate is replaced, and the binding constraint at each stage (§ Feasibility).
+    // SCHEMA (reconciled 2026-07-12, Build Plan §0.3): each stage carries a { floor, ceiling }
+    //   acceleration RANGE. `ceiling` preserves the six canon single-value ceilings
+    //   (2/4/6/50/5000/1e9); `floor` is the low end of the plausible range. The four biological
+    //   stages take their floors from acceleration-ceiling.html's original ranges (bio 1.5–2,
+    //   sensory 2–4, metabolic 3–6, synaptic 10–50); hybrid/upload chain monotonically from the
+    //   prior ceiling. This is the single source for both the sim STAGES table and the
+    //   nt_acceleration_ceiling kernel/hash preimage (ceiling_x_range = {floor, ceiling}).
     augmentation: [
-      { id:"vat",      stage:"Pure biological vat",       ceiling:2,    bottleneck:"Sleep elimination + metabolic optimization only. Tissue still rate-limits everything." },
-      { id:"sensory",  stage:"Sensory interface augmented", ceiling:4,  bottleneck:"Retina/optic-nerve & cochlear bypass; the bottleneck shifts inward to the cortex." },
-      { id:"metabolic",stage:"Metabolic support augmented", ceiling:6,  bottleneck:"Active heat extraction + external neurotransmitter supply, before thermal/synaptic limits bite." },
-      { id:"synaptic", stage:"Synaptic augmentation",       ceiling:50, bottleneck:"Key circuits' chemical synapses replaced with electronic/photonic equivalents (speculative)." },
-      { id:"hybrid",   stage:"Hybrid cortex",               ceiling:5000,bottleneck:"Cortex largely silicon/photonic; identity-continuity of the biological 'self' core becomes the open question." },
-      { id:"upload",   stage:"Full emulation / upload",     ceiling:1000000000, bottleneck:"Substrate-speed ceiling — but is this still the same brain? Identity continuity is acute." }
+      { id:"vat",      stage:"Pure biological vat",         floor:1.5, ceiling:2,          bottleneck:"Sleep elimination + metabolic optimization only. Tissue still rate-limits everything." },
+      { id:"sensory",  stage:"Sensory interface augmented", floor:2,   ceiling:4,          bottleneck:"Retina/optic-nerve & cochlear bypass; the bottleneck shifts inward to the cortex." },
+      { id:"metabolic",stage:"Metabolic support augmented", floor:3,   ceiling:6,          bottleneck:"Active heat extraction + external neurotransmitter supply, before thermal/synaptic limits bite." },
+      { id:"synaptic", stage:"Synaptic augmentation",       floor:10,  ceiling:50,         bottleneck:"Key circuits' chemical synapses replaced with electronic/photonic equivalents (speculative)." },
+      { id:"hybrid",   stage:"Hybrid cortex",               floor:50,  ceiling:5000,       bottleneck:"Cortex largely silicon/photonic; identity-continuity of the biological 'self' core becomes the open question." },
+      { id:"upload",   stage:"Full emulation / upload",     floor:5000,ceiling:1000000000, bottleneck:"Substrate-speed ceiling — but is this still the same brain? Identity continuity is acute." }
     ],
     // Sahara solar (sourced: area ~9.2M km^2; ~2,500 kWh/m^2/yr; "~1.2% powers the world").
     saharaAreaM2: 9.2e12,                 // 9.2 million km^2
@@ -103,9 +125,22 @@ const CH_CANON = {
     diameterCm: 21.8,              // ~bowling ball
     massKg: 122,                   // ≈ sphere of that size at osmium density
     aiPersonalities: 100,          // §19 — 100+ AI personalities aboard
+    vaporizationJPerKg: 4.5e6,     // osmium: ~4–5 MJ/kg total to vaporize (latent + heat-up + fusion). kinetic-probe margin.
+    terminalVMs: 1000,             // ~1 km/s ordnance-scale terminal speed a shock-protected slug survives (deceleration-lottery gate).
     survives: ["terrestrial planet","moon","asteroid","dwarf planet"],
     destroys: ["gas giant","star"],
     branches: ["Grey Goo / Paperclip","Passive Surveillance","Cognitive Husbandry"]
+  },
+
+  // ── Selection Problem criterion fractions (CH "The Selection Problem") ─────
+  // excl = fraction of 8.1B deleted if that criterion is required. Illustrative of
+  // scale, not exact demographics. Single source for selection-sorter.html + nt_selection_cost.
+  selection: {
+    criteria: {
+      all: 0, literacy: 0.15, education: 0.55, nocrime: 0.10, creative: 0.85,
+      productive: 0.40, iq: 0.50, health: 0.16, wealth: 0.84, digital: 0.32,
+      faith: 0.24, english: 0.81, adult: 0.26, nocriminal: 0.22, longevity: 0.999
+    }
   },
 
   // ── Constants ─────────────────────────────────────────────────────────────
