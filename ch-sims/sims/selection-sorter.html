@@ -104,13 +104,15 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
       <p>The Cognitive Husbandry "Selection Problem" asks who the ETI actually preserves as a conscious mind versus who is rendered as an NPC. The unsettling result is that <em>every</em> proposed criterion fails the same way. Require <code>literacy</code> and you delete roughly 15% of living adults — and essentially all of human history before ~200 years ago (Homer was illiterate). Require <code>formal education</code> and you erase most people who ever lived. Require <code>no violent record</code> and you hand the decision to incomplete, unjust, culturally-relative archives. And each line is, suspiciously, drawn just wide enough to include its author.</p>
       <p>The tool is a thought experiment, not a canon ratio — the percentages are illustrative of scale, not exact demographics. Pairs with the <a href="kinetic-probe.html">Kinetic Probe</a> (which branch the ETI chose) and the <a href="feasibility.html">Feasibility Calculator</a> (note: on energy, the ETI never actually needed to ration — which makes any selection a choice, not a necessity).</p>
       <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Pronin, E., Lin, D.Y., &amp; Ross, L. (2002). "The Bias Blind Spot: Perceptions of Bias in Self Versus Others." <em>Personality and Social Psychology Bulletin</em>, 28(3), 369–381 — on the near-universal tendency to identify bias in others while exempting oneself; directly relevant to why each proposed selection criterion "just happens" to include its author. Bostrom, N. (2014). <em>Superintelligence: Paths, Dangers, Strategies</em>. Oxford University Press — includes discussion of selection criteria under an optimization agent that is indifferent to human moral categories, mapping to the ETI's non-human evaluation logic.</p>
-      <p class="meta-line">v1.0 — CH "The Selection Problem" · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.0 — CH "The Selection Problem" · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
 
+<script src="../data/canon.js"></script>
 <script>
 "use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:{selection:{criteria:{all:0,literacy:0.15,education:0.55,nocrime:0.10,creative:0.85,productive:0.40,iq:0.50,health:0.16,wealth:0.84,digital:0.32,faith:0.24,english:0.81,adult:0.26,nocriminal:0.22,longevity:0.999}}};
 var YOU_CELL=44; // the dot that is always spared
 var CRITERIA=[
   {id:"all",name:"Everyone",excl:0,
@@ -159,6 +161,7 @@ var CRITERIA=[
    desc:"Keep only the ~8 billion people alive today. Everyone before 2020 is already gone; let them be NPCs.",
    counter:"Discards every human who ever lived before our lifetimes — roughly 108 billion people by historical estimate. Shakespeare. Hypatia. Every ancestor of every person on Earth. The criterion is so obviously self-serving it barely needs naming: we only preserved the generation that happened to be present when the ETI arrived."}
 ];
+CRITERIA.forEach(function(x){ if(C.selection&&C.selection.criteria&&C.selection.criteria[x.id]!==undefined) x.excl=C.selection.criteria[x.id]; });
 // deterministic scatter order for dimming
 var ORDER=(function(){var a=[];for(var i=0;i<100;i++)if(i!==YOU_CELL)a.push(i);var s=1;a.sort(function(){s=(s*9301+49297)%233280;return (s/233280)-0.5;});return a;})();
 
@@ -208,6 +211,5 @@ function init(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

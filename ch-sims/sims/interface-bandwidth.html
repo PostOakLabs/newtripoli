@@ -128,14 +128,17 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
       <p>Reading and writing are not symmetric. Recording neural signals is hard; <strong>writing</strong> coherent, high-fidelity sensory input back into the cortex — continuously, without inducing seizure, adaptation, or perceptual distortion — is substantially harder and unsolved at scale. A vat has to write continuously. As a reference, the human optic nerve carries on the order of <code>10 Mbit/s</code>; a full-sensory feed is higher. No known physical law forbids closing the gap; the barrier is materials, heat, and biocompatibility.</p>
       <p>Grounded in the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit, §4.4</a>. Pairs with the <a href="acceleration-ceiling.html">Acceleration Ceiling</a> (sensory augmentation sits on this interface) and the <a href="feasibility.html">Feasibility Calculator</a>.</p>
       <p style="font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Koch, K. et al. (2006). "How much the eye tells the brain." <em>Current Biology</em> 16(14), 1428–1434. Neuralink PRIME study (2024+) — N1, 1,024 electrodes / 64 threads.</p>
-      <p class="meta-line">v1.0 — Audit §4.4 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.0 — Audit §4.4 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
 
+<script src="../data/canon.js"></script>
 <script>
 "use strict";
-var NEURONS=8.6e10, NEUR_E=Math.log10(NEURONS); // ~10.93
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:{feasibility:{neurons:8.6e10,neuralinkChannels:1024}};
+var NEURONS=(C.feasibility&&C.feasibility.neurons)||8.6e10, NEUR_E=Math.log10(NEURONS); // ~10.93
+var NEURALINK_CHANNELS=(C.feasibility&&C.feasibility.neuralinkChannels)||1024;
 function getHash(){return Object.fromEntries(location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
 function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
 var state={c:30,dir:"read"}; // c = channel exponent ×10 (30 => 10^3.0)
@@ -180,6 +183,5 @@ function wire(){
 function init(){loadHash();wire();render();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

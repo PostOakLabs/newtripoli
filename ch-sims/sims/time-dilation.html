@@ -23,6 +23,7 @@
   --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
   --teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;
   --plum:#23ff88;--plum-glow:#7dffb8;--red:#e0584f;
+  --amber:#ffc24d;
   --border:rgba(52,230,224,0.16);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -279,7 +280,7 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;
       <p>Sister tool in the linked scenario: the OCS <a href="https://omegacentauri.me/tools/time-dilation.html">Gravitational Time Dilation Comparator</a> derives the same subjective-time speedup from the Schwarzschild metric instead of a substrate setting. Both worlds share the Transcension Hypothesis lineage (see <em>Cognitive Husbandry.md</em>, "On ETI Motivation").</p>
 
       <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Hafele, J.C., &amp; Keating, R.E. (1972). "Around-the-World Atomic Clocks: Observed Relativistic Time Gains." <em>Science</em>, 177(4044), 166–170 — the experiment that empirically confirmed Einstein's time dilation: atomic clocks flown around the Earth on commercial jets ran measurably differently from stationary ones. Dunbar, R.I.M. (1992). "Neocortex size as a constraint on group size in primates." <em>Journal of Human Evolution</em>, 22(6), 469–493 — the original paper establishing the ~150-relationship cognitive limit that New Centauri's dilation rate renders catastrophically obsolete.</p>
-      <p class="meta-line">v1.2 — Canon §18 / §9 / §30 / §13 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.2 — Canon §18 / §9 / §30 / §13 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
@@ -394,7 +395,7 @@ function render(){
   document.getElementById('s-day').textContent=fmtSubDays(R*1);
   document.getElementById('s-yr').textContent=fmtYears(R*1);
 
-  var lifespan=122; // demonstrated neuronal-lifespan ceiling, yr (Audit §4.8)
+  var lifespan=(C.feasibility&&C.feasibility.lifespanYr)||122; // demonstrated neuronal-lifespan ceiling, yr (Audit §4.8)
   var realToExhaust=lifespan/R;
   var bc=document.getElementById('bio-ceiling');
   if(R<=lifespan){
@@ -501,6 +502,5 @@ acqSlider.value=state.acq;
 buildGauge();
 render();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

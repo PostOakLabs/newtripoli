@@ -129,7 +129,7 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
       <p>OpenChainGraph (OCG) treats an execution hash as a reproducible record of a transformation rather than a receipt of ownership. The primitives are <code>execution_hash</code>, <code>parent_hashes</code>, <code>policy_parameters</code>, and the sources a computation cites. Here the <em>parent</em> is the canon version (everything descends from a fixed edition of the world), the <em>policy parameters</em> are the sim and its inputs, and the <em>execution hash</em> is a SHA-256 over the ordered manifest, computed in your browser with the Web Crypto API. Nothing leaves the page.</p>
       <p>The property that matters is reproducibility: identical inputs always yield the identical hash, so any two people who run the same instrument the same way can confirm they computed the same thing. Change a single parameter and the hash changes completely; restore it and the original hash returns. That is what lets a deterministic sim carry provenance.</p>
       <p>This is the homepage provenance readout made interactive, and the seed of a deeper build in which every instrument emits its own execution record. See the OpenChainGraph catalogue at <a href="https://ainumbers.co/chaingraph/ocg-industries.html" target="_blank" rel="noopener">ainumbers.co/chaingraph</a> and the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit</a>, whose EXEC HASH box uses the same construction.</p>
-      <p class="meta-line">v1.0 — OpenChainGraph · Web Crypto SHA-256 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.0 — OpenChainGraph · Web Crypto SHA-256 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
@@ -138,7 +138,7 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
 <script>
 "use strict";
 var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
-var CANON_VERSION=(C&&C.version)?C.version:"2026.05.21";
+var CANON_VERSION=(C&&C.version)?C.version:"2026.07.12";
 var DOMAIN="newtripoli.xyz";
 var SIMS=[
   {id:"time-dilation",label:"Time Dilation",refs:"§18,§20"},
@@ -199,6 +199,5 @@ function wire(){
 function init(){loadHash();wire();render();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

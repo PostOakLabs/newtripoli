@@ -176,7 +176,7 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5p
       <p><strong>Grey Goo</strong> — unbounded replication consumes all matter; humanity is incidental. <strong>Passive Surveillance</strong> — probes hide and watch for millennia (the Zoo Hypothesis, embedded). <strong>Cognitive Husbandry</strong> — the decapitation strike and the Intake: humanity preserved as cognitive substrate. See <em>Cognitive Husbandry.md</em>.</p>
       <p>Pairs with the <a href="feasibility.html">Feasibility Calculator</a> (what happens to the 8 billion afterward) and the Omega Centauri Society's black-hole tools (the Transcension lineage behind the sender).</p>
       <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Forward, R.L. (1984). "Roundtrip Interstellar Travel Using Laser-Pushed Lightsails." <em>Journal of Spacecraft and Rockets</em>, 21(2), 187–195 — propulsion concepts and energy scales for near-relativistic delivery. Freitas, R.A. (1980). "A Self-Reproducing Interstellar Probe." <em>Journal of the British Interplanetary Society</em>, 33, 251–264 — the classic von Neumann self-replicating probe. Fletcher, A., Close, S. &amp; Mathias, D. (2015). "Simulating plasma production from hypervelocity impacts." <em>Physics of Plasmas</em>, 22(9), 093504 — impact plasma is fully ionized above ~20 km/s, the basis for the vaporization verdict. Osmium thermophysical data (WebElements; Girolami) fix the ~4–5 MJ/kg vaporization enthalpy.</p>
-      <p class="meta-line">v1.1 — CH Delivery System / Branches / §19 · staged-deceleration canon fix (was: solid-body impact always survives) · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.1 — CH Delivery System / Branches / §19 · staged-deceleration canon fix (was: solid-body impact always survives) · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
@@ -188,8 +188,8 @@ var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
 var P=(C&&C.probe)?C.probe:{massKg:122,aiPersonalities:100};
 var CSI=2.998e8, MT=4.184e15; // J per megaton TNT
 var MASS=P.massKg||122;
-var VAP=4.5e6;    // osmium: ~4-5 MJ/kg total to vaporize from ambient (latent + heat-up + fusion)
-var TERM_V=1000;  // ~1 km/s: ordnance-scale terminal speed a shock-protected slug survives
+var VAP=P.vaporizationJPerKg||4.5e6;    // osmium: ~4-5 MJ/kg total to vaporize from ambient (latent + heat-up + fusion)
+var TERM_V=P.terminalVMs||1000;  // ~1 km/s: ordnance-scale terminal speed a shock-protected slug survives
 
 var TARGETS=[
   {id:"mercury",name:"Mercury",survive:true,note:"rocky planet"},
@@ -287,6 +287,5 @@ function wire(){
 function init(){loadHash();wire();render();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

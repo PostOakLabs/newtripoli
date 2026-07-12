@@ -124,20 +124,32 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
       <p>Replacing more of the substrate raises the ceiling but changes what kind of brain it is. Past ~×10 you are replacing synapses, and whether the self survives that is a question of identity, not physics — which is why the top of the ladder is dashed. Thermal load here is a first-order estimate, <code>~20 W × ceiling</code>, before any active heat extraction.</p>
       <p>Grounded in the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit, §4.5</a>. Pairs with the <a href="time-dilation.html">Time Dilation Instrument</a> (what the acceleration does to families) and the <a href="interface-bandwidth.html">Interface Bandwidth Gap</a> (the write-side problem behind sensory augmentation).</p>
       <p style="font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> VanRullen, R. (2016). "Perceptual cycles." <em>Trends in Cognitive Sciences</em> 20(10), 723–735. Attwell, D. &amp; Laughlin, S.B. (2001). "An energy budget for signaling in the grey matter of the brain." <em>J. Cereb. Blood Flow Metab.</em> 21(10), 1133–1145.</p>
-      <p class="meta-line">v1.0 — Audit §4.5 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.0 — Audit §4.5 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
 
+<script src="../data/canon.js"></script>
 <script>
 "use strict";
-var STAGES=[
-  {id:"bio",name:"Pure biological vat",lo:1.5,hi:2,rect:"r-bio",floor:"Floor: sleep-substitution and metabolic support. No substrate replaced.",desc:"Body removed, brain perfused. Gains come from eliminating sleep and stabilizing metabolism. Real but modest."},
-  {id:"sensory",name:"Sensory-interface augmented",lo:2,hi:4,rect:"r-sensory",floor:"Floor: cortical processing rate. Bottleneck moves inward.",desc:"Retina, optic nerve, and cochlea bypassed; input written closer to cortex. The peripheral limits fall away and the cortex sets the pace."},
-  {id:"metabolic",name:"Metabolically augmented",lo:3,hi:6,rect:"r-metabolic",floor:"Floor: thermal wall and neurotransmitter recycling.",desc:"Active heat extraction, external neurotransmitter synthesis, and artificial glymphatic clearance push past the metabolic limits."},
-  {id:"synaptic",name:"Synaptically augmented",lo:10,hi:50,rect:"r-synaptic",floor:"Floor: identity continuity — a philosophy problem, not a physics one.",desc:"Chemical synapses replaced with faster electronic or photonic equivalents. Speculative, and it changes what kind of brain this is."},
-  {id:"upload",name:"Hybrid / full upload",lo:null,hi:null,rect:"r-upload",floor:"Floor: substrate speed. Whether the self survives is unfalsifiable.",desc:"Little or no biological tissue remains. The ceiling is set by the hardware, but the identity-continuity question becomes acute."}
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
+// Prose (id → display copy). Acceleration NUMBERS come from
+// canon.feasibility.augmentation (reconciled {floor,ceiling}, Build Plan §0.3) —
+// no acceleration literals live in this file. Six stages preserved.
+var PROSE={
+  bio:{name:"Pure biological vat",rect:"r-bio",floorTxt:"Floor: sleep-substitution and metabolic support. No substrate replaced.",desc:"Body removed, brain perfused. Gains come from eliminating sleep and stabilizing metabolism. Real but modest."},
+  sensory:{name:"Sensory-interface augmented",rect:"r-sensory",floorTxt:"Floor: cortical processing rate. Bottleneck moves inward.",desc:"Retina, optic nerve, and cochlea bypassed; input written closer to cortex. The peripheral limits fall away and the cortex sets the pace."},
+  metabolic:{name:"Metabolically augmented",rect:"r-metabolic",floorTxt:"Floor: thermal wall and neurotransmitter recycling.",desc:"Active heat extraction, external neurotransmitter synthesis, and artificial glymphatic clearance push past the metabolic limits."},
+  synaptic:{name:"Synaptically augmented",rect:"r-synaptic",floorTxt:"Floor: identity continuity — a philosophy problem, not a physics one.",desc:"Chemical synapses replaced with faster electronic or photonic equivalents. Speculative, and it changes what kind of brain this is."},
+  hybrid:{name:"Hybrid cortex",rect:"r-upload",floorTxt:"Floor: identity continuity of the biological 'self' core.",desc:"Cortex largely silicon or photonic; tissue no longer rate-limits — but whether the original self persists becomes the open question."},
+  upload:{name:"Hybrid / full upload",rect:"r-upload",floorTxt:"Floor: substrate speed. Whether the self survives is unfalsifiable.",desc:"Little or no biological tissue remains. The ceiling is set by the hardware, but the identity-continuity question becomes acute."}
+};
+var AUG=(C&&C.feasibility&&C.feasibility.augmentation)?C.feasibility.augmentation:[
+  {id:"bio",floor:1.5,ceiling:2},{id:"sensory",floor:2,ceiling:4},{id:"metabolic",floor:3,ceiling:6},
+  {id:"synaptic",floor:10,ceiling:50},{id:"hybrid",floor:50,ceiling:5000},{id:"upload",floor:5000,ceiling:1e9}
 ];
+var STAGES=AUG.map(function(a){var p=PROSE[a.id]||{};return {id:a.id,name:p.name||a.stage,lo:a.floor,hi:a.ceiling,rect:p.rect||"r-upload",floor:p.floorTxt||a.bottleneck,desc:p.desc||a.bottleneck};});
+function fmtX(n){return n<1000?(''+n):n>=1e9?(n/1e9)+'B':n>=1e6?(n/1e6)+'M':(n/1e3)+'k';}
 function getHash(){return Object.fromEntries(location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
 function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
 var state={s:"bio",w:20};
@@ -152,8 +164,10 @@ function render(){
   var st=STAGES.filter(function(x){return x.id===state.s;})[0];
   STAGES.forEach(function(x){var el=document.getElementById(x.rect);if(el)el.setAttribute('opacity',x.id===state.s?'1':'0.32');});
   var ceilTxt,mid,heatTxt,subjTxt;
-  if(st.lo===null){ceilTxt='substrate-limited';mid=null;heatTxt='n/a (non-biological)';subjTxt='unbounded';}
-  else{ceilTxt='×'+st.lo+'–'+st.hi;mid=(st.lo+st.hi)/2;heatTxt='~'+Math.round(20*mid)+' W';subjTxt=fmtSubj(state.w*mid)+' (mid)';}
+  mid=(st.lo+st.hi)/2;
+  ceilTxt='×'+fmtX(st.lo)+'–'+fmtX(st.hi);
+  heatTxt = mid>1000 ? 'n/a (non-biological)' : '~'+Math.round(20*mid)+' W';
+  subjTxt=fmtSubj(state.w*mid)+' (mid)';
   document.getElementById('s-ceil').textContent=ceilTxt;
   document.getElementById('s-heat').textContent=heatTxt;
   document.getElementById('s-subj').textContent=subjTxt;
@@ -170,6 +184,5 @@ function wire(){
 function init(){loadHash();wire();render();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>

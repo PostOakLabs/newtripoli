@@ -144,13 +144,16 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
       <p>Two partial escapes exist in canon: the <strong>Universal Sabbath</strong> (§9), the maintenance window when every resident is briefly returned to 1× and real-time conversation is possible again; and <strong>"close-to-metal" acquaintances</strong> — NPCs run on local computronium beside you, at near-zero latency, which is part of why high-tier residents drift toward synthetic company. Neither solves the problem. They make its edges liveable.</p>
       <p>Pairs with the <a href="time-dilation.html">Time Dilation Instrument</a> and the <a href="birthday-sacrifice.html">Birthday-Sacrifice</a> calculator — three views of the same problem: a clock that is freedom for one person and distance between two.</p>
       <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Hafele, J.C., &amp; Keating, R.E. (1972). "Around-the-World Atomic Clocks: Observed Relativistic Time Gains." <em>Science</em>, 177(4044), 168–170 — the actual experiment that confirmed time dilation is real: flying atomic clocks around the world and comparing them to stationary ones. Yee, N. (2006). "The Psychology of Massively Multi-User Online Role-Playing Games." In R. Schroeder &amp; A. Axelsson (Eds.), <em>Avatars at Work and Play</em>. Springer — on how latency and synchrony shape social identity in online communities; precursor to the speed-tier dynamics of §18.</p>
-      <p class="meta-line">v1.0 — Canon §18 / §20 / §9 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p class="meta-line">v1.0 — Canon §18 / §20 / §9 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></p>
     </div>
   </section>
 </div>
 
+<script src="../data/canon.js"></script>
 <script>
 "use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:{feasibility:{alphaFrameMs:100}};
+var alphaFrameMs=(C.feasibility&&C.feasibility.alphaFrameMs)||100;
 var pktDur=3, pktColor="#86f6f2", pktStart=Date.now();
 function animatePacket(){
   var p=document.getElementById('packet');
@@ -197,7 +200,7 @@ function render(){
   document.getElementById('them-val').textContent=fmtRate(state.them);
   document.getElementById('lat-val').textContent=state.lat+' ms';
 
-  var framePct=state.lat/100*100; // one-way latency as % of the ~100 ms alpha frame
+  var framePct=state.lat/alphaFrameMs*100; // one-way latency as % of the ~100 ms alpha frame
   var fn=document.getElementById('frame-note');
   fn.style.borderColor = framePct<50 ? 'rgba(52,230,224,0.16)' : 'var(--amber)';
   fn.innerHTML='Against the body\'s own clock: one conscious frame is about <strong style="color:var(--text)">100 ms</strong> (the ~10 Hz alpha-band sampling rhythm). This link\'s '+state.lat+' ms one-way latency is <strong>'+Math.round(framePct)+'%</strong> of one frame. For physical scale, a co-located 100 km cluster is 0.33 ms (0.3%) and a Sahara–Gobi split is 33 ms (about a third). Below ~100 ms the delay is invisible inside a single frame, which is why a shared real-time world favours one site over scattered clusters. <span style="color:var(--muted)">(Feasibility Audit §4.7)</span>';
@@ -241,6 +244,5 @@ function wire(){
 function init(){loadHash();wire();render();requestAnimationFrame(animatePacket);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
-<div style="text-align:center;padding:14px 0;font-family:monospace;font-size:11px;letter-spacing:.1em;opacity:.55"><a href="/sitemap.html" style="color:inherit;text-decoration:none">◆ SITEMAP</a></div>
 </body>
 </html>
