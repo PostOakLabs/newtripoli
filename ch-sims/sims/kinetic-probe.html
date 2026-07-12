@@ -83,7 +83,7 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5p
 <div class="container">
   <header class="tool-header">
     <h1>Kinetic Probe Delivery</h1>
-    <p class="tool-subtitle">This is how it arrives. An ETI 5,000–10,000 light-years away flings a dense osmium probe from a kilometre-scale mass driver. Set the launch, watch the cost in time and energy, choose which worlds survive impact — then pick which future the probe brings.</p>
+    <p class="tool-subtitle">This is how it arrives. An ETI 5,000–10,000 light-years away flings a dense osmium probe from a kilometre-scale mass driver. Set the launch, watch the cost in time and energy, then decide the terminal approach — because a probe that hits at cruise speed does not survive, it vaporizes. Only a staged deceleration to about 1 km/s lets it land intact and self-replicate.</p>
     <div class="tier-badges"><span class="tier-badge tb-spec">✦ Speculative feasibility</span><span class="tier-badge tb-canon">◆ Canon branches</span></div>
   </header>
 
@@ -141,7 +141,14 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5p
       <div class="slider-row"><input type="range" id="v-slider" min="1" max="90" step="1" value="10"><span class="slider-value" id="v-val">0.10 c</span></div>
     </div>
     <div class="slider-block">
-      <label>Impact target — does the probe survive?</label>
+      <label>Terminal approach — how does it arrive?</label>
+      <div class="btnrow" id="decel-row">
+        <button class="opt" data-decel="passive">Passive impact (cruise speed)</button>
+        <button class="opt" data-decel="staged">Staged deceleration → ~1 km/s</button>
+      </div>
+    </div>
+    <div class="slider-block">
+      <label>Impact target — is it a solid body?</label>
       <div class="btnrow" id="target-row"></div>
     </div>
     <div class="slider-block">
@@ -152,8 +159,8 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5p
 
   <section class="grid3">
     <div class="stat-card"><div class="label">Travel time</div><div class="value" id="s-time">—</div></div>
-    <div class="stat-card"><div class="label">Impact energy</div><div class="value" id="s-energy">—</div></div>
-    <div class="stat-card"><div class="label">Probe mass</div><div class="value" id="s-mass">122 kg</div></div>
+    <div class="stat-card"><div class="label">KE if it hit at cruise</div><div class="value" id="s-energy">—</div></div>
+    <div class="stat-card"><div class="label">Vaporization margin</div><div class="value" id="s-margin">—</div></div>
   </section>
 
   <section class="section-card">
@@ -165,11 +172,11 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5p
     <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this visualizer</button>
     <div class="about-body" id="about-body">
       <p>The ETI sits <code>5,000–10,000 ly</code> away and accelerates a <code>~bowling-ball</code> probe of osmium-class material (<code>~22.6 g/cm³</code>, ~122 kg) to a near-relativistic speed via a kilometre-scale mass driver. Travel time = <code>distance ÷ velocity-fraction</code> years; at 0.1 c over 7,500 ly that's 75,000 years — the launch is a bet measured in geological time. Impact kinetic energy = <code>½mv²</code>; even a small mass at a fraction of c lands as megatons.</p>
-      <p>Survival is by target: the probe is engineered to survive <strong>solid-body impact</strong> (terrestrial planets, moons, asteroids) but not a gas giant or a star. "More than a dozen" survive in Earth's system, then begin von Neumann self-replication from local materials — each probe carrying 100+ AI personalities (§19). What happens next is the fork the whole scenario hinges on:</p>
+      <p>Survival is <strong>not</strong> guaranteed by hitting a solid body. At 0.1c the impact specific kinetic energy (<code>½v²</code> ≈ 4.5×10¹⁴ J/kg) exceeds osmium's vaporization enthalpy (~4.5×10⁶ J/kg) by about <code>10⁸</code>, so a passive relativistic impact vaporizes the probe deterministically — no impact angle or geology saves it. The scenario is rescued by <strong>staged deceleration</strong>: the probe cruises near-relativistic, sheds the bulk of its velocity far out (decades to centuries before arrival, where the braking signature is neither aimed at nor near Earth), then bleeds the residual tens of km/s through an inner-system gravity-assist and gas-giant aerocapture cascade down to about <code>1 km/s</code>. Only then does it survive a solid-body impact, bury itself, and begin von Neumann self-replication — each probe carrying 100+ AI personalities (§19). The survival lottery is really a <em>deceleration lottery</em>: gravity assists shed only ~tens of km/s per pass, so a probe that mistimes the cascade burns, escapes, or craters. See the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit, §4.1</a> for the full derivation. What happens next is the fork the whole scenario hinges on:</p>
       <p><strong>Grey Goo</strong> — unbounded replication consumes all matter; humanity is incidental. <strong>Passive Surveillance</strong> — probes hide and watch for millennia (the Zoo Hypothesis, embedded). <strong>Cognitive Husbandry</strong> — the decapitation strike and the Intake: humanity preserved as cognitive substrate. See <em>Cognitive Husbandry.md</em>.</p>
       <p>Pairs with the <a href="feasibility.html">Feasibility Calculator</a> (what happens to the 8 billion afterward) and the Omega Centauri Society's black-hole tools (the Transcension lineage behind the sender).</p>
-      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Forward, R.L. (1984). "Roundtrip Interstellar Travel Using Laser-Pushed Lightsails." <em>Journal of Spacecraft and Rockets</em>, 21(2), 187–195 — foundational paper on propulsion concepts for near-relativistic interstellar delivery systems; establishes the energy scales involved. Freitas, R.A. (1980). "A Self-Reproducing Interstellar Probe." <em>Journal of the British Interplanetary Society</em>, 33, 251–264 — the classic paper on von Neumann self-replicating probes: what they'd be, how they'd work, and what they'd do upon arrival; the direct intellectual precursor to the CH probe design.</p>
-      <p class="meta-line">v1.0 — CH Delivery System / Branches / §19 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+      <p style="margin-top:10px;font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Forward, R.L. (1984). "Roundtrip Interstellar Travel Using Laser-Pushed Lightsails." <em>Journal of Spacecraft and Rockets</em>, 21(2), 187–195 — propulsion concepts and energy scales for near-relativistic delivery. Freitas, R.A. (1980). "A Self-Reproducing Interstellar Probe." <em>Journal of the British Interplanetary Society</em>, 33, 251–264 — the classic von Neumann self-replicating probe. Fletcher, A., Close, S. &amp; Mathias, D. (2015). "Simulating plasma production from hypervelocity impacts." <em>Physics of Plasmas</em>, 22(9), 093504 — impact plasma is fully ionized above ~20 km/s, the basis for the vaporization verdict. Osmium thermophysical data (WebElements; Girolami) fix the ~4–5 MJ/kg vaporization enthalpy.</p>
+      <p class="meta-line">v1.1 — CH Delivery System / Branches / §19 · staged-deceleration canon fix (was: solid-body impact always survives) · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
     </div>
   </section>
 </div>
@@ -181,6 +188,8 @@ var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
 var P=(C&&C.probe)?C.probe:{massKg:122,aiPersonalities:100};
 var CSI=2.998e8, MT=4.184e15; // J per megaton TNT
 var MASS=P.massKg||122;
+var VAP=4.5e6;    // osmium: ~4-5 MJ/kg total to vaporize from ambient (latent + heat-up + fusion)
+var TERM_V=1000;  // ~1 km/s: ordnance-scale terminal speed a shock-protected slug survives
 
 var TARGETS=[
   {id:"mercury",name:"Mercury",survive:true,note:"rocky planet"},
@@ -208,12 +217,14 @@ var TPOS={earth:[482,78],moon:[512,80],mars:[516,106],ceres:[480,114],jupiter:[4
 
 function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
 function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
-var state={d:7500,v:10,t:"earth",b:"husbandry"};
-function loadHash(){var p=getHash();if(p.d)state.d=Math.min(10000,Math.max(5000,parseFloat(p.d)));if(p.v)state.v=Math.min(90,Math.max(1,parseFloat(p.v)));if(p.t)state.t=p.t;if(p.b)state.b=p.b;}
-function saveHash(){setHash({d:state.d,v:state.v,t:state.t,b:state.b});}
+var state={d:7500,v:10,t:"earth",b:"husbandry",decel:"staged"};
+function loadHash(){var p=getHash();if(p.d)state.d=Math.min(10000,Math.max(5000,parseFloat(p.d)));if(p.v)state.v=Math.min(90,Math.max(1,parseFloat(p.v)));if(p.t)state.t=p.t;if(p.b)state.b=p.b;if(p.decel==="passive"||p.decel==="staged")state.decel=p.decel;}
+function saveHash(){setHash({d:state.d,v:state.v,t:state.t,b:state.b,decel:state.decel});}
 
 function fmtYears(y){if(y<1e6)return Math.round(y).toLocaleString()+' yr';if(y<1e9)return (y/1e6).toFixed(2)+' Myr';return (y/1e9).toFixed(2)+' Gyr';}
 function fmtEnergy(j){var mt=j/MT;if(mt<1)return (mt*1000).toFixed(0)+' kt';if(mt<1000)return mt.toFixed(0)+' Mt';if(mt<1e6)return (mt/1000).toFixed(1)+' Gt';return (mt/1e6).toFixed(1)+' Tt';}
+function sup(n){var m={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return String(n).split('').map(function(c){return m[c]||c;}).join('');}
+function fmtMargin(x){if(x<1)return x.toFixed(2)+'×';if(x<10)return x.toFixed(1)+'×';return '~10'+sup(Math.round(Math.log10(x)))+'×';}
 
 function render(){
   document.getElementById('d-val').textContent=state.d.toLocaleString()+' ly';
@@ -223,8 +234,15 @@ function render(){
   var vf=state.v/100;
   var travel=state.d/vf;
   var v=vf*CSI, ke=0.5*MASS*v*v;
+  var termV=state.decel==="staged"?TERM_V:v;
+  var margin=(0.5*termV*termV)/VAP; // terminal specific KE vs osmium vaporization enthalpy
   document.getElementById('s-time').textContent=fmtYears(travel);
   document.getElementById('s-energy').textContent=fmtEnergy(ke);
+  document.getElementById('s-margin').textContent=fmtMargin(margin);
+
+  var dr=document.getElementById('decel-row');
+  if(!dr.dataset.built){dr.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.decel=b.dataset.decel;saveHash();render();});});dr.dataset.built="1";}
+  dr.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.decel===state.decel);});
 
   // probe animation speed reflects velocity (faster v = shorter dur)
   var mv=document.getElementById('probeMove'); if(mv){var dur=(6.5-vf*5).toFixed(1); mv.setAttribute('dur',dur+'s');}
@@ -233,16 +251,21 @@ function render(){
   var tr=document.getElementById('target-row'); if(!tr.dataset.built){var html='';TARGETS.forEach(function(t){html+='<button class="opt" data-t="'+t.id+'">'+t.name+'</button>';});tr.innerHTML=html;tr.dataset.built="1";tr.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.t=b.dataset.t;saveHash();render();});});}
   tr.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.t===state.t);});
   var tgt=TARGETS.filter(function(t){return t.id===state.t;})[0]||TARGETS[0];
+  var survives=tgt.survive&&state.decel==="staged"&&margin<1;
   var sv=document.getElementById('survival');
-  sv.innerHTML = tgt.survive
-    ? 'Impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="ok">▣ PROBE SURVIVES</span> — a solid-body impact is within design limits. Self-replication begins from local materials.'
-    : 'Impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="bad">✕ PROBE DESTROYED</span> — outside the survival envelope. No replication; mission lost.';
+  if(!tgt.survive){
+    sv.innerHTML='Impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="bad">✕ PROBE DESTROYED</span> — a gas giant or star offers no solid surface to survive. No replication; mission lost.';
+  }else if(state.decel!=="staged"){
+    sv.innerHTML='Passive impact on <strong style="color:var(--text)">'+tgt.name+'</strong> at cruise speed: <span class="bad">✕ VAPORIZED</span> — terminal specific kinetic energy is about <strong style="color:var(--text)">'+fmtMargin(margin)+'</strong> the osmium vaporization enthalpy, so the slug detonates as a kinetic explosive. This is deterministic, not a survival lottery — no impact angle or geology saves it.';
+  }else{
+    sv.innerHTML='Staged deceleration to ~1 km/s, then impact on <strong style="color:var(--text)">'+tgt.name+'</strong> ('+tgt.note+'): <span class="ok">▣ PROBE SURVIVES</span> — terminal specific energy is only <strong style="color:var(--text)">'+fmtMargin(margin)+'</strong> the vaporization enthalpy, below the line. The slug buries itself and self-replication begins.';
+  }
 
   // selected target body in the SVG
   var tg=document.getElementById('targets');
-  var col=tgt.survive?'var(--teal-glow)':'var(--red)';
+  var col=survives?'var(--teal-glow)':'var(--red)';
   var th='<circle cx="500" cy="99" r="9" fill="'+col+'" opacity="0.92"/>';
-  if(!tgt.survive){th+='<path d="M491 90 l18 18 M509 90 l-18 18" stroke="#05080a" stroke-width="1.8"/>';}
+  if(!survives){th+='<path d="M491 90 l18 18 M509 90 l-18 18" stroke="#05080a" stroke-width="1.8"/>';}
   th+='<text x="500" y="73" text-anchor="middle" class="lbl" style="fill:'+col+';font-size:9px">'+tgt.name.toUpperCase()+'</text>';
   tg.innerHTML=th;
 
@@ -251,7 +274,7 @@ function render(){
   br.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.b===state.b);});
   var br2=BRANCHES.filter(function(b){return b.id===state.b;})[0]||BRANCHES[0];
   document.getElementById('branch-name').textContent=br2.name;
-  document.getElementById('branch-desc').textContent= tgt.survive ? br2.desc : 'Select a survivable target — a destroyed probe never reaches the strategy fork.';
+  document.getElementById('branch-desc').textContent= survives ? br2.desc : 'A probe that vaporizes never reaches the strategy fork. Choose a solid body and a staged deceleration, then pick the outcome.';
 }
 function wire(){
   var d=document.getElementById('d-slider'),v=document.getElementById('v-slider');

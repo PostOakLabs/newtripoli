@@ -214,6 +214,8 @@ svg .lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;
     </div>
   </section>
 
+  <div id="bio-ceiling" style="border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13.5px;line-height:1.6"></div>
+
   <!-- Universal Sabbath explainer -->
   <div style="background:rgba(35,255,136,.06);border:1px solid rgba(35,255,136,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px">
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-glow);margin-bottom:8px">What is the Universal Sabbath?</div>
@@ -381,6 +383,7 @@ function updateGauge(R){
   document.getElementById('g-read').textContent=fmtRate(R);
 }
 
+function fmtReal(y){if(y>=1)return y.toFixed(1)+' yr';var d=y*365.25;if(d>=1)return d.toFixed(1)+' days';return (d*24).toFixed(1)+' hours';}
 function render(){
   var R=state.R;
   var resetYears=state.resetMonths/12;
@@ -390,6 +393,17 @@ function render(){
   document.getElementById('s-sec').textContent=fmtSubSeconds(R*1);
   document.getElementById('s-day').textContent=fmtSubDays(R*1);
   document.getElementById('s-yr').textContent=fmtYears(R*1);
+
+  var lifespan=122; // demonstrated neuronal-lifespan ceiling, yr (Audit §4.8)
+  var realToExhaust=lifespan/R;
+  var bc=document.getElementById('bio-ceiling');
+  if(R<=lifespan){
+    bc.style.borderColor='rgba(52,230,224,0.16)';
+    bc.innerHTML='<strong style="color:var(--text)">Biology holds.</strong> At '+fmtRate(R)+', a preserved biological brain reaches its ~122-year demonstrated lifespan only after about <strong style="color:var(--text)">'+fmtReal(realToExhaust)+'</strong> of real time — slow enough that a purely biological vat can carry the arc. <span style="color:var(--muted)">(Feasibility Audit §4.8)</span>';
+  } else {
+    bc.style.borderColor='var(--amber)';
+    bc.innerHTML='<strong style="color:var(--amber)">Upload required.</strong> At '+fmtRate(R)+', one real year accrues '+fmtYears(R)+' of subjective life — far past the ~122-year lifespan any brain is known to sustain. A biological substrate is exhausted in about <strong style="color:var(--amber)">'+fmtReal(realToExhaust)+'</strong> of real time, so every series above New Ganymede forces rejuvenation or upload, which reopens the identity problem. <span style="color:var(--muted)">(Feasibility Audit §4.8)</span>';
+  }
 
   var subjYrsSabbath=R*resetYears;
   var hl=document.getElementById('headline-text');

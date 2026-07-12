@@ -55,6 +55,12 @@ body::after{
 .nav-links{margin-left:auto;display:flex;gap:20px;font-size:11px;letter-spacing:.09em}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--green-glow)}
+/* embedded mode: when framed on the homepage (?embed), hide own nav + compact */
+body.embed .nav{display:none}
+body.embed{font-size:11.5px}
+body.embed .output{padding:14px 16px 6px}
+body.embed .input-row{padding:8px 16px 10px}
+body.embed .prompt-label,body.embed #cmd-input{font-size:11.5px}
 
 /* TERMINAL WRAP */
 .terminal{
@@ -198,6 +204,18 @@ const SIMS = {
   'cryonics': {
     title: 'Cryonics — State of the Science',
     desc: 'Where cryonics actually stood before the Intake — vitrification, information-theoretic death, the legal grey zone. Companion context for the substrate transition.'
+  },
+  'acceleration-ceiling': {
+    title: 'Acceleration Ceiling',
+    desc: 'How fast can a preserved mind subjectively run? The ceiling by augmentation stage, the alpha/thermal/synaptic floors that set it, and the subjective time it buys. Companion to the Feasibility Audit §4.5.'
+  },
+  'interface-bandwidth': {
+    title: 'Interface Bandwidth Gap',
+    desc: 'Today\'s ~1,000 electrodes against the brain\'s ~86 billion neurons: the gap, the doublings to close it, and why writing to cortex is harder than reading. Feasibility Audit §4.4.'
+  },
+  'provenance': {
+    title: 'Provenance / Execution-Hash',
+    desc: 'A real SHA-256 execution hash over a sim\'s inputs and the canon it cites — the OpenChainGraph model in miniature. Same inputs, same hash; change one and it changes.'
   }
 };
 
@@ -210,6 +228,7 @@ const STATE = {
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 const output = document.getElementById('output');
 const input  = document.getElementById('cmd-input');
+if (location.search.indexOf('embed') > -1) document.body.classList.add('embed');
 
 function line(text, cls = 'response') {
   const el = document.createElement('div');

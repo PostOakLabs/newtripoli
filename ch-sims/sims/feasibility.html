@@ -218,6 +218,13 @@ svg .lbl-ph{fill:var(--teal);font-family:'JetBrains Mono',monospace;font-size:9p
       </div>
     </div>
     <div class="slider-block">
+      <label>Digital emulation fidelity (operations per second, per digitized mind)</label>
+      <div class="slider-row">
+        <input type="range" id="fid-slider" min="18" max="25" step="1" value="20">
+        <span class="slider-value" id="fid-val">10²⁰ ops/s</span>
+      </div>
+    </div>
+    <div class="slider-block">
       <label>Augmentation stage (how much biology is replaced)</label>
       <div class="aug-row" id="aug-row"></div>
     </div>
@@ -227,6 +234,7 @@ svg .lbl-ph{fill:var(--teal);font-family:'JetBrains Mono',monospace;font-size:9p
     <div class="headline-label">Energy verdict</div>
     <div class="headline-text" id="headline-text">computing…</div>
     <div id="verdict-wrap"></div>
+    <div id="digital-note" style="font-size:13px;color:var(--body);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)"></div>
   </section>
 
   <!-- SAHARA POWER BUDGET -->
@@ -313,7 +321,7 @@ svg .lbl-ph{fill:var(--teal);font-family:'JetBrains Mono',monospace;font-size:9p
 "use strict";
 var C = (typeof CH_CANON !== "undefined") ? CH_CANON : null;
 var F = (C && C.feasibility) ? C.feasibility : {
-  brainWatts:20, brainMassKg:1.35, supportOverhead:3, digitalMindWatts:50,
+  brainWatts:20, brainMassKg:1.35, supportOverhead:3, digitalMindWatts:50, landauerJ:3e-21,
   saharaAreaM2:9.2e12, saharaYieldWPerM2:25, worldElectricityTW:2.7,
   augmentation:[
     {id:"vat",stage:"Pure biological vat",ceiling:2,bottleneck:"Sleep elimination + metabolic optimization only."},
@@ -325,6 +333,7 @@ var F = (C && C.feasibility) ? C.feasibility : {
   ]
 };
 var SAHARA_CAP_W = F.saharaAreaM2 * F.saharaYieldWPerM2; // ≈ 2.3e14
+var LANDAUER_J = (F.landauerJ!=null) ? F.landauerJ : 3e-21; // J per irreversible bit-op at 300 K
 
 // ── formatting ──
 function fmtPower(W){
@@ -357,14 +366,17 @@ function fmtX(x){
 // ── state + hash ──
 function getHash(){return Object.fromEntries(window.location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
 function setHash(p){var s=Object.entries(p).filter(function(e){return e[1]!==null&&e[1]!==undefined&&e[1]!=='';}).map(function(e){return encodeURIComponent(e[0])+'='+encodeURIComponent(e[1]);}).join('&');history.replaceState(null,'','#'+s);}
-var state={ popB:8.1, bioPct:10, accel:1, aug:"vat" };
+var state={ popB:8.1, bioPct:10, accel:1, aug:"vat", fid:20 };
 function loadHash(){var p=getHash();
   if(p.pop){var v=parseFloat(p.pop);if(!isNaN(v)&&v>=1&&v<=10)state.popB=v;}
   if(p.bio){var b=parseInt(p.bio);if(!isNaN(b)&&b>=0&&b<=100)state.bioPct=b;}
   if(p.accel){var a=parseInt(p.accel);if(!isNaN(a)&&a>=1&&a<=50)state.accel=a;}
+  if(p.fid){var f=parseInt(p.fid);if(!isNaN(f)&&f>=18&&f<=25)state.fid=f;}
   if(p.aug){state.aug=p.aug;}
 }
-function saveHash(){setHash({pop:state.popB,bio:state.bioPct,accel:state.accel,aug:state.aug});}
+function saveHash(){setHash({pop:state.popB,bio:state.bioPct,accel:state.accel,fid:state.fid,aug:state.aug});}
+function supN(n){var m={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return String(n).split('').map(function(c){return m[c]||c;}).join('');}
+function fmtW1(w){if(w<1)return (w*1000).toFixed(w<0.01?2:0)+' mW';if(w<1000)return w.toFixed(w<10?1:0)+' W';if(w<1e6)return (w/1000).toFixed(1)+' kW';return (w/1e6).toFixed(1)+' MW';}
 
 // ── build static SVG pieces ──
 function buildSplitGrid(){
@@ -410,10 +422,12 @@ function render(){
   document.getElementById('pop-val').textContent=state.popB.toFixed(1)+' billion';
   document.getElementById('bio-val').textContent=state.bioPct+'% / '+(100-state.bioPct)+'%';
   document.getElementById('accel-val').textContent=accel+'×';
+  document.getElementById('fid-val').textContent='10'+supN(state.fid)+' ops/s';
 
-  // power
+  // power — digital minds priced at the Landauer floor by emulation fidelity
   var bioW=F.brainWatts*accel*F.supportOverhead;
-  var totalW=bioCount*bioW + digCount*F.digitalMindWatts;
+  var digW=Math.pow(10,state.fid)*LANDAUER_J;
+  var totalW=bioCount*bioW + digCount*digW;
   var frac=totalW/SAHARA_CAP_W;
   var pct=frac*100;
   var margin=SAHARA_CAP_W/totalW;
@@ -425,6 +439,7 @@ function render(){
   var vw=document.getElementById('verdict-wrap');
   if(pct<=100){ vw.innerHTML='<span class="verdict ok">Feasible · '+fmtX(margin)+' energy margin</span>'; }
   else { vw.innerHTML='<span class="verdict warn">Over capacity · would need '+(frac).toFixed(1)+'× the whole Sahara</span>'; }
+  document.getElementById('digital-note').innerHTML='Digital 90% at the Landauer floor: each emulated mind draws <strong style="color:var(--text)">'+fmtW1(digW)+'</strong> at 10'+supN(state.fid)+' ops/s. Break-even with the 20 W biological brain is ~10²¹·⁸ ops/s — below it, digital minds are effectively free and the biological 10% dominates the draw; above it, toward full molecular detail near 10²⁵, the digital population takes over the budget. '+(digW<=F.brainWatts?'<span style="color:var(--teal)">Currently below break-even — digital is nearly free.</span>':'<span style="color:var(--amber)">Currently above break-even — digital now dominates.</span>');
 
   // sahara svg
   document.getElementById('cap-lbl').textContent='≈ '+fmtPower(SAHARA_CAP_W);
@@ -489,11 +504,12 @@ function render(){
 }
 
 function wire(){
-  var pop=document.getElementById('pop-slider'),bio=document.getElementById('bio-slider'),accel=document.getElementById('accel-slider');
-  pop.value=state.popB; bio.value=state.bioPct; accel.value=state.accel;
+  var pop=document.getElementById('pop-slider'),bio=document.getElementById('bio-slider'),accel=document.getElementById('accel-slider'),fid=document.getElementById('fid-slider');
+  pop.value=state.popB; bio.value=state.bioPct; accel.value=state.accel; fid.value=state.fid;
   pop.addEventListener('input',function(){state.popB=parseFloat(pop.value);saveHash();render();});
   bio.addEventListener('input',function(){state.bioPct=parseInt(bio.value);saveHash();render();});
   accel.addEventListener('input',function(){state.accel=parseInt(accel.value);saveHash();render();});
+  fid.addEventListener('input',function(){state.fid=parseInt(fid.value);saveHash();render();});
   var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
   at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
 }

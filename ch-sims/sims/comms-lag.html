@@ -133,6 +133,8 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
 
   <div class="sc-note" id="note">—</div>
 
+  <div id="frame-note" style="border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:16px 0 4px;font-size:13px;line-height:1.6"></div>
+
   <section class="about">
     <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this simulator</button>
     <div class="about-body" id="about-body">
@@ -194,6 +196,11 @@ function render(){
   document.getElementById('you-val').textContent=fmtRate(state.you);
   document.getElementById('them-val').textContent=fmtRate(state.them);
   document.getElementById('lat-val').textContent=state.lat+' ms';
+
+  var framePct=state.lat/100*100; // one-way latency as % of the ~100 ms alpha frame
+  var fn=document.getElementById('frame-note');
+  fn.style.borderColor = framePct<50 ? 'rgba(52,230,224,0.16)' : 'var(--amber)';
+  fn.innerHTML='Against the body\'s own clock: one conscious frame is about <strong style="color:var(--text)">100 ms</strong> (the ~10 Hz alpha-band sampling rhythm). This link\'s '+state.lat+' ms one-way latency is <strong>'+Math.round(framePct)+'%</strong> of one frame. For physical scale, a co-located 100 km cluster is 0.33 ms (0.3%) and a Sahara–Gobi split is 33 ms (about a third). Below ~100 ms the delay is invisible inside a single frame, which is why a shared real-time world favours one site over scattered clusters. <span style="color:var(--muted)">(Feasibility Audit §4.7)</span>';
   document.getElementById('av-you').textContent=fmtRate(state.you);
   document.getElementById('av-them').textContent=fmtRate(state.them);
 

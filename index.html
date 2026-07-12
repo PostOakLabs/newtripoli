@@ -2,9 +2,10 @@
 <!--
   New Tripoli — Landing Page
   newtripoli.xyz · Cognitive Husbandry series
-  Code: MIT · Prose: CC BY 4.0 · No PII, no runtime network calls (fonts excepted).
-  Aesthetic: "Simulation Terminal" — phosphor green/teal on near-black, CRT texture.
-  TODO: Key Truths #1 and #2 are HSS-specific — revise for NT in next iteration.
+  Code: MIT · Prose: CC BY 4.0 · No PII; runtime network calls limited to fonts.
+  Aesthetic: "Simulation Terminal" — phosphor teal/green on near-black, CRT texture.
+  Layout: left intro + live provenance readout · center enclave image · right featured
+  instruments + embedded live terminal (terminal.html?embed=1). Footer: sitemap + license.
 -->
 <html lang="en">
 <head>
@@ -51,157 +52,74 @@ a:hover{opacity:.75}
 h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.12}
 
 /* NAV */
-.nav{
-  border-bottom:1px solid var(--border);
-  background:rgba(5,8,10,.85);backdrop-filter:blur(8px);
-  position:sticky;top:0;z-index:50;
-}
-.nav-inner{
-  max-width:1400px;margin:0 auto;
-  padding:12px 32px;
-  display:flex;align-items:center;gap:20px;
-}
-.nav-brand{
-  font-family:'JetBrains Mono',monospace;font-weight:500;
-  font-size:13px;letter-spacing:.07em;
-  color:var(--text);display:flex;align-items:center;gap:10px;
-}
-.nav-brand .dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--green);box-shadow:0 0 8px var(--green);
-  animation:blink 2.4s steps(1) infinite;flex-shrink:0;
-}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+.nav-inner{max-width:1400px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;gap:20px}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13px;letter-spacing:.07em;color:var(--text);display:flex;align-items:center;gap:10px}
+.nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.4s steps(1) infinite;flex-shrink:0}
 @keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.35}}
 .nav-brand .slash{color:var(--muted);font-weight:300;margin-left:2px}
-.nav-links{
-  margin-left:auto;display:flex;gap:24px;
-  font-size:11px;letter-spacing:.1em;
-}
+.nav-links{margin-left:auto;display:flex;gap:24px;font-size:11px;letter-spacing:.1em}
 .nav-links a{color:var(--muted)}
 .nav-links a:hover{color:var(--green-glow);opacity:1}
 
 /* PAGE */
 .page{max-width:1400px;margin:0 auto}
 
-/* MAIN 3-COL */
-.main{
-  display:grid;
-  grid-template-columns:360px 1fr 268px;
-  border-bottom:1px solid var(--border);
-}
+/* MAIN — 3 columns: left intro · center image · right instruments+terminal */
+.main{display:grid;grid-template-columns:360px 1fr 300px;border-bottom:1px solid var(--border);min-height:460px}
 
 /* LEFT */
-.col-left{
-  border-right:1px solid var(--border);
-  padding:36px 28px 32px 32px;
-  display:flex;flex-direction:column;
-  background:linear-gradient(180deg,rgba(8,13,12,.4),transparent);
-}
-.row-num{font-size:10px;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;display:block}
-.eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--green);margin-bottom:16px}
-.hero-head{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:clamp(2rem,3vw,3rem);
-  font-weight:700;letter-spacing:-.01em;line-height:.95;
-  color:var(--text);margin-bottom:24px;
-  text-shadow:0 0 40px rgba(52,230,224,.12);
-}
-.hero-body{
-  font-family:'DM Sans',sans-serif;
-  font-size:13.5px;color:var(--body);line-height:1.75;
-  margin-bottom:28px;max-width:28ch;
-}
-.cta{
-  display:inline-flex;align-items:center;gap:10px;
-  border:1px solid rgba(52,230,224,.3);
-  padding:11px 18px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:10.5px;letter-spacing:.12em;
-  color:var(--green-glow);
-  background:rgba(52,230,224,.04);
-  cursor:pointer;
-  transition:border-color .15s,background .15s,box-shadow .15s;
-  margin-bottom:auto;
-  text-decoration:none;
-}
-.cta:hover{
-  border-color:var(--green);
-  background:rgba(52,230,224,.09);
-  box-shadow:0 0 18px rgba(52,230,224,.12);
-  opacity:1;
-}
-.status-panel{margin-top:36px;padding-top:20px;border-top:1px solid var(--border)}
+.col-left{border-right:1px solid var(--border);padding:36px 28px 32px 32px;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(8,13,12,.4),transparent)}
+.hero-head{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;letter-spacing:0;line-height:1.75;color:var(--body);margin-bottom:18px}
+.hero-body{font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--body);line-height:1.75;margin-bottom:28px;max-width:28ch}
+.status-panel{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 .panel-head{font-size:9.5px;letter-spacing:.18em;color:var(--green);margin-bottom:12px}
 .status-row{display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:8px}
 .status-row .key{color:var(--muted);letter-spacing:.04em}
 .status-row .val{color:var(--body);font-weight:500}
-.status-row .val.live{color:var(--teal);text-shadow:0 0 8px rgba(35,255,136,.4)}
-.status-row .val.stable{color:var(--teal);text-shadow:0 0 8px rgba(35,255,136,.4)}
 .status-row .val.nominal{color:var(--green)}
+.status-row .val.mono{font-family:'JetBrains Mono',monospace;color:var(--green-glow);letter-spacing:.02em}
+.pv-anchor{display:inline-block;margin-top:13px;font-size:9px;letter-spacing:.12em;color:var(--muted);text-decoration:none}
+.pv-anchor:hover{color:var(--green-glow);opacity:1}
 
-/* CENTER */
-.col-center{display:flex;flex-direction:column;align-items:center;padding:16px 16px 0}
-.enclave-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:9.5px;letter-spacing:.18em;text-align:center;
-  color:var(--muted);margin-bottom:4px;
-}
+/* CENTER — New Tripoli Enclave image */
+.col-center{display:flex;flex-direction:column;align-items:center;padding:20px 20px 24px}
+.enclave-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-align:center;color:var(--muted);margin-bottom:10px}
 .enclave-label span{display:block;color:var(--dim);letter-spacing:.08em}
-.enclave-img{width:100%;max-width:640px;object-fit:contain;display:block}
+.enclave-img{width:100%;max-width:600px;object-fit:contain;display:block}
 
-/* RIGHT */
-.col-right{
-  border-left:1px solid var(--border);
-  padding:28px 22px;
-  display:flex;flex-direction:column;
-  background:linear-gradient(180deg,rgba(8,13,12,.4),transparent);
-}
-.truth-item{
-  display:flex;gap:12px;align-items:flex-start;
-  padding-bottom:15px;border-bottom:1px solid var(--border);margin-bottom:1px;
-}
-.truth-item:last-child{border-bottom:none;padding-bottom:0}
-.truth-icon{
-  width:30px;height:30px;border:1px solid var(--border);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;background:rgba(52,230,224,.04);
-}
-.truth-icon svg{width:14px;height:14px;stroke:var(--green)}
-.truth-text{font-size:10.5px;letter-spacing:.06em;line-height:1.55;color:var(--body)}
+/* RIGHT — 2 compact featured cards + small terminal beneath */
+.col-right{border-left:1px solid var(--border);padding:28px 20px;display:flex;flex-direction:column;gap:16px;background:linear-gradient(180deg,rgba(8,13,12,.4),transparent)}
+.feat-head{font-size:9px;letter-spacing:.18em;color:var(--green);margin-bottom:11px}
+.featured{display:flex;flex-direction:column;gap:10px}
+.tool-card{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);border-radius:6px;padding:12px 13px;background:rgba(8,13,12,.35);text-decoration:none;transition:border-color .15s,background .15s}
+.tool-card:hover{border-color:rgba(52,230,224,.4);background:rgba(52,230,224,.05);opacity:1}
+.tool-idx{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:.08em;flex-shrink:0;margin-top:2px}
+.tool-body{flex:1;min-width:0}
+.tool-name{font-family:'Chakra Petch',sans-serif;font-size:12.5px;font-weight:600;color:var(--text);letter-spacing:.02em;margin-bottom:3px;line-height:1.15}
+.tool-desc{font-size:10.5px;color:var(--body);line-height:1.5}
+.tool-arrow{color:var(--muted);flex-shrink:0;font-size:12px;margin-top:2px}
+.tool-card:hover .tool-arrow{color:var(--green-glow)}
 
-/* BOTTOM */
-.bottom{display:grid;grid-template-columns:1fr 1fr 1.6fr 1fr}
-.b-panel{
-  padding:22px 26px;
-  border-right:1px solid var(--border);
-  border-top:1px solid var(--border);
-  background:rgba(8,13,12,.3);
-}
-.b-panel:last-child{border-right:none}
-.b-label{font-size:9px;letter-spacing:.2em;color:var(--green);margin-bottom:14px}
-.directive-text{
-  font-family:'Chakra Petch',sans-serif;
-  font-size:13px;font-weight:600;color:var(--text);
-  line-height:1.4;margin-bottom:14px;letter-spacing:.04em;
-}
-.directive-attr{font-size:9.5px;color:var(--muted);letter-spacing:.06em;border-top:1px solid var(--border);padding-top:10px}
-.terminal-body{font-size:11.5px;color:var(--green);line-height:1.7;text-shadow:0 0 8px rgba(52,230,224,.3)}
-.terminal-cursor{animation:cur .9s steps(1) infinite}
-@keyframes cur{0%,49%{opacity:1}50%,100%{opacity:0}}
-.entries-list{display:flex;flex-direction:column;gap:9px}
-.entry-row{display:flex;gap:10px;font-size:10px}
-.entry-date{color:var(--green);flex-shrink:0;letter-spacing:.04em}
-.entry-text{color:var(--body)}
-.nt-brand{display:flex;flex-direction:column;justify-content:space-between;height:100%}
-.nt-glyph{
-  width:38px;height:38px;border:1px solid rgba(52,230,224,.3);
-  border-radius:4px;display:flex;align-items:center;justify-content:center;
-  font-family:'Chakra Petch',sans-serif;font-size:16px;font-weight:700;
-  color:var(--green);background:rgba(52,230,224,.04);
-  box-shadow:0 0 14px rgba(52,230,224,.08);margin-bottom:10px;
-}
-.nt-name{font-size:12px;font-weight:600;color:var(--text);letter-spacing:.06em;margin-bottom:6px}
-.nt-tagline{font-size:10px;letter-spacing:.08em;color:var(--body);line-height:1.6}
+/* small terminal box, directly beneath the featured cards */
+.term-block{margin-top:0}
+.terminal-window{height:180px;display:flex;flex-direction:column;border:1px solid var(--rim);background:#050b0a;box-shadow:0 0 24px rgba(52,230,224,.05),inset 0 0 40px rgba(0,0,0,.5);border-radius:6px;overflow:hidden}
+.term-titlebar{display:flex;align-items:center;gap:6px;flex-shrink:0;padding:7px 11px;border-bottom:1px solid var(--edge);background:rgba(52,230,224,.03)}
+.term-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0}
+.term-dot.g{background:var(--green);box-shadow:0 0 6px var(--green)}
+.term-title{margin-left:6px;font-size:8.5px;letter-spacing:.1em;color:var(--muted)}
+.term-open{margin-left:auto;font-size:8px;letter-spacing:.1em;color:var(--muted);text-decoration:none}
+.term-open:hover{color:var(--green-glow);opacity:1}
+.term-frame{flex:1;width:100%;border:none;background:transparent;display:block}
+.term-hints{margin-top:8px;font-size:8.5px;letter-spacing:.05em;color:var(--dim)}
+.term-hints b{color:var(--muted);font-weight:400}
+
+/* FOOTER */
+.footer{padding:15px 32px;background:rgba(8,13,12,.3);display:flex;align-items:center;gap:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);flex-wrap:wrap}
+.footer a{color:var(--muted);text-decoration:none}
+.footer a:hover{color:var(--green-glow)}
+.footer .sep{color:var(--dim)}
+.footer .foot-right{margin-left:auto;color:var(--dim)}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
@@ -231,117 +149,115 @@ h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text)
 
     <!-- LEFT -->
     <div class="col-left">
-      <div class="eyebrow">IN NEW TRIPOLI</div>
-      <span class="row-num">01</span>
+      <h1 class="hero-head">New Tripoli is a single city two hundred kilometres across, home to eight billion residents.</h1>
 
-      <h1 class="hero-head">TWO HUNDRED KILOMETRES ACROSS. EIGHT BILLION RESIDENTS. ONE CITY.</h1>
-
-      <span class="row-num">02</span>
       <div class="hero-body">
-        New Tripoli was built to outlast every city that came before it. Libraries, transit, parks — and a sim stack beneath the surface that runs at up to 50× real time.<br><br>
+        It was built to outlast every city that came before it. Libraries, transit, parks, and a sim stack beneath the surface that runs at up to 50× real time.<br><br>
         Every six months, the Universal Sabbath runs for twenty-four hours. Eight billion minds, one clock. Then New Tripoli resumes.
       </div>
 
-      <span class="row-num">03</span>
-      <a class="cta" href="/ch-sims/">EXPLORE THE SIM CATALOGUE &nbsp;→</a>
-
       <div class="status-panel">
-        <div class="panel-head">// SYSTEM STATUS</div>
-        <div class="status-row"><span class="key">DILATION FIELD:</span><span class="val nominal">NOMINAL</span></div>
-        <div class="status-row"><span class="key">SABBATH CLOCK:</span><span class="val">6D 14:22:37</span></div>
-        <div class="status-row"><span class="key">DATA FEED:</span><span class="val live">LIVE</span></div>
-        <div class="status-row"><span class="key">ENCLAVE STATUS:</span><span class="val stable">STABLE</span></div>
+        <div class="panel-head">// PROVENANCE</div>
+        <div class="status-row"><span class="key">CANON</span><span class="val">v2026.05.21</span></div>
+        <div class="status-row"><span class="key">INSTRUMENTS</span><span class="val nominal">21 ONLINE</span></div>
+        <div class="status-row"><span class="key">EXEC HASH</span><span class="val mono" id="pv-hash">computing…</span></div>
+        <div class="status-row"><span class="key">ENCLAVE TIME</span><span class="val" id="pv-time">—</span></div>
+        <a class="pv-anchor" href="https://ainumbers.co/chaingraph/ocg-industries.html" target="_blank" rel="noopener">ANCHORED · OPENCHAINGRAPH ↗</a>
       </div>
     </div>
 
-    <!-- CENTER -->
+    <!-- CENTER: New Tripoli Enclave image -->
     <div class="col-center">
       <div class="enclave-label">
         NEW TRIPOLI ENCLAVE
         <span>EST. 2231</span>
       </div>
-
-      <img
-        class="enclave-img"
-        src="images/dark new tripoli chatgpt.png"
-        alt="New Tripoli Enclave — isometric view"
-      >
-
+      <img class="enclave-img" src="images/dark new tripoli chatgpt.png" alt="New Tripoli Enclave — isometric view">
     </div>
 
-    <!-- RIGHT -->
+    <!-- RIGHT: 2 compact featured cards + small terminal beneath -->
     <div class="col-right">
 
-        <div class="panel-head">// KEY TRUTHS</div>
-        <div class="truth-item">
-          <div class="truth-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <div class="truth-text">EIGHT BILLION RESIDENTS.<br>EIGHT BILLION SIMRATES.<br>NO TWO CLOCKS THE SAME.</div>
+      <div>
+        <div class="feat-head">// FEATURED INSTRUMENTS</div>
+        <div class="featured">
+          <a class="tool-card" href="/ch-sims/sims/time-dilation.html">
+            <span class="tool-idx">01</span>
+            <span class="tool-body">
+              <span class="tool-name">TIME DILATION INSTRUMENT</span>
+              <span class="tool-desc">Subjective time vs. real time across every HSS tier. The numbers are not metaphors.</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </a>
+          <a class="tool-card" href="/ch-sims/sims/feasibility.html">
+            <span class="tool-idx">02</span>
+            <span class="tool-body">
+              <span class="tool-name">BRAIN-IN-A-VAT FEASIBILITY</span>
+              <span class="tool-desc">Sahara solar, power draw, substrate compute. How far are we from the split?</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </a>
         </div>
-        <div class="truth-item">
-          <div class="truth-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+
+      <div class="term-block">
+        <div class="terminal-window">
+          <div class="term-titlebar">
+            <span class="term-dot g"></span><span class="term-dot"></span><span class="term-dot"></span>
+            <span class="term-title">nt-console</span>
+            <a class="term-open" href="/terminal" target="_top">OPEN FULL ↗</a>
           </div>
-          <div class="truth-text">WHERE YOU LIVE DOESN'T SET YOUR SPEED.<br>WHO YOU LIVE NEAR MIGHT.</div>
+          <iframe class="term-frame" src="/terminal.html?embed=1" title="New Tripoli terminal" loading="lazy"></iframe>
         </div>
-        <div class="truth-item">
-          <div class="truth-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div class="truth-text">THE SABBATH<br>RESETS THE GAP.<br>FOR A MOMENT.</div>
-        </div>
-        <div class="truth-item">
-          <div class="truth-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8C.344 8 .344 16 5.44 16c5.606 0 7.644-8 12.738-8z"/></svg>
-          </div>
-          <div class="truth-text">PROGRESS IS<br>COMPOUNDED.<br>FOREVER.</div>
-        </div>
+        <div class="term-hints">TRY&nbsp; <b>help</b> &nbsp;·&nbsp; <b>list</b> &nbsp;·&nbsp; <b>scan</b></div>
+      </div>
 
     </div>
 
   </div><!-- /main -->
 
-  <div class="bottom">
-
-    <div class="b-panel">
-      <div class="b-label">// DIRECTIVE</div>
-      <div class="directive-text">EIGHT BILLION MINDS.<br>ONE ENCLAVE.<br>THE PACE IS NEGOTIABLE.</div>
-      <div class="directive-attr">— THE FOUNDERS' CHARTER</div>
-    </div>
-
-    <a class="b-panel" href="/terminal" style="text-decoration:none;display:block;cursor:pointer">
-      <div class="b-label">// TERMINAL</div>
-      <div class="terminal-body">
-        WELCOME, RESIDENT.<br>
-        SELECT A MODULE<br>TO BEGIN.<br>
-        &gt;<span class="terminal-cursor">_</span>
-      </div>
-    </a>
-
-    <div class="b-panel">
-      <div class="b-label">// RECENT ENTRIES</div>
-      <div class="entries-list">
-        <div class="entry-row"><span class="entry-date">[2231.10.12]</span><span class="entry-text">SABBATH OBSERVANCE COMPLETE</span></div>
-        <div class="entry-row"><span class="entry-date">[2231.10.05]</span><span class="entry-text">TIER ADJUSTMENT WINDOW CLOSED</span></div>
-        <div class="entry-row"><span class="entry-date">[2231.09.28]</span><span class="entry-text">COGNITIVE HUSBANDRY REPORT: Q3</span></div>
-        <div class="entry-row"><span class="entry-date">[2231.09.21]</span><span class="entry-text">NEW SIM: BIRTHDAY SACRIFICE CALCULATOR</span></div>
-      </div>
-    </div>
-
-    <div class="b-panel">
-      <div class="nt-brand">
-        <div>
-          <div class="nt-glyph">NT</div>
-          <div class="nt-name">NEW TRIPOLI</div>
-          <div class="nt-tagline">THE INFRASTRUCTURE<br>IS GIVEN.<br>THE SPEED IS OURS.</div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /bottom -->
+  <div class="footer">
+    <a href="/sitemap.html">SITEMAP</a>
+    <span class="sep">·</span>
+    <span>CODE MIT &nbsp; PROSE CC BY 4.0</span>
+    <span class="foot-right">NT://ENCLAVE · BUILD 2231</span>
+  </div><!-- /footer -->
 
 </div><!-- /page -->
 </div><!-- /wrap -->
+
+<script>
+// Provenance readout — genuine client-side execution hash + live enclave clock.
+// Mirrors the OpenChainGraph model: a deterministic SHA-256 over an ordered manifest.
+(function(){
+  const CANON_VERSION = '2026.05.21';
+  const INSTRUMENTS   = 21;
+  // Deterministic manifest -> reproducible exec hash (same inputs, same hash).
+  const manifest = ['newtripoli.xyz','canon-' + CANON_VERSION,'instruments-' + INSTRUMENTS].join('|');
+
+  const hashEl = document.getElementById('pv-hash');
+  if (window.crypto && crypto.subtle) {
+    crypto.subtle.digest('SHA-256', new TextEncoder().encode(manifest)).then(buf => {
+      const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+      hashEl.textContent = hex.slice(0,12);
+      hashEl.title = 'SHA-256(' + manifest + ') = ' + hex;
+    }).catch(() => { hashEl.textContent = 'unavailable'; });
+  } else {
+    hashEl.textContent = 'unavailable';
+  }
+
+  // Live enclave clock: in-world year offset (+206) + real local time.
+  const timeEl = document.getElementById('pv-time');
+  function tick(){
+    const n = new Date();
+    const yr = 2231 + (n.getFullYear() - 2025);
+    const p = x => String(x).padStart(2,'0');
+    timeEl.textContent = yr + '.' + p(n.getMonth()+1) + '.' + p(n.getDate())
+      + '  ' + p(n.getHours()) + ':' + p(n.getMinutes()) + ':' + p(n.getSeconds());
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
 </body>
 </html>

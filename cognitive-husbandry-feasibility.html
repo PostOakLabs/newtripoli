@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<!--
+  The Science in Cognitive Husbandry: Feasibility Audit (companion paper)
+  newtripoli.xyz/cognitive-husbandry-feasibility · Cognitive Husbandry series
+  Preprint draft. Listed in sitemap.html; not in the top nav.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no runtime network calls (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Science in Cognitive Husbandry: Feasibility Audit</title>
+<meta name="description" content="A non-fiction feasibility audit of the Cognitive Husbandry scenario. Companion paper to the New Tripoli series.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#a9c6ba;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;
+  --border:rgba(52,230,224,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--body);
+  font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;
+  -webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.06) 3px,rgba(0,0,0,0) 4px),
+    radial-gradient(ellipse at 50% 40%,transparent 65%,rgba(0,0,0,.4) 100%);
+}
+.wrap{position:relative;z-index:3;max-width:820px;margin:0 auto;padding:0 24px 120px}
+a{color:var(--green-glow);text-decoration:none;border-bottom:1px solid var(--border)}
+a:hover{opacity:.8}
+
+.topbar{
+  border-bottom:1px solid var(--border);margin-bottom:48px;
+  padding:16px 0;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.14em;color:var(--muted);
+  display:flex;align-items:center;gap:10px;
+}
+.topbar .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.topbar .tag{margin-left:auto;color:var(--dim)}
+
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;color:var(--text);line-height:1.2}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;letter-spacing:-.01em;margin-bottom:14px;text-shadow:0 0 40px rgba(52,230,224,.12)}
+h2{font-size:1.35rem;font-weight:600;margin:52px 0 16px;padding-top:22px;border-top:1px solid var(--border);color:var(--green-glow)}
+h3{font-size:1.05rem;font-weight:600;margin:32px 0 12px;color:var(--text)}
+.byline{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);letter-spacing:.04em;margin-bottom:6px}
+.subhead{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);letter-spacing:.03em;margin-bottom:40px;line-height:1.6}
+p{margin:0 0 18px}
+strong{color:var(--text);font-weight:600}
+em{font-style:italic;color:var(--body)}
+
+.keywords{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.02em;margin:0 0 8px}
+.abstract{
+  background:linear-gradient(180deg,rgba(12,19,17,.6),transparent);
+  border:1px solid var(--border);border-left:2px solid var(--green);
+  padding:22px 26px;margin:0 0 20px;font-size:15px;
+}
+.abstract .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);margin-bottom:12px}
+
+ul,ol{margin:0 0 18px;padding-left:22px}
+li{margin-bottom:9px}
+
+blockquote{
+  border-left:2px solid var(--rim);background:rgba(12,19,17,.45);
+  padding:14px 20px;margin:18px 0;font-size:14.5px;
+}
+blockquote p{margin:0 0 8px}
+blockquote p:last-child{margin:0}
+blockquote strong{color:var(--green-glow)}
+
+.tbl-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--border)}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-family:'JetBrains Mono',monospace}
+th,td{border:1px solid var(--edge);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:rgba(52,230,224,.06);color:var(--green-glow);font-weight:500;letter-spacing:.03em}
+td{color:var(--body)}
+.sym{color:var(--teal);text-align:center}
+
+code{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green-glow);background:rgba(52,230,224,.06);padding:1px 5px;border-radius:3px}
+
+figure{margin:26px 0}
+figure svg{width:100%;height:auto;display:block;background:rgba(8,13,12,.4);border:1px solid var(--border);border-radius:6px}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.55}
+figcaption b{color:var(--green-glow);font-weight:500}
+.fig-t{fill:var(--body);font-family:'JetBrains Mono',monospace;font-size:11px}
+.fig-k{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px}
+.fig-h{fill:var(--text);font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:600}
+.fig-ok{fill:var(--teal)}
+.fig-no{fill:#e05050}
+.fig-warn{fill:#ffc24d}
+.fig-axis{stroke:var(--rim);stroke-width:1}
+.fig-tick{stroke:var(--edge);stroke-width:1}
+
+.foot{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:.04em;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <span class="dot"></span>
+    NEW TRIPOLI <span style="color:var(--dim)">// COMPANION PAPER</span>
+    <span class="tag">PREPRINT · DRAFT v0.8</span>
+  </div>
+
+  <h1>The Science in Cognitive Husbandry: A Feasibility Audit of a Speculative Scenario</h1>
+  <div class="byline">Tim Swanson · Post Oak Labs · tim@postoaklabs.com</div>
+  <div class="subhead">Companion to the Cognitive Husbandry world bible and sibling to the Omega Centauri Society corpus (Papers A to D). Preprint, work in progress.</div>
+
+  <div class="abstract">
+    <div class="label">// ABSTRACT</div>
+    <p>Cognitive Husbandry is a speculative scenario in which an extraterrestrial intelligence delivers self-replicating probes across interstellar distance, converts the human population into brains on external life support, and runs those brains inside an accelerated simulation for the cognitive output they produce. The scenario is elaborate, and the question this companion addresses is how much of it is grounded science and how much is narrative necessity. This paper answers that question by isolating the ten central physical and quasi-physical premises, restating each one with explicit numbers, and grading it against a five-criterion falsifiability rubric borrowed from the Omega Centauri Society inward-review paper. The rubric is repurposed for a retrospective audit, so it asks whether a premise is barred by known physics or merely centuries from engineering rather than whether a telescope could test it now. The headline results are that the energy and siting premise is robustly permitted with roughly 500 times margin, that self-replication, brain-in-vat support, and neural interface bandwidth are unbounded by physics and therefore merely early, that passive survival of a relativistic impact is barred as written and is rescued only by a staged deceleration model, and that the long high-dilation arc runs past demonstrated neuronal lifespan and forces either rejuvenation or upload. Two premises, substrate conversion and ETI motivation, are not physics claims at all and are graded unfalsifiable. The contribution here is the graded ledger rather than any claim that the scenario is likely to occur.</p>
+  </div>
+  <div class="keywords"><strong style="color:var(--green)">Keywords:</strong> cognitive husbandry; brain-in-vat; whole-brain emulation; brain-computer interface; technosignatures; von Neumann probe; transcension hypothesis; feasibility audit; falsifiability</div>
+
+  <h2>1. Introduction and Scope</h2>
+  <p>The Cognitive Husbandry scenario runs as follows. An advanced extraterrestrial intelligence, located several thousand light years away and having turned its own development inward toward dense computation, dispatches many small self-replicating probes toward candidate systems. A surviving probe reaches Earth, replicates from local materials, and eventually absorbs the human population into a managed simulation, preserving a fraction as biological brains on external life support and digitizing the rest. The intelligence values the aggregate cognitive output of human civilization and farms it the way a beekeeper farms a hive. The premise is deliberately bold, and the purpose of this paper is to sort the parts that current physics permits from the parts that are storytelling.</p>
+  <p>The method is to enumerate the premises the scenario rests on, restate each one quantitatively, and grade it against a fixed rubric. The paper declines to dress philosophy as physics, so premises that turn on personal identity or on the goals of an alien mind are labelled as such rather than smuggled through as engineering. One handwave is named directly because it recurs across the genre and because the bible itself flags it: the conflation of how fast a datacenter can run a simulation with how fast a biological brain can consume that simulation without degradation. The two ceilings differ by many orders of magnitude, and that gap is decisive in Section 4.</p>
+  <p>This paper is a sibling to the Omega Centauri Society corpus, and it borrows that corpus's falsifiability scorecard, but the two differ in kind. The OCS papers are falsifiable now, in the sense that they name astronomical targets, request telescope time, and set kill dates. This paper is a retrospective feasibility audit of technology that is centuries or millennia beyond the present frontier, so the same rubric is turned to a different question, which is whether a premise is barred by known physics or is merely early. Section 6 sets out that repurposing in full.</p>
+  <p><strong>Disclosure.</strong> The author invented the Cognitive Husbandry scenario, so a self-audit carries an obvious hazard of special pleading. The mitigation is mechanical. Every premise runs through the same C1 to C5 scorecard, the criteria are fixed before grading, the scorecard is written to penalize the failure modes a partisan would be tempted to excuse, and the standing objections to each premise are catalogued at full strength rather than softened. The single premise that the audit finds barred as written, relativistic impact survival, is the author's own, and it is reported as barred before the rescue is offered. Readers should still apply their own discount.</p>
+  <p><strong>Section map.</strong> Section 2 restates the scenario's physical commitments with numbers. Section 3 enumerates the ten graded claims and triages them into physics, philosophy of mind, and xenopsychology. Section 4 is the quantitative feasibility analysis, one subsection per physics claim, each closing with an epistemic-status box and a falsifier. Section 5 treats the premises that are not physics. Section 6 defines the grading rubric and its repurposing. Section 7 is the verdict table. Section 8 discusses what would have to be true, and locates the one open scientific question. Section 9 gives the references.</p>
+
+  <h2>2. Background: The Scenario's Physical Commitments</h2>
+  <p>This section restates the commitments the scenario cannot do without, in the order a probe's mission would encounter them. Grading is deferred to Section 4, so the aim here is only to fix the numbers each later claim will be held to.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 176" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The scenario as a four-stage pipeline: delivery of a 127 kg osmium probe cruising at 0.1c and impacting near 1 km/s; von Neumann replication with in-situ closure; preservation of eight billion minds split ten percent biological vats and ninety percent digital; and an accelerated simulation powered by about 800 gigawatts from the Sahara.">
+      <text class="fig-h" x="20" y="24">THE SCENARIO AS A PIPELINE</text>
+      <g>
+        <rect x="18" y="52" width="150" height="78" rx="5" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+        <rect x="186" y="52" width="150" height="78" rx="5" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+        <rect x="354" y="52" width="150" height="78" rx="5" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+        <rect x="522" y="52" width="150" height="78" rx="5" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+      </g>
+      <g text-anchor="middle">
+        <text class="fig-h" x="93"  y="76" style="font-size:11px">DELIVERY</text>
+        <text class="fig-k" x="93"  y="97">127 kg osmium</text>
+        <text class="fig-k" x="93"  y="112">cruise 0.1c → ~1 km/s</text>
+        <text class="fig-h" x="261" y="76" style="font-size:11px">REPLICATION</text>
+        <text class="fig-k" x="261" y="97">von Neumann</text>
+        <text class="fig-k" x="261" y="112">in-situ closure</text>
+        <text class="fig-h" x="429" y="76" style="font-size:11px">PRESERVATION</text>
+        <text class="fig-k" x="429" y="97">8×10⁹ minds</text>
+        <text class="fig-k" x="429" y="112">10% vat · 90% digital</text>
+        <text class="fig-h" x="597" y="76" style="font-size:11px">SIMULATION</text>
+        <text class="fig-k" x="597" y="97">accelerated</text>
+        <text class="fig-k" x="597" y="112">~800 GW Saharan</text>
+      </g>
+      <g stroke="var(--green)" stroke-width="1.4" fill="var(--green)">
+        <path d="M168 91 L184 91"/><path d="M180 87 L186 91 L180 95 Z"/>
+        <path d="M336 91 L352 91"/><path d="M348 87 L354 91 L348 95 Z"/>
+        <path d="M504 91 L520 91"/><path d="M516 87 L522 91 L516 95 Z"/>
+      </g>
+      <text class="fig-k" x="350" y="158" text-anchor="middle" style="font-size:10px">§4.1 · §4.2 grade the left stages; §4.3 to §4.8 grade preservation and simulation</text>
+    </svg>
+    <figcaption><b>Figure 2.</b> The scenario as a four-stage pipeline, in the order a probe's mission encounters it. Each later section grades one stage against its stated numbers.</figcaption>
+  </figure>
+  <p><strong>Delivery.</strong> The intelligence launches dense probes on the scale of a bowling ball, of osmium-class density near 22.6 g/cm³, from a kilometre-scale mass driver, at a significant fraction of the speed of light, toward candidate bodies thousands of light years away. Most probes are lost in transit, and a survivor reaches a solid body and comes to rest intact. The original bible framed this as survival of a high-velocity impact, and Section 4.1 revises it to a staged deceleration ending near 1 km/s.</p>
+  <p><strong>Replication.</strong> A surviving probe uses local materials to build copies of itself on a von Neumann pattern, operating covertly at first. This assumes a high degree of manufacturing closure, meaning the probe can source or synthesize nearly all of its own components from a raw planetary environment.</p>
+  <p><strong>Preservation.</strong> After a coordinated takeover, the human population is converted to a preserved form. Roughly one tenth of the population is kept as biological brains, surgically isolated and maintained in refrigerator-scale life-support units, and the remainder is digitized onto compact compute units. Every preserved mind is interfaced to a shared simulation. The scenario assumes both indefinite biological maintenance of an isolated brain and a bidirectional neural interface of enormous bandwidth.</p>
+  <p><strong>Acceleration.</strong> The simulation can run faster than real time, so a preserved mind experiences more subjective life per unit of wall-clock time. The scenario's later arcs push this multiplier to extreme values, which makes the sustainable acceleration ceiling a load-bearing number rather than a flourish.</p>
+  <p><strong>Power and siting.</strong> The preserved population is concentrated and powered by a large solar array in the Sahara, chosen for irradiance, geological stability, and the latency advantage of physical proximity. The claim is that this energy budget suffices indefinitely and with margin.</p>
+  <p><strong>Conversion and selection.</strong> Minds that are not preserved as full brains are converted to computational substrate, and personality profiles derived from them are instantiated as non-player characters inside the simulations of those who are preserved. This raises a question of personal identity rather than a question of physics, and it is treated in Section 5.</p>
+  <p>The relevant bible sections are Core Premise, The ETI Delivery System, The Infrastructure of Preservation, Technical Feasibility, and The Selection Problem.</p>
+
+  <h2>3. The Speculative Claims, Enumerated</h2>
+  <p>Each claim is falsifiable in principle and carries an ID reused downstream.</p>
+  <ul>
+    <li><strong>C-D1, Delivery:</strong> a near-relativistic kinetic probe of osmium-class density that survives solid-body impact.</li>
+    <li><strong>C-D2, Replication:</strong> von Neumann self-replication from in-situ materials, operating covertly at first.</li>
+    <li><strong>C-D3, Vat viability:</strong> an isolated human brain kept conscious and interfaced indefinitely on external life support.</li>
+    <li><strong>C-D4, BCI bandwidth:</strong> bidirectional high-fidelity read and write access to large cortical fractions, where the write side is the harder problem.</li>
+    <li><strong>C-D5, Temporal acceleration:</strong> subjective time running faster than one times wall-clock, with the ceiling set by augmentation stage.</li>
+    <li><strong>C-D6, Energy and siting:</strong> a Saharan solar array that powers roughly 8 billion preserved minds, biological vats plus digital units, indefinitely with margin.</li>
+    <li><strong>C-D7, Substrate conversion:</strong> biological matter converted to computronium and personality profiles instantiated as NPCs, which raises the identity question.</li>
+    <li><strong>C-D8, ETI motivation:</strong> transcension-driven inward optimization plus outward sampling of cognitive diversity.</li>
+    <li><strong>C-D9, Latency:</strong> signal-propagation delay across the vat cluster that stays under the conscious-binding budget, covering the proximity rationale of Variant A and its breakdown across the continental clusters of Variant B.</li>
+    <li><strong>C-D10, Longevity and replacement:</strong> whether an individual biological brain, optimally supported, lasts long enough to matter across the multi-decade and dilated arc, or whether it must be replaced or uploaded.</li>
+  </ul>
+  <p><strong>Triage.</strong> The physics claims are D1, D2, D3, D4, D5, D6, D9, and D10. The philosophy-of-mind claim is D7. The xenopsychology claim, unfalsifiable in principle, is D8. Section 4 grades the physics claims and Section 5 treats D7 and D8.</p>
+
+  <h2>4. Feasibility Analysis</h2>
+  <p>All figures are order-of-magnitude and are flagged with a tilde, and the arithmetic is shown so any input can be revised. Citations are keyed to Section 9.</p>
+
+  <h3>4.1 Delivery physics (C-D1)</h3>
+  <p><strong>Setup.</strong> A bowling-ball osmium probe of radius roughly 0.11 m has a volume of about 5.6×10³ cm³, and at a density of 22.6 g/cm³ its mass is about 127 kg. Take near-relativistic to mean 0.1c, which is 3×10⁷ m/s, where the Lorentz factor is about 1.005 and classical kinetic energy is adequate.</p>
+  <p><strong>Energetics.</strong> The kinetic energy is one-half m v squared, which works out to 0.5 × 127 × (3×10⁷)² ≈ 5.7×10¹⁶ J, or about 14 megatons of TNT per probe. The launch requires at least this much energy delivered to the payload, and a kilometre-scale mass driver at even 10 percent wall-plug efficiency draws about 5.7×10¹⁷ J per shot. For a civilization that has made the transcension turn this is a trivial cost, and it is not where the premise fails.</p>
+  <p><strong>The weak point is survival at impact.</strong> Above roughly 5 to 10 km/s, a projectile's own kinetic energy exceeds its material vaporization enthalpy, and both impactor and target surface convert to an expanding plasma; the effect is routine for micrometeoroids on spacecraft. At 3×10⁷ m/s the specific kinetic energy is about 4.5×10¹⁴ J/kg, which is roughly eight orders of magnitude above osmium's vaporization enthalpy of about 10⁶ to 10⁷ J/kg. That margin is deterministic rather than probabilistic, so a relativistic solid-body impact is not a survival lottery at all. No impact angle, target geology, or launch multiplicity lets a monolithic slug survive, because every probe arriving at 0.1c detonates as a kinetic explosive. Anchors verified: Fletcher, Close, and Mathias (2015), <em>Physics of Plasmas</em> 22, 093504, report that the impact plasma is weakly ionized below about 14 km/s and fully ionized above about 20 km/s, independent of impactor mass. Osmium thermophysical data (WebElements; Girolami) give a melting point of 3306 K, a boiling point of 5285 K, and an enthalpy of vaporization of about 630 to 746 kJ/mol, which is roughly 3.3 to 3.9 MJ/kg of latent heat and about 4 to 5 MJ/kg total from ambient temperature, so the specific-kinetic-energy margin at 0.1c is about 10⁸.</p>
+  <figure>
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Specific kinetic energy at impact on a log scale. A 1 km/s impact at about 5 times 10 to the 5 joules per kilogram sits below the osmium vaporization enthalpy of about 4.5 times 10 to the 6 and survives; a 0.1c impact at about 4.5 times 10 to the 14 sits roughly eight orders of magnitude above it and vaporizes.">
+      <text class="fig-h" x="20" y="24">SPECIFIC KINETIC ENERGY AT IMPACT — J/kg, log scale</text>
+      <rect x="110" y="86" width="248" height="64" fill="rgba(35,255,136,0.06)"/>
+      <rect x="358" y="86" width="312" height="64" fill="rgba(224,80,80,0.07)"/>
+      <line class="fig-axis" x1="110" y1="150" x2="670" y2="150"/>
+      <g class="fig-k" text-anchor="middle">
+        <line class="fig-tick" x1="110" y1="150" x2="110" y2="156"/><text x="110" y="168">10⁰</text>
+        <line class="fig-tick" x1="222" y1="150" x2="222" y2="156"/><text x="222" y="168">10³</text>
+        <line class="fig-tick" x1="335" y1="150" x2="335" y2="156"/><text x="335" y="168">10⁶</text>
+        <line class="fig-tick" x1="447" y1="150" x2="447" y2="156"/><text x="447" y="168">10⁹</text>
+        <line class="fig-tick" x1="559" y1="150" x2="559" y2="156"/><text x="559" y="168">10¹²</text>
+        <line class="fig-tick" x1="670" y1="150" x2="670" y2="156"/><text x="670" y="168">10¹⁵</text>
+      </g>
+      <line x1="358" y1="84" x2="358" y2="150" stroke="#ffc24d" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text class="fig-warn fig-k" x="358" y="196" text-anchor="middle" style="font-size:10.5px">osmium vaporization enthalpy · ~4.5×10⁶ J/kg</text>
+      <line x1="507" y1="74" x2="507" y2="74"/>
+      <path d="M358 76 L358 70 L657 70 L657 76" fill="none" stroke="var(--rim)" stroke-width="1"/>
+      <text class="fig-t" x="507" y="64" text-anchor="middle" style="font-size:11px">≈ 8 orders of magnitude (10⁸×)</text>
+      <circle cx="323" cy="150" r="5" class="fig-ok"/>
+      <line x1="323" y1="150" x2="323" y2="120" stroke="var(--teal)" stroke-width="1"/>
+      <text class="fig-t" x="345" y="112" text-anchor="end">1 km/s impact · survives</text>
+      <text class="fig-k" x="345" y="126" text-anchor="end">~5×10⁵ J/kg</text>
+      <circle cx="657" cy="150" r="5" class="fig-no"/>
+      <line x1="657" y1="150" x2="657" y2="120" stroke="#e05050" stroke-width="1"/>
+      <text class="fig-t" x="662" y="112" text-anchor="end">0.1c impact · vaporizes</text>
+      <text class="fig-k" x="662" y="126" text-anchor="end">~4.5×10¹⁴ J/kg</text>
+    </svg>
+    <figcaption><b>Figure 1.</b> The delivery premise in one line. A slug arriving at 1 km/s carries less specific energy than it takes to vaporize osmium, so it survives and buries itself; the same slug at 0.1c carries about 10⁸ times the vaporization enthalpy and is destroyed deterministically. The staged-deceleration fix moves the surviving probe from the right marker to the left of the amber threshold.</figcaption>
+  </figure>
+
+  <p><strong>Resolving the story beat that some probes crashed and one survived.</strong> The lottery is physically coherent only at low impact speed, on the order of 1 km/s, which is ordnance scale and where a dense osmium-class slug with shock protection plausibly survives ground impact and buries itself. The survivors are the probes that decelerated successfully, so the beat becomes a deceleration lottery rather than an impact lottery, and canon impact speed is therefore about 1 km/s even though cruise speed stays near-relativistic. Deceleration has to be staged, and the staging is constrained by two facts that are easy to miss.</p>
+  <ul>
+    <li><strong>Gravity assists cannot shed relativistic velocity.</strong> A flyby changes heliocentric speed by at most about twice the body's orbital velocity, which is tens of km/s per pass; for Jupiter at about 13.1 km/s that ceiling is roughly 26 km/s, the textbook twice-orbital-velocity bound. Bleeding 0.1c this way would take on the order of a thousand perfect passes, so gravity assists can only finish a deceleration and cannot serve as the primary brake.</li>
+    <li><strong>Stealth forbids a bright primary brake.</strong> A magnetic or electromagnetic sail large enough to brake relativistically against the interstellar medium is an obvious technosignature, which is incompatible with the scenario's covert arrival.</li>
+  </ul>
+  <p>The staging that satisfies both the physics and the covertness requirement has two stages.</p>
+  <ol>
+    <li><strong>Primary braking, far out and early.</strong> The bulk of the velocity is shed thousands of AU out, decades to centuries before impact, on a trajectory whose signature is neither aimed at nor near Earth and predates any human observation. Covertness comes from distance and time rather than from a zero-signature mechanism, and the ETI's stated extreme patience does the real work here, since a slower and more patient cruise leaves less velocity to shed.</li>
+    <li><strong>Inner-system finish by a gravity-assist and gas-giant aerocapture cascade.</strong> The residual tens of km/s are bled off by threading close retrograde passes of the giant planets and grazing their upper atmospheres across many orbits, spiralling down to a low-energy trajectory and a terminal impact near 1 km/s. This inner phase is brief, dim, and geometry-dependent, which supplies the natural lottery, because arrival timing and planetary alignment decide which probes complete the cascade and which mistime it and then burn, escape, or crater at lethal speed.</li>
+  </ol>
+  <p>This re-grades D1 from barred to merely-early. Gas-giant aerocapture is an established mission-design concept from NASA aerocapture systems-analysis studies, although it has not yet been flown, so it is cited as a plausibility rather than a demonstrated capability.</p>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Launch energetics are Permitted. Passive survival of a relativistic impact is Barred, because the vaporization is deterministic at a roughly 10⁸ enthalpy margin. With staged deceleration, meaning a far-out primary brake plus an inner-system gravity-assist and aerocapture cascade down to about 1 km/s, the premise is Merely-early, and the story beat survives as a deceleration-success lottery.</p>
+    <p><strong>Falsifier:</strong> the premise is barred outright if no covert mechanism can shed a near-relativistic cruise down to gravity-assist-tractable speed, on the order of tens of km/s, within the mass, time, and stealth budget of an interstellar probe.</p>
+  </blockquote>
+
+  <h3>4.2 Self-replication (C-D2)</h3>
+  <p><strong>Claim.</strong> A von Neumann architecture, in which a probe mines in-situ materials and builds copies. The theoretical feasibility is not in dispute, since Freitas and Merkle catalogue the requirements and biology is an existence proof of molecular self-replication from ambient feedstock. The open question is the closure problem, meaning how much of the manufacturing supply chain the unit carries versus bootstraps locally. No human system has yet demonstrated full material closure, since RepRap self-replicates its structural parts but not its motors or chips. Anchors verified: Freitas and Merkle, <em>Kinematic Self-Replicating Machines</em> (Landes Bioscience, 2004), which gives the first quantitative closure analysis of a self-replicating interstellar probe, and von Neumann, <em>Theory of Self-Reproducing Automata</em>, edited by Burks (1966).</p>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Permitted and merely-early. No physical bound forbids it, and the gap is engineering closure rather than law.</p>
+    <p><strong>Falsifier:</strong> a proof that full manufacturing closure is impossible without a pre-existing industrial base, meaning a permanent bootstrap dependency, would bar autonomous single-probe replication.</p>
+  </blockquote>
+
+  <h3>4.3 Brain-in-vat substrate (C-D3)</h3>
+  <p><strong>Baseline decoupling.</strong> Removing body-maintenance overhead such as feeding, thermoregulation, and immune load is straightforward in principle. Sleep accounts for about 30 percent of life and cannot simply be skipped, because glymphatic clearance has to be substituted rather than deleted. Xie and colleagues (2013), in <em>Science</em>, showed that the interstitial space expands by about 60 percent during sleep and accelerates clearance of metabolites and amyloid-beta, with Nedergaard as senior author. The net on-time gain from decoupling alone, without acceleration, is about 40 to 50 percent (bible, Feasibility section), which is real but modest.</p>
+  <p><strong>Support load.</strong> The brain dissipates about 20 W, a figure consistent with the neural energy budget of Attwell and Laughlin (2001). A vat has to supply oxygenated perfusion, glucose, neurotransmitter precursors, thermal extraction, and glymphatic-equivalent clearance, all of which have been demonstrated piecemeal but never for indefinite conscious maintenance. Anchor verified: Vrselja and colleagues (2019), in <em>Nature</em>, the BrainEx study, used extracorporeal pulsatile perfusion to restore microcirculation, spontaneous synaptic activity, and cerebral metabolism in ex vivo pig brains up to four hours post-mortem. The study reported no organized or consciousness-associated electrocorticographic activity, which means it restored cellular function without awareness, and that boundary limits how far it supports the vat premise.</p>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Contested and merely-early. Each support function is individually grounded, while indefinite integrated conscious maintenance is undemonstrated and faces no known hard bound.</p>
+    <p><strong>Falsifier:</strong> a demonstration that some essential CNS-maintenance function, glymphatic clearance for example, is inseparable from whole-body physiology would bar the isolated-brain substrate.</p>
+  </blockquote>
+
+  <h3>4.4 BCI bandwidth: the write problem (C-D4)</h3>
+  <p><strong>Scale gap.</strong> The human brain has about 8.6×10¹⁰ neurons, while the best current implants sample about 10³ channels, since the Neuralink N1 carries 1,024 electrodes across 64 threads (verified) and the Synchron Stentrode carries fewer. The ratio is about 1 in 8.4×10⁷, which is like characterizing an 86-billion-instrument orchestra from about a thousand microphones.</p>
+  <p><strong>Read and write asymmetry.</strong> Recording is hard, and writing coherent high-fidelity sensory input to the cortex without inducing seizure, adaptation, or perceptual distortion is substantially harder and remains unsolved at scale, yet the simulation has to write continuously. As a reference bandwidth, the human optic nerve carries on the order of 10 Mbit/s (Koch and colleagues, 2006, in <em>Current Biology</em>, "How much the eye tells the brain," which measured about 0.875 Mbit/s across roughly 100,000 guinea-pig ganglion cells and scaled that to near 10 Mbit/s for the roughly one-million-cell human retina), and a full-sensory feed is higher. No known physical law forbids high-channel bidirectional interfaces, and the barrier is materials, heat, and biocompatibility rather than physics. Anchors verified: Neuralink N1 (1,024 channels across 64 threads) and Koch and colleagues (2006).</p>
+
+  <figure>
+    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale comparison of neuron count and implant channel count. Current best implants sample about ten to the three channels; the human brain has about 8.6 times ten to the ten neurons, roughly eight orders of magnitude more.">
+      <text class="fig-h" x="20" y="24">CHANNELS vs NEURONS — count, log scale</text>
+      <line class="fig-axis" x1="110" y1="130" x2="670" y2="130"/>
+      <g class="fig-k" text-anchor="middle">
+        <line class="fig-tick" x1="110" y1="130" x2="110" y2="136"/><text x="110" y="148">10⁰</text>
+        <line class="fig-tick" x1="212" y1="130" x2="212" y2="136"/><text x="212" y="148">10²</text>
+        <line class="fig-tick" x1="314" y1="130" x2="314" y2="136"/><text x="314" y="148">10⁴</text>
+        <line class="fig-tick" x1="416" y1="130" x2="416" y2="136"/><text x="416" y="148">10⁶</text>
+        <line class="fig-tick" x1="518" y1="130" x2="518" y2="136"/><text x="518" y="148">10⁸</text>
+        <line class="fig-tick" x1="620" y1="130" x2="620" y2="136"/><text x="620" y="148">10¹⁰</text>
+      </g>
+      <rect x="110" y="70" width="153" height="60" fill="rgba(255,194,77,0.06)"/>
+      <rect x="263" y="70" width="394" height="60" fill="rgba(52,230,224,0.06)"/>
+      <circle cx="263" cy="130" r="5" class="fig-warn"/>
+      <line x1="263" y1="130" x2="263" y2="100" stroke="#ffc24d" stroke-width="1"/>
+      <text class="fig-t" x="263" y="92" text-anchor="middle">Neuralink N1 · ~10³ channels</text>
+      <circle cx="657" cy="130" r="5" class="fig-ok"/>
+      <line x1="657" y1="130" x2="657" y2="100" stroke="var(--teal)" stroke-width="1"/>
+      <text class="fig-t" x="657" y="92" text-anchor="end">human brain · 8.6×10¹⁰ neurons</text>
+      <path d="M263 62 L263 56 L657 56 L657 62" fill="none" stroke="var(--rim)" stroke-width="1"/>
+      <text class="fig-t" x="460" y="48" text-anchor="middle" style="font-size:11px">~7 to 8 orders of magnitude of channel scaling</text>
+      <text class="fig-k" x="460" y="176" text-anchor="middle" style="font-size:10px">and the write side, not shown, is the harder half of the gap</text>
+    </svg>
+    <figcaption><b>Figure 3.</b> The interface gap. Recording from ~10³ electrodes against ~10¹¹ neurons is a shortfall of seven to eight orders of magnitude, and writing high-fidelity input back to the cortex is harder still. No physical law forbids closing it; the barrier is materials, heat, and biocompatibility.</figcaption>
+  </figure>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Merely-early, with the write side as the dominant unsolved sub-problem, requiring roughly seven to eight orders of magnitude of channel scaling.</p>
+    <p><strong>Falsifier:</strong> a proof that stable high-fidelity write-side stimulation to large cortical fractions is bounded, thermodynamically or biologically, below simulation-fidelity thresholds would bar the interface premise.</p>
+  </blockquote>
+
+  <h3>4.5 Temporal acceleration (C-D5)</h3>
+  <p>The ceiling scales with how much of the biological substrate is replaced. The layered bottlenecks (bible, Feasibility section) each carry a number.</p>
+  <ul>
+    <li><strong>Neural firing.</strong> Action potentials cap near 1,000 Hz, while sustained cortical firing runs at 10 to 100 Hz. Some headroom exists, but pushing it costs energy and heat.</li>
+    <li><strong>Synaptic delay.</strong> Each chemical synapse adds 0.5 to 5 ms, and a multi-relay cognitive chain accumulates a floor that cannot be crossed without replacing chemical synapses.</li>
+    <li><strong>Perceptual sampling (alpha).</strong> The unified conscious update appears to run near 10 Hz, in the alpha band of about 8 to 12 Hz, which a body of work reads as a discrete perceptual-sampling rhythm that gates what reaches awareness (VanRullen 2016; VanRullen and Koch 2003). This is arguably the hardest floor, and it is set by the sampling cadence rather than by raw neuron speed.</li>
+    <li><strong>Visual Nyquist limit.</strong> Critical flicker fusion for cones reaches about 60 Hz (Hecht and Shlaer 1936), with sensitivity to about 150 to 200 Hz under optimal conditions, and beyond that there is no perceptual gain.</li>
+    <li><strong>Thermal wall.</strong> Dissipation rises from 20 W at one times to about 40 W at two times and about 100 W at five times, all within roughly 1.3 kg of tissue, which is a hard dissipation problem.</li>
+    <li><strong>Neurotransmitter depletion.</strong> The synthesis and recycling rate caps any sustained overclock.</li>
+  </ul>
+  <p>The ceilings by augmentation stage, restated from the bible, run as follows: a pure biological vat reaches about 1.5 to 2 times; a sensory-interface-augmented vat about 2 to 4 times; a metabolically augmented vat about 3 to 6 times; a synaptically augmented vat about 10 to 50 times, which is speculative; and a hybrid or uploaded configuration is substrate-limited, with identity continuity contested.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Subjective-acceleration ceiling by augmentation stage on a log scale. Pure biological reaches about 1.5 to 2 times, sensory-augmented 2 to 4, metabolically augmented 3 to 6, synaptically augmented 10 to 50 which is speculative, and hybrid or upload is substrate-limited.">
+      <text class="fig-h" x="20" y="24">SUBJECTIVE-ACCELERATION CEILING BY STAGE — ×, log scale</text>
+      <g class="fig-tick">
+        <line x1="180" y1="44" x2="180" y2="190"/><line x1="252" y1="44" x2="252" y2="190"/>
+        <line x1="348" y1="44" x2="348" y2="190"/><line x1="420" y1="44" x2="420" y2="190"/>
+        <line x1="492" y1="44" x2="492" y2="190"/><line x1="588" y1="44" x2="588" y2="190"/>
+        <line x1="660" y1="44" x2="660" y2="190"/>
+      </g>
+      <rect x="222" y="52" width="30"  height="15" rx="2" fill="var(--green)"/>
+      <rect x="252" y="80" width="73"  height="15" rx="2" fill="var(--teal)"/>
+      <rect x="295" y="108" width="72" height="15" rx="2" fill="var(--teal)"/>
+      <rect x="420" y="136" width="168" height="15" rx="2" fill="#ffc24d"/>
+      <rect x="588" y="164" width="67" height="15" rx="2" fill="none" stroke="var(--teal)" stroke-dasharray="4 3"/>
+      <path d="M655 171 L668 171 M663 167 L668 171 L663 175" stroke="var(--teal)" stroke-width="1.2" fill="none"/>
+      <g class="fig-t" text-anchor="end">
+        <text x="172" y="64">pure biological</text>
+        <text x="172" y="92">sensory-augmented</text>
+        <text x="172" y="120">metabolic-augmented</text>
+        <text x="172" y="148">synaptic-augmented</text>
+        <text x="172" y="176">hybrid / upload</text>
+      </g>
+      <g class="fig-k">
+        <text x="258" y="64">×1.5–2</text>
+        <text x="331" y="92">×2–4</text>
+        <text x="373" y="120">×3–6</text>
+        <text x="594" y="148">×10–50 · speculative</text>
+        <text x="588" y="158" style="font-size:9.5px">substrate-limited</text>
+      </g>
+      <g class="fig-k" text-anchor="middle">
+        <text x="180" y="204">1×</text><text x="252" y="204">2×</text><text x="348" y="204">5×</text>
+        <text x="420" y="204">10×</text><text x="492" y="204">20×</text><text x="588" y="204">50×</text><text x="660" y="204">100×</text>
+      </g>
+      <text class="fig-k" x="20" y="226" style="font-size:10px">Hard floors: alpha sampling ~10 Hz · synaptic delay 0.5–5 ms · thermal wall 20→100 W. The jump past ×10 requires replacing synapses (a §5 identity problem).</text>
+    </svg>
+    <figcaption><b>Figure 4.</b> Acceleration is cheap in the biological regime and expensive past it. A pure vat buys roughly ×2; every higher tier trades away more of the original substrate, and the ×10-and-up range depends on synapse replacement, whose identity cost is not a physics question.</figcaption>
+  </figure>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> The pure-biological ceiling near 2 times is Permitted, since it is bounded and defensible. High multipliers at or above 10 times are Contested and merely-early, since they are gated on synapse replacement whose identity-continuity cost is a Section 5 philosophy problem rather than a physics one.</p>
+    <p><strong>Falsifier:</strong> if the roughly 10 Hz alpha sampling cadence is shown to be an irreducible floor for unified consciousness rather than a modifiable implementation artifact, subjective acceleration is capped near the pure-biological ceiling regardless of substrate speed.</p>
+  </blockquote>
+
+  <h3>4.6 Energy and siting (C-D6)</h3>
+  <p><strong>Load.</strong> The preserved population is about 8×10⁹ minds, which canon splits ten to ninety into roughly 8×10⁸ biological brains held in vats and roughly 7.2×10⁹ minds digitized onto compact compute units. A biological brain dissipates about 20 W, and that figure is used here as a per-unit envelope across all 8×10⁹ units, so at a 20 W baseline the total is 1.6×10¹¹ W, or 160 GW. Adding support overhead and acceleration, at about 100 W per unit at three times with life support, gives 8×10¹¹ W, or 800 GW.</p>
+  <p><strong>Digital-unit load.</strong> The ninety percent that run as software are harder to bound, because whole-brain emulation cost depends on the fidelity level. Sandberg and Bostrom (2008) span roughly 10¹⁸ to 10²⁵ operations per second per mind across their emulation levels, from spiking-network models up to full molecular detail. The ETI is assumed to compute near the thermodynamic floor rather than on present-day hardware, so per-operation cost is set by the Landauer bound, about 3×10⁻²¹ J at 300 K (Landauer 1961). At the low-fidelity end this is milliwatts per mind, far below the 20 W biological baseline, so the digital population is effectively free. At the high-fidelity end, near 10²⁵ operations per second, it approaches tens of kilowatts per mind, and 7.2×10⁹ such minds would draw a large fraction of the full Saharan array rather than 0.17 percent of it. The energy verdict therefore holds with room to spare for low and moderate emulation fidelity and tightens, without breaking, only in the limit where every digitized mind is emulated at full molecular detail.</p>
+  <p><strong>Supply.</strong> The Sahara covers about 9.2×10⁶ km². Average 24-hour, weather-derated surface irradiance is about 250 W/m², and at about 20 percent end-to-end system efficiency that delivers about 50 W/m². The area needed is 8×10¹¹ divided by 50, which is 1.6×10¹⁰ m², or 16,000 km², about 0.17 percent of the Sahara. The budget closes with roughly 500 times margin even before any increase in panel area.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Per-mind digital power against emulation cost at the Landauer floor, log-log. A low-fidelity mind at ten to the eighteen operations per second costs about 3 milliwatts, far below the 20 watt biological baseline; a full-molecular mind at ten to the twenty-five costs about 30 kilowatts. Break-even with biology is near ten to the 21.8 operations per second.">
+      <text class="fig-h" x="20" y="24">PER-MIND DIGITAL POWER AT THE LANDAUER FLOOR — log-log</text>
+      <rect x="130" y="40" width="289" height="210" fill="rgba(35,255,136,0.05)"/>
+      <rect x="419" y="40" width="241" height="210" fill="rgba(255,194,77,0.06)"/>
+      <line class="fig-axis" x1="130" y1="40" x2="130" y2="250"/>
+      <line class="fig-axis" x1="130" y1="250" x2="660" y2="250"/>
+      <g class="fig-k" text-anchor="middle">
+        <text x="130" y="266">10¹⁸</text><text x="281" y="266">10²⁰</text><text x="433" y="266">10²²</text><text x="584" y="266">10²⁴</text>
+      </g>
+      <g class="fig-k" text-anchor="end">
+        <text x="126" y="253">10⁻³</text><text x="126" y="174">10⁰</text><text x="126" y="95">10³</text>
+      </g>
+      <line x1="130" y1="137" x2="660" y2="137" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="5 3"/>
+      <text class="fig-t" x="655" y="131" text-anchor="end">20 W biological baseline</text>
+      <line x1="130" y1="237" x2="660" y2="54" stroke="var(--teal)" stroke-width="2"/>
+      <circle cx="130" cy="237" r="4" class="fig-ok"/>
+      <text class="fig-t" x="150" y="228">10¹⁸ ops/s → ~3 mW</text>
+      <circle cx="660" cy="54" r="4" class="fig-warn"/>
+      <text class="fig-t" x="655" y="72" text-anchor="end">10²⁵ ops/s → ~30 kW</text>
+      <circle cx="419" cy="137" r="4" fill="var(--text)"/>
+      <text class="fig-k" x="419" y="123" text-anchor="middle">break-even ≈10²¹·⁸ ops/s</text>
+      <text class="fig-ok fig-k" x="270" y="58" text-anchor="middle">digital cheaper than biology</text>
+      <text class="fig-warn fig-k" x="545" y="58" text-anchor="middle">digital costlier</text>
+      <text class="fig-k" x="395" y="284" text-anchor="middle" style="font-size:10px">emulation cost — operations per second per mind (Sandberg &amp; Bostrom 2008 range)</text>
+    </svg>
+    <figcaption><b>Figure 5.</b> The 90 percent digital population priced at the Landauer bound (3×10⁻²¹ J/op, 300 K). Below about 10²¹·⁸ ops/s a simulated mind costs less than the 20 W a biological brain draws, so low- and moderate-fidelity emulation is effectively free; only full-molecular emulation near 10²⁵ ops/s (~30 kW/mind) tightens the Saharan budget. The array itself needs just 16,000 km², about 0.17 percent of the Sahara.</figcaption>
+  </figure>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Permitted. The energy and siting claim is the most robust in the scenario, and the bible's phrase "with margin" is correct by about two to three orders of magnitude.</p>
+    <p><strong>Falsifier:</strong> only a drastic revision of per-unit power, on the order of 10⁴ W per unit at extreme acceleration, combined with low array efficiency, could break the Saharan budget, and nominal parameters do not approach that.</p>
+  </blockquote>
+
+  <h3>4.7 Latency (C-D9)</h3>
+  <p><strong>Budget.</strong> The alpha-band sampling cadence of about 10 Hz gives about 100 ms per unified frame, and signals travel at c, which is 3×10⁸ m/s.</p>
+  <p><strong>Variant A, centralized.</strong> A cluster spanning about 100 km has a one-way light-time of about 0.33 ms, which is about 0.3 percent of the frame budget. Physical proximity satisfies the constraint easily, so the bible's latency-minimization rationale is quantitatively sound.</p>
+  <p><strong>Variant B, continental clusters.</strong> A Sahara-to-Gobi span of about 10,000 km gives a one-way delay of about 33 ms, which is about a third of a 100 ms frame before any switching or compute jitter. A shared real-time simulation across continents is therefore marginal to unworkable, and independent per-cluster simulations avoid the problem but then diverge, which is a narrative feature. This is consistent with the bible's stated Variant B tension.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 156" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One-way signal latency against the roughly 100 millisecond conscious frame budget. A centralized 100 km cluster adds 0.33 milliseconds, about 0.3 percent of the budget; a continental Sahara-to-Gobi span adds 33 milliseconds, about a third of the budget, before any switching or compute jitter.">
+      <text class="fig-h" x="20" y="24">ONE-WAY LATENCY vs ~100 ms FRAME BUDGET</text>
+      <text class="fig-t" x="650" y="44" text-anchor="end">frame budget ~100 ms (alpha ~10 Hz)</text>
+      <rect x="130" y="52" width="520" height="34" rx="3" fill="rgba(52,230,224,0.06)" stroke="var(--rim)"/>
+      <rect x="130" y="52" width="172" height="34" fill="rgba(35,255,136,0.22)"/>
+      <rect x="130" y="52" width="3" height="34" fill="var(--green)"/>
+      <text class="fig-t" x="310" y="44">Variant B · Sahara↔Gobi 10,000 km · 33 ms · ~⅓ of budget</text>
+      <g class="fig-k" text-anchor="middle">
+        <line class="fig-tick" x1="130" y1="86" x2="130" y2="92"/><text x="130" y="104">0</text>
+        <line class="fig-tick" x1="260" y1="86" x2="260" y2="92"/><text x="260" y="104">25</text>
+        <line class="fig-tick" x1="390" y1="86" x2="390" y2="92"/><text x="390" y="104">50</text>
+        <line class="fig-tick" x1="520" y1="86" x2="520" y2="92"/><text x="520" y="104">75</text>
+        <line class="fig-tick" x1="650" y1="86" x2="650" y2="92"/><text x="650" y="104">100 ms</text>
+      </g>
+      <text class="fig-ok fig-k" x="130" y="128">Variant A · 100 km cluster · 0.33 ms · 0.3% of budget — the green sliver at the far left</text>
+      <text class="fig-k" x="130" y="144" style="font-size:10px">Variant B leaves under two-thirds of a frame for switching and compute jitter, so a shared real-time world is marginal.</text>
+    </svg>
+    <figcaption><b>Figure 6.</b> Physical proximity is not a flourish. A co-located cluster spends 0.3 percent of a conscious frame on light-travel; a continental split spends a third of it before any other delay, which is why a shared real-time world favours one site over Variant B's scattered clusters.</figcaption>
+  </figure>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Permitted for Variant A and Contested for a networked real-time Variant B, since the physics favours independent clusters.</p>
+    <p><strong>Falsifier:</strong> if the inter-unit latency required for coherent shared experience is shown to fall below the intra-cluster propagation delay at any survivable packing density, even centralized latency is barred, and the nominal numbers do not approach that.</p>
+  </blockquote>
+
+  <h3>4.8 Longevity and replacement (C-D10)</h3>
+  <p><strong>Problem.</strong> Cortical neurons are largely post-mitotic and they age. Even under perfect metabolic support, senescence, protein aggregation, and DNA damage accumulate. The maximum observed human lifespan is about 122 years, with statistical evidence for a species limit near 115 years (Dong, Milholland, and Vijg 2016, a claim that remains debated); there is no evidence that a perfused isolated brain exceeds this, and there is some reason to expect a shorter span in the absence of whole-body regulatory signaling.</p>
+  <p><strong>Arc stress.</strong> The New Tripoli arc spans 20 wall-clock years but pushes subjective dilation to extreme multipliers, up to about 10⁹ times in the late series. At even three times subjective, 122 wall-clock years correspond to about 366 subjective years, which is far past any demonstrated neuronal lifespan. The multi-decade and high-dilation story therefore requires either biological rejuvenation of post-mitotic tissue or migration to a non-biological substrate through upload, and the upload path reopens the D7 identity problem.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Subjective years accrued per wall-clock year, by series, on a log scale, against the roughly 122-year neuronal-lifespan ceiling. New Tripoli at 50 times and New Ganymede at 100 times stay under the ceiling; New Pluto at fifty thousand, New Centauri at a million, and New Andromeda at a billion times run far past it within a single wall-clock year.">
+      <text class="fig-h" x="20" y="24">SUBJECTIVE YEARS PER WALL-CLOCK YEAR, BY SERIES — log scale</text>
+      <rect x="266" y="40" width="384" height="153" fill="rgba(224,80,80,0.06)"/>
+      <line x1="266" y1="40" x2="266" y2="193" stroke="#ffc24d" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text class="fig-warn fig-k" x="272" y="52">~122-yr neuronal-lifespan ceiling</text>
+      <rect x="150" y="48" width="94"  height="15" rx="2" fill="var(--teal)"/>
+      <rect x="150" y="78" width="111" height="15" rx="2" fill="var(--teal)"/>
+      <rect x="150" y="108" width="261" height="15" rx="2" fill="#e05050"/>
+      <rect x="150" y="138" width="333" height="15" rx="2" fill="#e05050"/>
+      <rect x="150" y="168" width="500" height="15" rx="2" fill="#e05050"/>
+      <g class="fig-t" text-anchor="end">
+        <text x="144" y="60">New Tripoli 50×</text>
+        <text x="144" y="90">New Ganymede 100×</text>
+        <text x="144" y="120">New Pluto 5×10⁴×</text>
+        <text x="144" y="150">New Centauri 10⁶×</text>
+        <text x="144" y="180">New Andromeda 10⁹×</text>
+      </g>
+      <line class="fig-axis" x1="150" y1="193" x2="650" y2="193"/>
+      <g class="fig-k" text-anchor="middle">
+        <line class="fig-tick" x1="150" y1="193" x2="150" y2="199"/><text x="150" y="211">10⁰</text>
+        <line class="fig-tick" x1="261" y1="193" x2="261" y2="199"/><text x="261" y="211">10²</text>
+        <line class="fig-tick" x1="372" y1="193" x2="372" y2="199"/><text x="372" y="211">10⁴</text>
+        <line class="fig-tick" x1="483" y1="193" x2="483" y2="199"/><text x="483" y="211">10⁶</text>
+        <line class="fig-tick" x1="594" y1="193" x2="594" y2="199"/><text x="594" y="211">10⁸</text>
+      </g>
+      <text class="fig-k" x="150" y="234" style="font-size:10px">Above ~122× dilation, a single wall-clock year accrues more subjective life than any brain is known to sustain, so every series past New Ganymede forces rejuvenation or upload.</text>
+    </svg>
+    <figcaption><b>Figure 7.</b> The long arc outruns the tissue. Only the two slowest series keep a year of wall-clock time inside a single demonstrated neuronal lifespan; from New Pluto onward the biological substrate is exhausted almost immediately, which is what forces the upload branch and its identity problem back into the story.</figcaption>
+  </figure>
+  <blockquote>
+    <p><strong>Epistemic status:</strong> Contested to Barred for indefinite biological continuity, since the long arc is rescuable only through rejuvenation or upload, both unproven, and the upload path is philosophically loaded.</p>
+    <p><strong>Falsifier:</strong> a demonstrated hard ceiling on post-mitotic neuronal lifespan, independent of somatic aging, would bar indefinite biological preservation and force the upload branch.</p>
+  </blockquote>
+
+  <h2>5. What Is Not Science: Narrative Necessities</h2>
+  <p>Two of the scenario's premises look like factual claims but cannot be graded as physics, and honesty requires saying so rather than assigning them a spurious score. This section is the firewall between what the audit can adjudicate and what it cannot.</p>
+  <p><strong>C-D7, substrate conversion and identity.</strong> The mechanical half of this premise, that a personality can be profiled and that biological matter can be reorganized into computational substrate, is an engineering claim and inherits the same merely-early status as the rest of the hardware. The decisive half is not mechanical. It is the claim that a sufficiently detailed personality profile, instantiated as a character in someone else's simulation, constitutes a meaningful continuation of the person it was copied from. This is the Ship of Theseus applied to personhood, and it turns on what one takes identity to consist in. No measurement decides it, because two observers who agree on every physical fact about the profile can still disagree on whether the person survived. The premise is therefore unfalsifiable in principle. The same holds for the consent question, which is an ethical judgment rather than a physical one.</p>
+  <p><strong>C-D8, ETI motivation.</strong> The scenario rests on a specific account of why an advanced intelligence behaves as it does, namely that it has turned inward toward dense computation, in the manner of the transcension hypothesis, yet still reaches outward to sample the cognitive diversity of an alien biosphere. This is a plausible and internally consistent story, and it is the same motivational hinge that the Omega Centauri Society papers examine at astronomical scale. It is not, however, a claim that observation of the scenario itself could confirm or refute, because the goals of a single alien mind are not recoverable from its actions in any unique way. A given action is consistent with many goal structures. The premise is unfalsifiable as stated, which is not a criticism of the fiction but a statement of its category.</p>
+  <p><strong>Precedents.</strong> The questions in this section are old ones in both fiction and philosophy, and the scenario inherits them rather than inventing them. Galouye's <em>Simulacron-3</em> (1964) already placed conscious inhabitants inside a simulation who cannot tell they are simulated, which is the C-D7 NPC problem stated in narrative form. Egan's "Learning to Be Me" (1990) and <em>Permutation City</em> (1994) run the gradual-replacement cut directly, asking at what point a copied or re-substrated mind stops being the original, and Watts's <em>Blindsight</em> (2006) presses the harder question of whether the cognitive output the ETI values requires consciousness at all. On the philosophical side, Chalmers (2005) argues that a simulation is better read as metaphysics than as deception, and Bostrom (2003b) turns the same setup into a probabilistic argument about our own situation. None of these resolves the identity or motivation questions, which is the point: they are the shared and unfalsifiable ground the fiction stands on.</p>
+  <p>The point of drawing this line is not to diminish these premises. They are where the scenario does its philosophical work, and a story is entitled to build on foundations that no experiment can test. The audit's only obligation is to refuse to launder them as settled science. See the bible's Selection Problem section for C-D7 and its sections on ETI motivation and the transcension hypothesis for C-D8.</p>
+
+  <h2>6. Grading Rubric</h2>
+  <p>Each premise is graded against five criteria, fixed before grading.</p>
+  <ul>
+    <li><strong>C1:</strong> it names a target or mechanism that evidence can interrogate.</li>
+    <li><strong>C2:</strong> it states quantitative thresholds such as bandwidth, power, temperature, or velocity.</li>
+    <li><strong>C3:</strong> at least one stated check is decidable with existing physics or experiment within about 15 years.</li>
+    <li><strong>C4:</strong> it specifies in advance what result would refute feasibility, meaning a kill condition.</li>
+    <li><strong>C5:</strong> it has survived an executed test or experiment that could have refuted it.</li>
+  </ul>
+  <p>The symbols are ● for met, ◐ for partially met, and ○ for not met. The scorecard grades the testability of the feasibility claim rather than the probability that the scenario occurs.</p>
+  <blockquote>
+    <p><strong>Repurposing note.</strong> OCS Papers A to D apply C1 to C5 to falsifiable-now astronomy. Here the rubric is turned on far-future engineering premises, so C5 asks whether a bench experiment or an established physical bound already speaks to the claim rather than whether a telescope has looked. A premise can score high on C1 to C4, meaning it is well-posed, quantified, and bounded, while remaining centuries from construction, which is exactly the merely-early versus physically-barred distinction this paper exists to draw.</p>
+  </blockquote>
+
+  <h2>7. Verdict Table</h2>
+  <p>Grades follow directly from the Section 4 and Section 5 reasoning. Columns mirror the OCS scorecard table. The C1 to C5 symbols are ● for met, ◐ for partial, and ○ for none. The verdict vocabulary is Permitted (physics allows it, though it may be far off), Merely-early (no bound, only engineering distance), Contested (undemonstrated, with no hard bound either way), Barred (as stated it conflicts with known physics), and Unfalsifiable (not a physics claim).</p>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>Claim</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th><th>Verdict</th><th>Key anchor</th><th>Gap to close</th></tr></thead>
+    <tbody>
+      <tr><td>C-D1 Delivery</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td>Barred for passive relativistic impact, Merely-early with staged deceleration</td><td>Hypervelocity impact-plasma literature; osmium enthalpy; gravity-assist velocity bound</td><td>Covert far-out primary brake plus inner-system assist and aerocapture cascade to about 1 km/s (in canon)</td></tr>
+      <tr><td>C-D2 Replication</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">○</td><td>Merely-early</td><td>Freitas and Merkle; von Neumann 1966; RepRap</td><td>Full manufacturing closure</td></tr>
+      <tr><td>C-D3 Vat substrate</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">◐</td><td>Contested to merely-early</td><td>Xie 2013; Vrselja 2019 BrainEx</td><td>Indefinite integrated conscious maintenance</td></tr>
+      <tr><td>C-D4 BCI write</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">◐</td><td>Merely-early, write-side dominant</td><td>Neuralink N1; Synchron; optic-nerve rate</td><td>Channel scaling of about 10⁷ to 10⁸, plus stable write</td></tr>
+      <tr><td>C-D5 Acceleration</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td>Permitted at or below 2 times, contested at or above 10 times</td><td>Alpha sampling ~10 Hz; thermal 20 W</td><td>Whether the alpha sampling cadence is an irreducible floor</td></tr>
+      <tr><td>C-D6 Energy and siting</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td>Permitted, robust, about 500 times margin</td><td>Saharan irradiance; 20 W per brain</td><td>None material</td></tr>
+      <tr><td>C-D7 Computronium and identity</td><td class="sym">◐</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td>Unfalsifiable, philosophy</td><td>Ship of Theseus; substrate independence</td><td>Not a physics claim; see Section 5</td></tr>
+      <tr><td>C-D8 ETI motivation</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td>Unfalsifiable, xenopsychology</td><td>Transcension (Smart, Vidal)</td><td>Not a physics claim; see Section 5</td></tr>
+      <tr><td>C-D9 Latency</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td>Permitted for Variant A, contested for networked Variant B</td><td>c; sampling-frame budget of about 100 ms</td><td>Shared-simulation jitter across continents</td></tr>
+      <tr><td>C-D10 Longevity</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">○</td><td>Contested to barred for indefinite biology</td><td>Post-mitotic neuron aging; about 122-year maximum</td><td>Rejuvenation or upload, which points back to D7</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>8. Discussion</h2>
+  <p>The audit sorts the scenario into three tiers. One premise is barred as originally written, one cluster is robustly permitted, a broad middle is merely early, and two premises sit outside physics entirely.</p>
+  <p>Only one premise fails on physics, and it fails in a specific and repairable way. Passive survival of a relativistic impact is barred, because the specific kinetic energy at 0.1c exceeds osmium's vaporization enthalpy by about eight orders of magnitude, which vaporizes the probe deterministically. The repair is a staged deceleration that ends near 1 km/s, and it costs the scenario nothing narratively, since the surviving-probe lottery moves intact from the moment of impact to the success of the deceleration cascade. This is the audit's clearest single result, and it has been fed back into canon.</p>
+  <p>At the opposite end, the energy and siting premise is the most secure part of the scenario. The Saharan budget closes with roughly 500 times margin, and no plausible revision of per-unit power breaks it. The latency argument for physical proximity is also sound, and it argues against the distributed Variant B for any design that needs a shared real-time world.</p>
+  <p>The broad middle is where most of the scenario actually sits. Self-replication, indefinite brain support, neural interface bandwidth, and modest temporal acceleration are all unbounded by any known physical law and are separated from us only by engineering distance, though in the case of the write-side interface that distance spans seven to eight orders of magnitude of channel scaling. Two constraints in this middle tier are worth flagging as genuine design pressure rather than mere difficulty. The alpha-band sampling cadence near 10 Hz may be a hard floor on subjective acceleration, and post-mitotic neuronal aging almost certainly caps indefinite biological preservation, which forces the late high-dilation arcs onto either rejuvenation or upload.</p>
+  <p>The one open scientific question is the same hinge the Omega Centauri Society papers turn on, which is the direction of mature intelligence. Cognitive Husbandry and the OCS corpus share a physics, namely the Landauer bound and the thermodynamics of computation, and they share the transcension premise that advanced civilizations move inward toward denser computation rather than outward across space. They differ in where the bottleneck sits. For OCS the limiting resource is an astrophysical entropy sink, a cold place to dump the waste heat of computation, and the papers propose to look for its traces at Omega Centauri. For Cognitive Husbandry the limiting resource is the bandwidth and endurance of a biological receiver, which is why this paper's hardest numbers are about synapses and neurons rather than black holes. The two projects are the same question asked at opposite ends of the same physics.</p>
+  <p>The firewall restated: a scenario can be rigorous in its physics and still rest on premises that no experiment can test, and Cognitive Husbandry does exactly that. Its hardware is mostly permitted or merely early, its one barred step is repairable, and its deepest commitments, about identity and about the goals of an alien mind, are unfalsifiable by construction. That placement is not a defect. A story is entitled to build on foundations no experiment can test, and the value of an audit like this one is to mark the boundary so that the science and the storytelling are not mistaken for one another.</p>
+
+  <h2>9. References</h2>
+  <p style="font-size:13px;color:var(--muted)">A check mark means the entry was confirmed on this pass. Entries marked shared are present in the OCS references.bib and should reuse the same key.</p>
+  <h3>Brain, vat, and BCI</h3>
+  <ul>
+    <li>✓ Xie, L., Kang, H., Xu, Q., and colleagues, with Nedergaard, M. (2013). Sleep drives metabolite clearance from the adult brain. <em>Science</em> 342(6156), 373 to 377. doi:10.1126/science.1241224.</li>
+    <li>✓ Vrselja, Z., Daniele, S.G., and colleagues, with Sestan, N. (2019). Restoration of brain circulation and cellular functions hours post-mortem. <em>Nature</em> 568, 336 to 343. doi:10.1038/s41586-019-1099-1.</li>
+    <li>✓ Koch, K., McLean, J., and colleagues, with Sterling, P. (2006). How much the eye tells the brain. <em>Current Biology</em> 16(14), 1428 to 1434. doi:10.1016/j.cub.2006.05.056. Guinea-pig retinal rate about 0.875 Mbit/s, scaled to about 10 Mbit/s for the human eye.</li>
+    <li>✓ Neuralink (2024 onward). N1 implant, 1,024 electrodes across 64 threads, PRIME study.</li>
+    <li>Synchron Stentrode, an endovascular BCI with fewer channels and lower surgical risk.</li>
+    <li>✓ Sandberg, A. and Bostrom, N. (2008). Whole Brain Emulation: A Roadmap. Future of Humanity Institute, Oxford, Technical Report 2008-3. Emulation compute spans roughly 10¹⁸ to 10²⁵ operations per second per mind by fidelity level.</li>
+    <li>✓ VanRullen, R. (2016). Perceptual cycles. <em>Trends in Cognitive Sciences</em> 20(10), 723 to 735. doi:10.1016/j.tics.2016.07.006. And VanRullen, R. and Koch, C. (2003). Is perception discrete or continuous? <em>Trends in Cognitive Sciences</em> 7(5), 207 to 213. Alpha-band, about 10 Hz, discrete perceptual sampling.</li>
+    <li>✓ Attwell, D. and Laughlin, S.B. (2001). An energy budget for signaling in the grey matter of the brain. <em>Journal of Cerebral Blood Flow and Metabolism</em> 21(10), 1133 to 1145. doi:10.1097/00004647-200110000-00001. Neural energy budget underpinning the ~20 W brain figure.</li>
+    <li>✓ Hecht, S. and Shlaer, S. (1936). Intermittent stimulation by light. <em>Journal of General Physiology</em> 19(6), 965 to 977. doi:10.1085/jgp.19.6.965. Critical flicker fusion up to about 60 Hz for cones.</li>
+    <li>✓ Dong, X., Milholland, B., and Vijg, J. (2016). Evidence for a limit to human lifespan. <em>Nature</em> 538, 257 to 259. doi:10.1038/nature19793. Statistical species limit near 115 years; subsequently contested.</li>
+    <li>Nozick, R. (1974). <em>Anarchy, State, and Utopia</em>, pages 42 to 45.</li>
+    <li>Putnam, H. (1981). <em>Reason, Truth and History</em>.</li>
+    <li>Kurzweil, R. (2004). Dialogue on Reincarnation. The Wallerstein Brain.</li>
+  </ul>
+  <h3>Delivery and replication</h3>
+  <ul>
+    <li>✓ Freitas, R.A. and Merkle, R.C. (2004). <em>Kinematic Self-Replicating Machines</em>. Landes Bioscience, Georgetown, TX. ISBN 978-1-57059-690-2.</li>
+    <li>von Neumann, J. (1966). <em>Theory of Self-Reproducing Automata</em>, edited by A. Burks. University of Illinois Press.</li>
+    <li>✓ Fletcher, A., Close, S., and Mathias, D. (2015). Simulating plasma production from hypervelocity impacts. <em>Physics of Plasmas</em> 22(9), 093504. doi:10.1063/1.4930281.</li>
+    <li>✓ Osmium thermophysical data, from WebElements thermochemistry and the Girolami entry in the <em>Macmillan Encyclopedia of Chemistry</em>.</li>
+    <li>✓ Gravity-assist velocity bound of about twice a planet's orbital velocity, a standard mission-design result. Gas-giant aerocapture from NASA aerocapture systems-analysis studies, for example the Neptune Aerocapture Systems Analysis (NASA NTRS 20040111217, 2004) and the Titan aerocapture systems analysis (2006), a concept that is well studied but unflown.</li>
+  </ul>
+  <h3>Thermodynamics and motivation (shared with the OCS references.bib)</h3>
+  <ul>
+    <li>Landauer, R. (1961). Irreversibility and heat generation in the computing process. <em>IBM Journal of Research and Development</em> 5, 183 to 191. <code>[Landauer1961]</code></li>
+    <li>Smart, J.M. (2012). The transcension hypothesis. <em>Acta Astronautica</em> 78, 55 to 68. <code>[Smart2012]</code></li>
+    <li>Vidal, C. (2014). <em>The Beginning and the End</em>. Springer. <code>[Vidal2014]</code></li>
+    <li>Bostrom, N. (2003). Astronomical waste. <em>Utilitas</em> 15, 308 to 314. <code>[Bostrom2003, CH-only]</code></li>
+    <li>Bostrom, N. (2014). <em>Superintelligence: Paths, Dangers, Strategies</em>. Oxford University Press. <code>[Bostrom2014, CH-only]</code></li>
+  </ul>
+  <h3>Fictional and philosophical precedents (CH-only; lineage, not physics)</h3>
+  <ul>
+    <li>Galouye, D.F. (1964). <em>Simulacron-3</em>. Bantam Books. Conscious simulated inhabitants unaware of their status; the C-D7 NPC problem in narrative form.</li>
+    <li>Egan, G. (1990). "Learning to Be Me." <em>Interzone</em>; collected in <em>Axiomatic</em> (1995). The gradual neuron-by-neuron replacement cut and the identity question it forces.</li>
+    <li>Egan, G. (1994). <em>Permutation City</em>. Millennium. Uploaded minds, substrate independence, and subjective-time manipulation.</li>
+    <li>Egan, G. (1997). <em>Diaspora</em>. Millennium. Bandwidth and latency costs of moving uploaded minds; relevant to Section 4.7.</li>
+    <li>Stross, C. (2005). <em>Accelerando</em>. Ace Books. Minds at about 10⁶ times biological speed and the subjective-time exile this creates; relevant to Sections 4.5 and 4.8.</li>
+    <li>Watts, P. (2006). <em>Blindsight</em>. Tor Books. Whether the cognitive output being harvested requires consciousness at all.</li>
+    <li>Chalmers, D.J. (2005). The Matrix as metaphysics. In C. Grau (ed.), <em>Philosophers Explore the Matrix</em>. Oxford University Press. Simulation read as metaphysics rather than deception. <code>[Chalmers2005, CH-only]</code></li>
+    <li>Bostrom, N. (2003). Are you living in a computer simulation? <em>Philosophical Quarterly</em> 53(211), 243 to 255. doi:10.1111/1467-9213.00309. The simulation argument. <code>[Bostrom2003b, CH-only]</code></li>
+  </ul>
+  <h3>OCS cross-references (the sibling corpus)</h3>
+  <ul>
+    <li>Swanson (2026), Macro Transcension Hypothesis, Paper A.</li>
+    <li>Swanson (2026), Inward Resolutions of the Fermi Paradox: A Critical Review, Paper B, the source of the C1 to C5 scorecard.</li>
+    <li>Swanson (2026), Multi-Messenger Technosignature Campaign for Omega Centauri, Paper C.</li>
+    <li>Swanson (2026), The Economics of Inward Migration, Paper D.</li>
+  </ul>
+
+  <div class="foot">
+    PREPRINT · DRAFT v0.8 · COMPANION PAPER · NEWTRIPOLI.XYZ/COGNITIVE-HUSBANDRY-FEASIBILITY<br>
+    CODE: MIT · PROSE: CC BY 4.0
+  </div>
+
+</div>
+</body>
+</html>

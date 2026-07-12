@@ -38,6 +38,14 @@ jobs:
             echo "All text files use LF line endings"
           fi
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: SVG pre-flight checks
+        run: python scripts/check-svgs.py
+
   # ── Deploy ──────────────────────────────────────────────────────────────────
   deploy:
     name: Deploy to DreamHost

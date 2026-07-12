@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!--
+  Provenance / Execution-Hash — New Tripoli / Cognitive Husbandry Sim Catalogue
+  OpenChainGraph tie-in: a real, reproducible SHA-256 execution hash over sim inputs + canon refs.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provenance / Execution-Hash — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Every instrument in this catalogue is deterministic: same inputs, same output. This tool anchors that with a real SHA-256 execution hash over the sim id, its inputs, and the canon sections it cites — the OpenChainGraph model in miniature.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#23ff88;--teal-glow:#7dffb8;--gold:#34e6e0;--gold-glow:#86f6f2;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.08) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 40%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--gold-glow);text-decoration:none}a:hover{color:var(--teal-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:700px}
+.tier-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor;color:var(--amber);background:rgba(255,194,77,.08)}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px;margin:18px 0 22px}
+.fig svg{display:block;width:100%;height:auto}
+.input-card{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.slider-block{margin-bottom:18px}.slider-block:last-child{margin-bottom:0}
+.slider-block label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--body);display:block;margin-bottom:7px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--edge),var(--teal))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--teal-glow);min-width:80px;text-align:right}
+.btnrow{display:flex;gap:6px;flex-wrap:wrap}
+.opt{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.opt:hover{color:var(--teal-glow);border-color:var(--teal)}
+.opt.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.hashcard{background:rgba(12,19,17,.55);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.hashcard .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}
+.hashcard .hash{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--gold-glow);word-break:break-all}
+.hashcard .hash .head{color:var(--teal-glow);font-weight:500}
+.manifest{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--body);background:rgba(5,8,10,.6);border:1px solid var(--edge);border-radius:8px;padding:12px 14px;word-break:break-all;margin-bottom:14px}
+.manifest .k{color:var(--muted)}
+.verify{font-family:'JetBrains Mono',monospace;font-size:12.5px;margin-top:6px}
+.verify .ok{color:var(--teal)}
+.btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:8px;border:1px solid var(--teal);background:rgba(35,255,136,.08);color:var(--teal-glow);cursor:pointer}
+.btn:hover{background:rgba(35,255,136,.16)}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:8px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+.fig-t{fill:var(--body);font-family:'JetBrains Mono',monospace;font-size:11px}.fig-k{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px}.fig-h{fill:var(--text);font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:600}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Provenance / Execution-Hash</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Provenance / Execution-Hash</h1>
+    <p class="tool-subtitle">Every instrument here is deterministic — same inputs, same output. This tool makes that auditable: it computes a real SHA-256 execution hash over the sim, its inputs, and the canon sections it cites. Change one input and the hash changes; restore it and the hash returns. That is the OpenChainGraph model in miniature: not "who owns this," but "how did this come to exist."</p>
+    <div class="tier-badges"><span class="tier-badge">▣ Real-science companion · OpenChainGraph</span></div>
+  </header>
+
+  <div class="fig">
+    <svg viewBox="0 0 700 150" role="img" aria-label="A three-node provenance chain: the canon version anchors a parent hash, which with the sim inputs produces the execution hash.">
+      <text class="fig-h" x="16" y="22">EXECUTION CHAIN</text>
+      <rect x="40" y="46" width="170" height="60" rx="6" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+      <rect x="265" y="46" width="170" height="60" rx="6" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+      <rect x="490" y="46" width="170" height="60" rx="6" fill="rgba(35,255,136,0.06)" stroke="var(--teal)"/>
+      <g text-anchor="middle">
+        <text class="fig-k" x="125" y="66">PARENT · canon</text>
+        <text class="fig-t" x="125" y="86" id="g-parent" style="fill:var(--gold-glow);font-size:12px">—</text>
+        <text class="fig-k" x="350" y="66">POLICY · sim + inputs</text>
+        <text class="fig-t" x="350" y="86" id="g-policy" style="font-size:11px">—</text>
+        <text class="fig-k" x="575" y="66">EXECUTION HASH</text>
+        <text class="fig-t" x="575" y="86" id="g-exec" style="fill:var(--teal-glow);font-size:12px">—</text>
+      </g>
+      <g stroke="var(--green)" stroke-width="1.4" fill="var(--green)">
+        <path d="M210 76 L262 76"/><path d="M256 72 L262 76 L256 80 Z"/>
+        <path d="M435 76 L487 76"/><path d="M481 72 L487 76 L481 80 Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <section class="input-card">
+    <div class="card-title">Build an execution record</div>
+    <div class="slider-block">
+      <label>Instrument</label>
+      <div class="btnrow" id="sim-row"></div>
+    </div>
+    <div class="slider-block">
+      <label>Policy parameter (a stand-in for the sim's inputs)</label>
+      <div class="slider-row"><input type="range" id="p-slider" min="0" max="100" step="1" value="42"><span class="slider-value" id="p-val">42</span></div>
+    </div>
+  </section>
+
+  <section class="hashcard">
+    <div class="label">policy_parameters + canon_refs (the manifest, in order)</div>
+    <div class="manifest" id="manifest">—</div>
+    <div class="label">parent_hashes[0] — SHA-256(canon anchor)</div>
+    <div class="hash"><span class="head" id="parent-head">—</span><span id="parent-tail" style="color:var(--dim)"></span></div>
+    <div class="label" style="margin-top:14px">execution_hash — SHA-256(manifest)</div>
+    <div class="hash"><span class="head" id="exec-head">—</span><span id="exec-tail" style="color:var(--dim)"></span></div>
+    <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="verify-btn">Recompute &amp; verify</button>
+      <span class="verify" id="verify-out"></span>
+    </div>
+  </section>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this instrument</button>
+    <div class="about-body" id="about-body">
+      <p>OpenChainGraph (OCG) treats an execution hash as a reproducible record of a transformation rather than a receipt of ownership. The primitives are <code>execution_hash</code>, <code>parent_hashes</code>, <code>policy_parameters</code>, and the sources a computation cites. Here the <em>parent</em> is the canon version (everything descends from a fixed edition of the world), the <em>policy parameters</em> are the sim and its inputs, and the <em>execution hash</em> is a SHA-256 over the ordered manifest, computed in your browser with the Web Crypto API. Nothing leaves the page.</p>
+      <p>The property that matters is reproducibility: identical inputs always yield the identical hash, so any two people who run the same instrument the same way can confirm they computed the same thing. Change a single parameter and the hash changes completely; restore it and the original hash returns. That is what lets a deterministic sim carry provenance.</p>
+      <p>This is the homepage provenance readout made interactive, and the seed of a deeper build in which every instrument emits its own execution record. See the OpenChainGraph catalogue at <a href="https://ainumbers.co/chaingraph/ocg-industries.html" target="_blank" rel="noopener">ainumbers.co/chaingraph</a> and the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit</a>, whose EXEC HASH box uses the same construction.</p>
+      <p class="meta-line">v1.0 — OpenChainGraph · Web Crypto SHA-256 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script src="../data/canon.js"></script>
+<script>
+"use strict";
+var C=(typeof CH_CANON!=="undefined")?CH_CANON:null;
+var CANON_VERSION=(C&&C.version)?C.version:"2026.05.21";
+var DOMAIN="newtripoli.xyz";
+var SIMS=[
+  {id:"time-dilation",label:"Time Dilation",refs:"§18,§20"},
+  {id:"feasibility",label:"Feasibility",refs:"§26"},
+  {id:"kinetic-probe",label:"Kinetic Probe",refs:"§19"},
+  {id:"acceleration-ceiling",label:"Acceleration Ceiling",refs:"Audit-§4.5"},
+  {id:"interface-bandwidth",label:"Interface Gap",refs:"Audit-§4.4"},
+  {id:"selection-sorter",label:"Selection Sorter",refs:"§Selection"}
+];
+function getHash(){return Object.fromEntries(location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={s:"time-dilation",p:42};
+function loadHash(){var h=getHash();if(h.s&&SIMS.some(function(x){return x.id===h.s;}))state.s=h.s;if(h.p)state.p=Math.min(100,Math.max(0,parseFloat(h.p)));}
+function saveHash(){setHash({s:state.s,p:state.p});}
+function sha256hex(str){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(str)).then(function(buf){return [].map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0');}).join('');});}
+function manifestFor(sim){return [DOMAIN,'canon-'+CANON_VERSION,'sim-'+sim.id,'refs-'+sim.refs,'param-'+state.p].join('|');}
+function render(){
+  document.getElementById('p-val').textContent=state.p;
+  var sr=document.getElementById('sim-row');
+  if(!sr.dataset.built){var h='';SIMS.forEach(function(s){h+='<button class="opt" data-s="'+s.id+'">'+s.label+'</button>';});sr.innerHTML=h;sr.dataset.built="1";sr.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.s=b.dataset.s;saveHash();render();});});}
+  sr.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.s===state.s);});
+  var sim=SIMS.filter(function(x){return x.id===state.s;})[0];
+  var manifest=manifestFor(sim);
+  var parentStr=DOMAIN+'|canon-'+CANON_VERSION;
+  document.getElementById('manifest').innerHTML=manifest.split('|').map(function(seg,i){return (i?'<span class="k"> | </span>':'')+seg;}).join('');
+  document.getElementById('g-policy').textContent=sim.id+' · p='+state.p;
+  document.getElementById('verify-out').textContent='';
+  sha256hex(parentStr).then(function(hx){
+    document.getElementById('parent-head').textContent=hx.slice(0,12);
+    document.getElementById('parent-tail').textContent=hx.slice(12,24)+'…';
+    document.getElementById('g-parent').textContent=hx.slice(0,10)+'…';
+  });
+  sha256hex(manifest).then(function(hx){
+    document.getElementById('exec-head').textContent=hx.slice(0,12);
+    document.getElementById('exec-tail').textContent=hx.slice(12,24)+'…';
+    document.getElementById('g-exec').textContent=hx.slice(0,10)+'…';
+    document.getElementById('exec-head').dataset.full=hx;
+  });
+}
+function verify(){
+  var sim=SIMS.filter(function(x){return x.id===state.s;})[0];
+  var manifest=manifestFor(sim);
+  sha256hex(manifest).then(function(hx){
+    var shown=document.getElementById('exec-head').dataset.full||'';
+    var ok=(hx===shown);
+    document.getElementById('verify-out').innerHTML= ok
+      ? '<span class="ok">▣ reproduced — identical hash from identical inputs</span>'
+      : 'mismatch (inputs changed)';
+  });
+}
+function wire(){
+  var p=document.getElementById('p-slider');p.value=state.p;
+  p.addEventListener('input',function(){state.p=parseFloat(p.value);saveHash();render();});
+  document.getElementById('verify-btn').addEventListener('click',verify);
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>

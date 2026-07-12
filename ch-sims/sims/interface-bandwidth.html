@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+  Interface Bandwidth Gap — New Tripoli / Cognitive Husbandry Sim Catalogue
+  Companion to the Feasibility Audit §4.4. Electrodes vs neurons; the write problem.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interface Bandwidth Gap — New Tripoli Sim Catalogue</title>
+<meta name="description" content="How far is a brain-computer interface from vat-viable? Slide the channel count from today's ~1,000 electrodes toward the brain's ~86 billion neurons and watch the gap, the doublings needed, and why writing is harder than reading. Grounded in the Feasibility Audit §4.4.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#23ff88;--teal-glow:#7dffb8;--gold:#34e6e0;--gold-glow:#86f6f2;--amber:#ffc24d;--red:#ff6a5a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.08) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 40%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--gold-glow);text-decoration:none}a:hover{color:var(--teal-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1020px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:1020px;margin:0 auto;padding:38px 26px 80px}
+.tool-header h1{font-size:29px;margin-bottom:9px;text-transform:uppercase;letter-spacing:.02em}
+.tool-subtitle{color:var(--body);font-size:15.5px;max-width:680px}
+.tier-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tier-badge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:10px;border:1px solid currentColor;color:var(--amber);background:rgba(255,194,77,.08)}
+.fig{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(12,19,17,.6),rgba(8,13,12,.5));padding:14px;margin:18px 0 22px}
+.fig svg{display:block;width:100%;height:auto}
+.input-card{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:24px}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed var(--border)}
+.slider-block{margin-bottom:18px}.slider-block:last-child{margin-bottom:0}
+.slider-block label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--body);display:block;margin-bottom:7px}
+.slider-row{display:flex;align-items:center;gap:14px}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;outline:none;background:linear-gradient(90deg,var(--edge),var(--teal))}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:17px;height:17px;border-radius:50%;cursor:pointer;background:var(--teal-glow);box-shadow:0 0 10px rgba(125,255,184,.55)}
+.slider-value{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:var(--teal-glow);min-width:130px;text-align:right}
+.btnrow{display:flex;gap:6px;flex-wrap:wrap}
+.opt{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--body);cursor:pointer;transition:all .15s}
+.opt:hover{color:var(--teal-glow);border-color:var(--teal)}
+.opt.active{color:var(--void);background:var(--teal);border-color:var(--teal);font-weight:600}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:680px){.grid3{grid-template-columns:1fr}}
+.stat-card{background:rgba(12,19,17,.55);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-align:center}
+.stat-card .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px}
+.stat-card .value{font-family:'Chakra Petch',sans-serif;font-size:20px;font-weight:600;color:var(--teal-glow)}
+.section-card{background:rgba(8,13,12,.5);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:24px}
+.section-card p{font-size:13.7px;color:var(--body);line-height:1.6}
+.section-card .verdict{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);margin-bottom:8px}
+.about{border-top:1px solid var(--border);padding-top:22px;margin-top:8px}
+.about-toggle{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.07em;text-transform:uppercase;background:transparent;border:none;color:var(--body);cursor:pointer;padding:8px 0;display:inline-flex;gap:8px}
+.about-toggle:hover{color:var(--teal-glow)}.about-toggle .arrow{transition:transform .2s}.about-toggle.open .arrow{transform:rotate(90deg)}
+.about-body{display:none;margin-top:14px;padding:18px 22px;background:rgba(12,19,17,.4);border-radius:8px;font-size:14px}.about-body.open{display:block}
+.about-body p{margin-bottom:10px}.about-body code{font-family:'JetBrains Mono',monospace;background:rgba(5,8,10,.6);padding:1px 6px;border-radius:3px;color:var(--teal-glow)}
+.meta-line{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:12px}
+.fig-t{fill:var(--body);font-family:'JetBrains Mono',monospace;font-size:11px}.fig-k{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px}.fig-h{fill:var(--text);font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:600}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Interface Bandwidth Gap</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="tool-header">
+    <h1>Interface Bandwidth Gap</h1>
+    <p class="tool-subtitle">A vat needs to read from and write to a large fraction of the cortex at once. Today's best implants sample about a thousand channels; the brain has about 86 billion neurons. Slide the channel count and watch the gap, the doublings it would take to close, and why writing is the harder half.</p>
+    <div class="tier-badges"><span class="tier-badge">▣ Real-science companion · Audit §4.4</span></div>
+  </header>
+
+  <div class="fig">
+    <svg viewBox="0 0 700 200" role="img" aria-label="Channel count versus neuron count on a log scale, with a movable channel marker.">
+      <text class="fig-h" x="16" y="22">CHANNELS vs NEURONS — count, log scale</text>
+      <line stroke="var(--rim)" stroke-width="1" x1="110" y1="130" x2="670" y2="130"/>
+      <g class="fig-k" text-anchor="middle">
+        <text x="110" y="148">10⁰</text><text x="212" y="148">10²</text><text x="314" y="148">10⁴</text><text x="416" y="148">10⁶</text><text x="518" y="148">10⁸</text><text x="620" y="148">10¹⁰</text>
+      </g>
+      <rect id="gapfill" x="263" y="72" width="394" height="58" fill="rgba(255,194,77,0.07)"/>
+      <circle cx="657" cy="130" r="5" fill="var(--teal-glow)"/>
+      <line x1="657" y1="130" x2="657" y2="102" stroke="var(--teal)" stroke-width="1"/>
+      <text class="fig-t" x="657" y="94" text-anchor="end">8.6×10¹⁰ neurons</text>
+      <circle id="chan-dot" cx="263" cy="130" r="6" fill="var(--gold-glow)"/>
+      <line id="chan-stem" x1="263" y1="130" x2="263" y2="106" stroke="var(--gold)" stroke-width="1.4"/>
+      <text id="chan-lbl" class="fig-t" x="263" y="98" text-anchor="middle" style="fill:var(--gold-glow)">10³ channels</text>
+      <path id="gap-brace" d="M263 64 L263 58 L657 58 L657 64" fill="none" stroke="var(--rim)" stroke-width="1"/>
+      <text id="gap-lbl" class="fig-t" x="460" y="50" text-anchor="middle" style="font-size:11px">~7.9 orders of magnitude</text>
+      <text class="fig-k" x="16" y="188" style="font-size:10px">Reading is hard; writing coherent input back to cortex without seizure or distortion is harder, and unsolved at scale.</text>
+    </svg>
+  </div>
+
+  <section class="input-card">
+    <div class="card-title">Interface parameters</div>
+    <div class="slider-block">
+      <label>Channels (electrodes reading or writing)</label>
+      <div class="slider-row"><input type="range" id="c-slider" min="30" max="110" step="1" value="30"><span class="slider-value" id="c-val">~10³</span></div>
+    </div>
+    <div class="slider-block">
+      <label>Direction</label>
+      <div class="btnrow" id="dir-row">
+        <button class="opt active" data-dir="read">Read (record)</button>
+        <button class="opt" data-dir="write">Write (stimulate)</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid3">
+    <div class="stat-card"><div class="label">Fraction of brain sampled</div><div class="value" id="s-frac">—</div></div>
+    <div class="stat-card"><div class="label">Gap to neurons</div><div class="value" id="s-gap">—</div></div>
+    <div class="stat-card"><div class="label">Doublings to close</div><div class="value" id="s-dbl">—</div></div>
+  </section>
+
+  <section class="section-card">
+    <div class="verdict" id="verdict">—</div>
+    <p id="verdict-note">—</p>
+  </section>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle"><span class="arrow">▶</span> About this instrument</button>
+    <div class="about-body" id="about-body">
+      <p>The human brain has about <code>8.6×10¹⁰</code> neurons. The Neuralink N1 samples <code>1,024</code> electrodes across 64 threads; the Synchron Stentrode fewer. That is roughly one channel per <code>10⁸</code> neurons — characterizing an 86-billion-instrument orchestra from about a thousand microphones. Closing the gap to even one channel per neuron is seven to eight orders of magnitude, and the "doublings to close" figure assumes each doubling of channel count is a discrete engineering step.</p>
+      <p>Reading and writing are not symmetric. Recording neural signals is hard; <strong>writing</strong> coherent, high-fidelity sensory input back into the cortex — continuously, without inducing seizure, adaptation, or perceptual distortion — is substantially harder and unsolved at scale. A vat has to write continuously. As a reference, the human optic nerve carries on the order of <code>10 Mbit/s</code>; a full-sensory feed is higher. No known physical law forbids closing the gap; the barrier is materials, heat, and biocompatibility.</p>
+      <p>Grounded in the <a href="../../cognitive-husbandry-feasibility.html">Feasibility Audit, §4.4</a>. Pairs with the <a href="acceleration-ceiling.html">Acceleration Ceiling</a> (sensory augmentation sits on this interface) and the <a href="feasibility.html">Feasibility Calculator</a>.</p>
+      <p style="font-size:13px;color:var(--body)"><strong style="color:var(--text)">Further reading:</strong> Koch, K. et al. (2006). "How much the eye tells the brain." <em>Current Biology</em> 16(14), 1428–1434. Neuralink PRIME study (2024+) — N1, 1,024 electrodes / 64 threads.</p>
+      <p class="meta-line">v1.0 — Audit §4.4 · Code MIT · Prose CC BY 4.0 · No PII, no network calls at runtime.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+var NEURONS=8.6e10, NEUR_E=Math.log10(NEURONS); // ~10.93
+function getHash(){return Object.fromEntries(location.hash.replace('#','').split('&').filter(Boolean).map(function(p){return p.split('=').map(decodeURIComponent);}));}
+function setHash(p){history.replaceState(null,'','#'+Object.entries(p).map(function(e){return e[0]+'='+e[1];}).join('&'));}
+var state={c:30,dir:"read"}; // c = channel exponent ×10 (30 => 10^3.0)
+function loadHash(){var p=getHash();if(p.c)state.c=Math.min(110,Math.max(30,parseFloat(p.c)));if(p.dir==="read"||p.dir==="write")state.dir=p.dir;}
+function saveHash(){setHash({c:state.c,dir:state.dir});}
+function sup(n){var m={'-':'⁻','.':'·','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return String(n).split('').map(function(c){return m[c]||c;}).join('');}
+function xOf(e){return 110+e*51;} // 10^0 at 110, 10^10 at 620, 10^11 near 671
+function render(){
+  var e=state.c/10;                 // channel exponent
+  var channels=Math.pow(10,e);
+  document.getElementById('c-val').textContent='~10'+sup((Math.round(e*10)/10).toString());
+  var frac=channels/NEURONS;
+  var gapOrders=NEUR_E-e;
+  var doublings=gapOrders*Math.log2(10);
+  document.getElementById('s-frac').textContent = frac>=1?'≥ all':('1 in '+ (function(x){var ee=Math.round(Math.log10(x));return '10'+sup(ee);})(NEURONS/channels));
+  document.getElementById('s-gap').textContent = gapOrders<=0?'closed':('~10'+sup(Math.round(gapOrders))+'×');
+  document.getElementById('s-dbl').textContent = doublings<=0?'0':('~'+Math.round(doublings));
+  // marker
+  var x=Math.min(657,xOf(e));
+  document.getElementById('chan-dot').setAttribute('cx',x);
+  var stem=document.getElementById('chan-stem');stem.setAttribute('x1',x);stem.setAttribute('x2',x);
+  var lbl=document.getElementById('chan-lbl');lbl.setAttribute('x',Math.min(x,610));lbl.textContent='10'+sup((Math.round(e*10)/10).toString())+' channels';
+  var gf=document.getElementById('gapfill');gf.setAttribute('x',x);gf.setAttribute('width',Math.max(0,657-x));
+  var brace=document.getElementById('gap-brace');brace.setAttribute('d','M'+x+' 64 L'+x+' 58 L657 58 L657 64');
+  var glbl=document.getElementById('gap-lbl');glbl.setAttribute('x',(x+657)/2);glbl.textContent = gapOrders<=0?'gap closed':('~'+gapOrders.toFixed(1)+' orders of magnitude');
+  // direction
+  var dr=document.getElementById('dir-row');
+  if(!dr.dataset.built){dr.querySelectorAll('.opt').forEach(function(b){b.addEventListener('click',function(){state.dir=b.dataset.dir;saveHash();render();});});dr.dataset.built="1";}
+  dr.querySelectorAll('.opt').forEach(function(b){b.classList.toggle('active',b.dataset.dir===state.dir);});
+  var v=document.getElementById('verdict'),vn=document.getElementById('verdict-note');
+  if(gapOrders<=0){v.textContent='▣ INTERFACE-COMPLETE';vn.textContent='At this channel count the interface samples the whole brain. The remaining problem is fidelity and stability, not coverage.';}
+  else{v.textContent='✕ '+gapOrders.toFixed(1)+' ORDERS SHORT';vn.textContent = state.dir==="write"
+    ? 'Writing to '+(function(x){var ee=Math.round(Math.log10(x));return '10'+sup(ee);})(channels)+' sites is the harder half: high-fidelity stimulation without seizure, adaptation, or distortion is unsolved at scale, and the simulation must write continuously.'
+    : 'Reading '+(function(x){var ee=Math.round(Math.log10(x));return '10'+sup(ee);})(channels)+' channels is the easier half. Even so, this is a shortfall of many orders of magnitude before the vat premise is met.';}
+}
+function wire(){
+  var c=document.getElementById('c-slider');c.value=state.c;
+  c.addEventListener('input',function(){state.c=parseFloat(c.value);saveHash();render();});
+  var at=document.getElementById('about-toggle'),ab=document.getElementById('about-body');
+  at.addEventListener('click',function(){var o=!ab.classList.contains('open');ab.classList.toggle('open',o);at.classList.toggle('open',o);});
+}
+function init(){loadHash();wire();render();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>
