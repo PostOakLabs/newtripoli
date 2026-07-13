@@ -502,5 +502,27 @@ acqSlider.value=state.acq;
 buildGauge();
 render();
 </script>
+<!-- PARITY.build (buildplan 1.5): reproduce the worker's OCG execution_hash from the SHARED kernel.
+     Default state = the nt_time_dilation fixture; hash must byte-match the frozen worker golden. -->
+<script type="module">
+import { compute } from '../kernels/time-dilation.kernel.mjs';
+import { executionHash } from '../lib/_hash.mjs';
+const input_parameters = { rate_x: 50, reset_months: 6 };
+const policy_parameters = {
+  execution_backend: 'js',
+  canon_version: (typeof CH_CANON !== 'undefined') ? CH_CANON.CANON_VERSION : null,
+  input_parameters,
+};
+try {
+  const { output_payload } = compute(policy_parameters);
+  const execution_hash = await executionHash(policy_parameters, output_payload);
+  console.log('[nt_time_dilation] execution_hash', execution_hash);
+  const chip = document.createElement('div');
+  chip.id = 'verify-hash';
+  chip.style.cssText = 'font:11px/1.5 ui-monospace,monospace;color:var(--muted,#6a8);opacity:.6;text-align:center;padding:8px 12px;word-break:break-all;';
+  chip.textContent = 'OCG execution_hash · nt_time_dilation (defaults): ' + execution_hash;
+  document.body.appendChild(chip);
+} catch (e) { console.error('[nt_time_dilation] hash error', e); }
+</script>
 </body>
 </html>
