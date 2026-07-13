@@ -23,11 +23,20 @@ const REPO = dirname(dirname(fileURLToPath(import.meta.url)));           // repo
 const SITE = resolve(REPO, 'ch-sims');                                   // repo/ch-sims/
 const WORKER = resolve(REPO, '..', 'newtripoli-mcp-worker');             // sibling worker tree
 
-// tool id → { slug } for the three P1 L1 tools.
+// tool id → { slug } for all 12 tools (3 P1 L1 + 9 L2), master-table order (L2-CONSOLIDATE-SPEC §0.1).
 const TOOLS = [
-  { id: 'nt_time_dilation',   slug: 'time-dilation' },
-  { id: 'nt_kinetic_probe',   slug: 'kinetic-probe' },
-  { id: 'nt_vat_feasibility', slug: 'vat-feasibility' },
+  { id: 'nt_time_dilation',        slug: 'time-dilation' },
+  { id: 'nt_kinetic_probe',        slug: 'kinetic-probe' },
+  { id: 'nt_vat_feasibility',      slug: 'vat-feasibility' },
+  { id: 'nt_acceleration_ceiling', slug: 'acceleration-ceiling' },
+  { id: 'nt_comms_lag',            slug: 'comms-lag' },
+  { id: 'nt_ring_density',         slug: 'ring-density' },
+  { id: 'nt_birthday_sacrifice',   slug: 'birthday-sacrifice' },
+  { id: 'nt_synthetic_body',       slug: 'synthetic-body' },
+  { id: 'nt_selection_cost',       slug: 'selection-cost' },
+  { id: 'nt_interface_bandwidth',  slug: 'interface-bandwidth' },
+  { id: 'nt_tech_tree_path',       slug: 'tech-tree' },
+  { id: 'nt_provenance',           slug: 'provenance' },
 ];
 
 let failed = 0;

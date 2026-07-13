@@ -244,5 +244,36 @@ function wire(){
 function init(){loadHash();wire();render();requestAnimationFrame(animatePacket);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
+<!-- L2PARITY.build (L2-CONSOLIDATE-SPEC §B.2/§B.4): reproduce the worker's OCG execution_hash from the SHARED kernel.
+     Default state = the nt_comms_lag fixture; hash must byte-match the frozen worker golden. Hardened canon_version (CHIP-HARDEN). -->
+<script type="module">
+import { compute } from '../kernels/comms-lag.kernel.mjs';
+import { executionHash } from '../lib/_hash.mjs';
+function requireCanonVersion() {
+  const v = (typeof CH_CANON !== 'undefined') ? CH_CANON.CANON_VERSION : undefined;
+  if (!v) {
+    const chip = document.createElement('div');
+    chip.id = 'verify-hash';
+    chip.style.cssText = 'font:11px/1.5 ui-monospace,monospace;color:#c66;text-align:center;padding:8px 12px;';
+    chip.textContent = 'canon stale — purge cache (CANON_VERSION missing)';
+    document.body.appendChild(chip);
+    throw new Error('CANON_VERSION missing — refusing to emit a hash against stale/absent canon.');
+  }
+  return v;
+}
+const input_parameters = { your_rate_x: 50, their_rate_x: 1000000, latency_ms: 50 };
+try {
+  const canon_version = requireCanonVersion();
+  const policy_parameters = { execution_backend: 'js', canon_version, input_parameters };
+  const { output_payload } = compute(policy_parameters);
+  const execution_hash = await executionHash(policy_parameters, output_payload);
+  console.log('[nt_comms_lag] execution_hash', execution_hash);
+  const chip = document.createElement('div');
+  chip.id = 'verify-hash';
+  chip.style.cssText = 'font:11px/1.5 ui-monospace,monospace;color:var(--muted,#6a8);opacity:.6;text-align:center;padding:8px 12px;word-break:break-all;';
+  chip.textContent = 'OCG execution_hash · nt_comms_lag (defaults): ' + execution_hash;
+  document.body.appendChild(chip);
+} catch (e) { console.error('[nt_comms_lag] hash error', e); }
+</script>
 </body>
 </html>

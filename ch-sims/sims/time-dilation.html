@@ -508,12 +508,21 @@ render();
 import { compute } from '../kernels/time-dilation.kernel.mjs';
 import { executionHash } from '../lib/_hash.mjs';
 const input_parameters = { rate_x: 50, reset_months: 6 };
-const policy_parameters = {
-  execution_backend: 'js',
-  canon_version: (typeof CH_CANON !== 'undefined') ? CH_CANON.CANON_VERSION : null,
-  input_parameters,
-};
+function requireCanonVersion() {
+  const v = (typeof CH_CANON !== 'undefined') ? CH_CANON.CANON_VERSION : undefined;
+  if (!v) {
+    const chip = document.createElement('div');
+    chip.id = 'verify-hash';
+    chip.style.cssText = 'font:11px/1.5 ui-monospace,monospace;color:#c66;text-align:center;padding:8px 12px;';
+    chip.textContent = 'canon stale — purge cache (CANON_VERSION missing)';
+    document.body.appendChild(chip);
+    throw new Error('CANON_VERSION missing — refusing to emit a hash against stale/absent canon.');
+  }
+  return v;
+}
 try {
+  const canon_version = requireCanonVersion();
+  const policy_parameters = { execution_backend: 'js', canon_version, input_parameters };
   const { output_payload } = compute(policy_parameters);
   const execution_hash = await executionHash(policy_parameters, output_payload);
   console.log('[nt_time_dilation] execution_hash', execution_hash);
