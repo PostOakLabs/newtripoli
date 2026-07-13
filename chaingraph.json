@@ -1,0 +1,257 @@
+{
+  "$comment": "Hand-authored catalog (see NEWTRIPOLI-PHASE3-SPEC.md §4 for the sync contract). Values lifted verbatim from newtripoli-mcp-worker/data/tools-manifest.json (SSOT, emitted by that repo's generate.mjs). Alt-history kernels are HELD; catalog frozen at 13 tools + 7 chains. When alt-history unfreezes the catalog, regenerate/extend this file in the SAME PR that lands those kernels, and consider promoting to a real generate.mjs emit at that point. Validate with scripts/check-chaingraph.py.",
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "nt": "https://newtripoli.xyz/ns#",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "ocg": "https://postoaklabs.github.io/chaingraph/ns#"
+  },
+  "@type": "dcat:Catalog",
+  "@id": "https://newtripoli.xyz/chaingraph.json",
+  "chaingraph_version": "0.8.0",
+  "derives_from": "https://postoaklabs.github.io/chaingraph/ext/x-chaingraph/v0.1",
+  "namespace": "me.newtripoli",
+  "site": "https://newtripoli.xyz",
+  "updated": "2026-07-13",
+  "description": "Deterministic, hash-verifiable science instruments for the New Tripoli scenario — relativistic delivery, time-dilation, digital-mind feasibility (Landauer vs Sahara cap), and a graded D1–D10 claim ledger. 13 client-side, zero-egress calculators; each emits an OpenChainGraph-conformant artifact carrying a verifiable SHA-256 execution_hash.",
+  "dct:conformsTo": "https://modelcontextprotocol.io/specification",
+  "mcp_endpoint": "https://mcp.newtripoli.xyz/mcp",
+  "verify_tool": "verify_execution_hash",
+  "data_ssot": "https://newtripoli.xyz/ch-sims/data/canon.js",
+  "internal_registry": "https://newtripoli.xyz/ch-sims/data/canon.js",
+  "mandate_families": {
+    "canon": [
+      "me.newtripoli/time_dilation",
+      "me.newtripoli/kinetic_probe",
+      "me.newtripoli/comms_lag",
+      "me.newtripoli/ring_density",
+      "me.newtripoli/birthday_sacrifice",
+      "me.newtripoli/synthetic_body",
+      "me.newtripoli/selection_cost",
+      "me.newtripoli/tech_tree_path"
+    ],
+    "feasibility": [
+      "me.newtripoli/vat_feasibility",
+      "me.newtripoli/acceleration_ceiling",
+      "me.newtripoli/feasibility_crosswalk"
+    ],
+    "real-science": [
+      "me.newtripoli/interface_bandwidth",
+      "me.newtripoli/provenance"
+    ]
+  },
+  "tools": [
+    {
+      "tool_id": "nt_time_dilation",
+      "mandate_type": "me.newtripoli/time_dilation",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/time-dilation.html"
+    },
+    {
+      "tool_id": "nt_kinetic_probe",
+      "mandate_type": "me.newtripoli/kinetic_probe",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/kinetic-probe.html"
+    },
+    {
+      "tool_id": "nt_vat_feasibility",
+      "mandate_type": "me.newtripoli/vat_feasibility",
+      "tool_version": "1.0.0",
+      "register": "feasibility",
+      "guest_legal": false,
+      "url": "https://newtripoli.xyz/ch-sims/sims/feasibility.html"
+    },
+    {
+      "tool_id": "nt_acceleration_ceiling",
+      "mandate_type": "me.newtripoli/acceleration_ceiling",
+      "tool_version": "1.0.0",
+      "register": "feasibility",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/acceleration-ceiling.html"
+    },
+    {
+      "tool_id": "nt_comms_lag",
+      "mandate_type": "me.newtripoli/comms_lag",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/comms-lag.html"
+    },
+    {
+      "tool_id": "nt_ring_density",
+      "mandate_type": "me.newtripoli/ring_density",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/ring-density.html"
+    },
+    {
+      "tool_id": "nt_birthday_sacrifice",
+      "mandate_type": "me.newtripoli/birthday_sacrifice",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/birthday-sacrifice.html"
+    },
+    {
+      "tool_id": "nt_synthetic_body",
+      "mandate_type": "me.newtripoli/synthetic_body",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/synthetic-body.html"
+    },
+    {
+      "tool_id": "nt_selection_cost",
+      "mandate_type": "me.newtripoli/selection_cost",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/selection-sorter.html"
+    },
+    {
+      "tool_id": "nt_interface_bandwidth",
+      "mandate_type": "me.newtripoli/interface_bandwidth",
+      "tool_version": "1.0.0",
+      "register": "real-science",
+      "guest_legal": false,
+      "url": "https://newtripoli.xyz/ch-sims/sims/interface-bandwidth.html"
+    },
+    {
+      "tool_id": "nt_tech_tree_path",
+      "mandate_type": "me.newtripoli/tech_tree_path",
+      "tool_version": "1.0.0",
+      "register": "canon",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/sims/tech-tree.html"
+    },
+    {
+      "tool_id": "nt_provenance",
+      "mandate_type": "me.newtripoli/provenance",
+      "tool_version": "1.0.0",
+      "register": "real-science",
+      "guest_legal": true,
+      "url": "https://newtripoli.xyz/ch-sims/about.html"
+    },
+    {
+      "tool_id": "nt_feasibility_crosswalk",
+      "mandate_type": "me.newtripoli/feasibility_crosswalk",
+      "tool_version": "1.0.0",
+      "register": "feasibility",
+      "guest_legal": false,
+      "url": "https://newtripoli.xyz/ch-sims/sims/feasibility.html"
+    }
+  ],
+  "chains": [
+    {
+      "chain_name": "intake-to-arc",
+      "title": "Intake to arc",
+      "register": "canon",
+      "tier": "L2",
+      "gate": "no gate — terminal verdict = weakest link",
+      "step_tool_ids": ["nt_kinetic_probe", "nt_vat_feasibility", "nt_time_dilation", "nt_acceleration_ceiling"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "deceleration-lottery",
+      "title": "Deceleration lottery",
+      "register": "canon",
+      "tier": "L2",
+      "gate": "gates on nt_kinetic_probe /branch (vaporized|destroyed → end; survives → anchor provenance)",
+      "step_tool_ids": ["nt_kinetic_probe", "nt_provenance"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "substrate-decision",
+      "title": "Substrate decision",
+      "register": "canon",
+      "tier": "L2",
+      "gate": "gates on nt_time_dilation /upload_required (biological holds → end; upload required → anchor provenance)",
+      "step_tool_ids": ["nt_time_dilation", "nt_provenance"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "energy-envelope",
+      "title": "Energy envelope",
+      "register": "feasibility",
+      "tier": "L2",
+      "gate": "gates on nt_vat_feasibility /sahara_pct (over capacity → end, binding constraint = power)",
+      "step_tool_ids": ["nt_vat_feasibility", "nt_interface_bandwidth", "nt_acceleration_ceiling"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "friendship-across-tiers",
+      "title": "Friendship across tiers",
+      "register": "canon",
+      "tier": "L2",
+      "gate": "no gate",
+      "step_tool_ids": ["nt_time_dilation", "nt_time_dilation", "nt_comms_lag"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "provenance-anchor",
+      "title": "Provenance anchor",
+      "register": "canon",
+      "tier": "L2",
+      "gate": "no gate — terminal spine",
+      "step_tool_ids": ["nt_time_dilation", "nt_provenance"],
+      "run_via": "run_chain"
+    },
+    {
+      "chain_name": "feasibility-audit-crosswalk",
+      "title": "Feasibility audit crosswalk",
+      "register": "feasibility",
+      "tier": "meta",
+      "gate": "gates on nt_feasibility_crosswalk /binding_verdict == Barred (end; do not anchor a passing run)",
+      "step_tool_ids": ["nt_feasibility_crosswalk", "nt_provenance"],
+      "run_via": "run_chain"
+    }
+  ],
+  "dcat:dataset": [
+    {
+      "@type": "ocg:MandateFamily",
+      "@id": "https://newtripoli.xyz/chaingraph.json#canon",
+      "dct:title": "canon",
+      "dcat:endpointURL": "https://mcp.newtripoli.xyz/mcp",
+      "dct:conformsTo": "https://modelcontextprotocol.io/specification",
+      "ocg:mandateType": [
+        "me.newtripoli/time_dilation",
+        "me.newtripoli/kinetic_probe",
+        "me.newtripoli/comms_lag",
+        "me.newtripoli/ring_density",
+        "me.newtripoli/birthday_sacrifice",
+        "me.newtripoli/synthetic_body",
+        "me.newtripoli/selection_cost",
+        "me.newtripoli/tech_tree_path"
+      ]
+    },
+    {
+      "@type": "ocg:MandateFamily",
+      "@id": "https://newtripoli.xyz/chaingraph.json#feasibility",
+      "dct:title": "feasibility",
+      "dcat:endpointURL": "https://mcp.newtripoli.xyz/mcp",
+      "dct:conformsTo": "https://modelcontextprotocol.io/specification",
+      "ocg:mandateType": [
+        "me.newtripoli/vat_feasibility",
+        "me.newtripoli/acceleration_ceiling",
+        "me.newtripoli/feasibility_crosswalk"
+      ]
+    },
+    {
+      "@type": "ocg:MandateFamily",
+      "@id": "https://newtripoli.xyz/chaingraph.json#real-science",
+      "dct:title": "real-science",
+      "dcat:endpointURL": "https://mcp.newtripoli.xyz/mcp",
+      "dct:conformsTo": "https://modelcontextprotocol.io/specification",
+      "ocg:mandateType": [
+        "me.newtripoli/interface_bandwidth",
+        "me.newtripoli/provenance"
+      ]
+    }
+  ]
+}

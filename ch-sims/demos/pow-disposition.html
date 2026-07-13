@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!--
+  Speculative explainer: WW1 Prisoner-of-War disposition — captor fan-out, repatriation drain, labor-vs-parole slider.
+  Part of the "WW1-avoided cluster" (chain 8 sequence: Ottoman finance -> demographics -> POW disposition).
+  New Tripoli Sim Catalogue. Carries no golden hash — explorable over stipulated parameters (EXPLAINER-TEMPLATE-SPEC).
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WW1 Prisoner-of-War Disposition — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Where 8.5 million WW1 prisoners actually went: the ~5x mortality fan-out by captor, the repatriation drain 1918-1922, and a labor-vs-parole mortality slider. Ranges, not false precision.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#07060d;--panel:#12101c;--edge:#241c33;--text:#e8e0f5;--body:#a99cc4;--muted:#6b5e86;--dim:#453a5c;--teal:#34e6e0;--teal-glow:#86f6f2;--amber:#ffb454;--amber-glow:#ffd08a;--border:rgba(52,230,224,.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 4%,rgba(52,230,224,.09),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(255,180,84,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--amber-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.16}
+.nav{border-bottom:1px solid var(--border);background:rgba(7,6,13,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--amber)}
+.demo-head h1{font-size:clamp(1.9rem,4.2vw,2.8rem);letter-spacing:.005em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--teal);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.demo-head .lede{font-size:1.03rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+section.block{margin-top:44px}
+.block .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.block h2{font-size:1.4rem;margin-bottom:8px}
+.block .sub{font-size:.95rem;color:var(--body);max-width:66ch;margin-bottom:16px;line-height:1.7}
+.panel{background:linear-gradient(180deg,rgba(18,16,28,.75),rgba(9,8,15,.6));border:1px solid var(--edge);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.readout{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--teal-glow);display:inline-flex;align-items:baseline;gap:6px}
+.readout .band{font-size:.72rem;color:var(--muted);letter-spacing:.02em}
+.controls{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;margin-top:14px}
+.ctrl{display:flex;flex-direction:column;gap:6px;min-width:220px;flex:1}
+.ctrl label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.ctrl label .val{color:var(--teal-glow)}
+.ctrl input[type=range]{width:100%;accent-color:var(--teal);height:4px}
+.switchrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.switch{position:relative;width:46px;height:24px;border-radius:12px;background:var(--edge);border:1px solid var(--dim);cursor:pointer;flex-shrink:0}
+.switch .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:left .16s,background .16s}
+.switch[aria-checked="true"]{border-color:var(--teal)}
+.switch[aria-checked="true"] .knob{left:24px;background:var(--teal);box-shadow:0 0 8px rgba(52,230,224,.6)}
+.switch:focus-visible{outline:2px solid var(--teal-glow);outline-offset:2px}
+.switchlabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--body)}
+svg.fig{width:100%;height:auto;display:block}
+.lbl{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em}
+.lbl-hi{fill:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em}
+.lbl-amber{fill:var(--amber-glow);font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em}
+.caveat{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.6}
+.chip{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-glow);border:1px solid rgba(255,180,84,.35);border-radius:4px;padding:2px 7px;background:rgba(255,180,84,.06);margin:2px 4px 2px 0}
+details.assump{border:1px solid var(--edge);border-radius:10px;padding:14px 18px;background:rgba(18,16,28,.5)}
+details.assump summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-glow);list-style:none}
+details.assump summary::-webkit-details-marker{display:none}
+details.assump summary::before{content:'▸ ';color:var(--muted)}
+details.assump[open] summary::before{content:'▾ '}
+details.assump .assump-body{margin-top:14px;display:flex;flex-direction:column;gap:16px}
+.knob-note{font-size:.85rem;color:var(--muted);line-height:1.6}
+.cite{background:linear-gradient(180deg,rgba(18,16,28,.6),rgba(9,8,15,.5));border:1px solid var(--edge);border-radius:10px;padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;color:var(--body)}
+.cite h3{font-size:.95rem;margin-bottom:6px;color:var(--text)}
+.cite .row{margin-bottom:12px}
+.cite .row:last-child{margin-bottom:0}
+.cite a{border-bottom:1px dotted var(--teal)}
+.gentag{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--dim);border-radius:3px;padding:1px 5px;margin-left:5px}
+.footer-promote{margin-top:36px;border:1px solid var(--edge);border-radius:12px;padding:20px 22px;background:linear-gradient(135deg,rgba(52,230,224,.05),rgba(9,8,15,.4));font-size:.92rem;color:var(--body);line-height:1.7}
+.footer-promote strong{color:var(--text)}
+.footnote{margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:620px){.container{padding:30px 16px 70px}.controls{gap:16px}.ctrl{min-width:100%}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Speculative explainer</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Speculative explainer · WW1-avoided cluster</span>
+    <h1>Where did <span class="acc">8.5 million</span> prisoners actually go?</h1>
+    <p class="lede">Capture was rarely the end of a soldier's war. It forked into labor, parole, and a mortality rate that moved <strong>~5×</strong> depending only on who held you — before a repatriation clock that ran, in places, three years past the armistice.</p>
+  </header>
+
+  <!-- 1. Sankey-style captor fan-out + mortality recolor -->
+  <section class="block" id="fanout">
+    <div class="tag">Figure 1 · Captor fan-out</div>
+    <h2>The ~5× mortality fan-out</h2>
+    <p class="sub">Same status — "prisoner of war" — four wildly different odds. Toggle the fill to see either the illustrative share of the ~8.5M captured, or the documented mortality rate by captor.</p>
+    <div class="panel">
+      <div class="switchrow" style="margin-bottom:14px">
+        <button class="switch" id="modeSwitch" role="switch" aria-checked="false" aria-label="Recolor by mortality rate">
+          <span class="knob"></span>
+        </button>
+        <span class="switchlabel" id="modeLabel">Fill: illustrative captor share</span>
+      </div>
+      <svg class="fig" id="fanoutSvg" viewBox="0 0 900 320" role="img" aria-label="Sankey-style fan-out of WW1 prisoners of war from capture into four captor cohorts, colored either by share captured or by documented mortality rate.">
+        <!-- source node -->
+        <rect x="20" y="120" width="130" height="80" rx="6" fill="var(--panel)" stroke="var(--teal)" stroke-width="1.4"/>
+        <text class="lbl-hi" x="34" y="150">CAPTURED</text>
+        <text class="lbl" x="34" y="166">≈ 8.5M (8.0–9.0M)</text>
+        <text class="lbl" x="34" y="182">all fronts, 1914–18</text>
+        <!-- flows: paths drawn by JS -->
+        <g id="flows"></g>
+        <!-- captor bars -->
+        <g id="captorBars"></g>
+      </svg>
+      <div class="caveat">Captor shares are an <strong>illustrative</strong> visualization split (order-of-magnitude, weighted toward Russia's large documented intake) — not an official per-captor tally, which no single source reconciles. Mortality rates and the two counts shown (411k died in Russia; 122k German dead in Allied captivity) are the documented anchors. <span class="chip">±2M total caveat</span></div>
+      <div class="caveat" style="margin-top:8px">Separately, and not tied to one captor bar above: <strong style="color:var(--text)">≈478,000 Austro-Hungarian POWs died in captivity overall</strong>, across all captors combined (mostly Russian-held) — the largest single documented national death toll of the war's POW system.</div>
+    </div>
+  </section>
+
+  <!-- 2. Repatriation drain -->
+  <section class="block" id="drain">
+    <div class="tag">Figure 2 · Repatriation drain</div>
+    <h2>Armistice ≠ freedom</h2>
+    <p class="sub">The reservoir of prisoners still held drained slowly, gated by legal levers written into the peace treaties, not by the guns falling silent.</p>
+    <div class="panel">
+      <div class="readout" id="drainReadout">≈ 1.2M still held <span class="band">(Dec 1918)</span></div>
+      <svg class="fig" id="drainSvg" viewBox="0 0 900 160" role="img" aria-label="Timeline bar from November 1918 to 1922 showing the shrinking reservoir of prisoners still held, with legal event markers.">
+        <line x1="40" y1="70" x2="860" y2="70" stroke="var(--edge)" stroke-width="10" stroke-linecap="round"/>
+        <rect id="drainFill" x="40" y="65" width="0" height="10" rx="5" fill="var(--teal)"/>
+        <g id="drainMarkers"></g>
+      </svg>
+      <div class="controls">
+        <div class="ctrl">
+          <label for="yearSlider">Year <span class="val" id="yearVal">1918 (Nov)</span></label>
+          <input type="range" id="yearSlider" min="0" max="100" value="0" step="1" aria-label="Year from November 1918 to 1922">
+        </div>
+      </div>
+      <div class="caveat">Reservoir: ~1.2M Russians still on German soil (Dec 1918) → 182,748 (Oct 1919) → trickle through 1920 → last out from Siberia/Japan, 1922. Legal gates: <strong style="color:var(--text)">Versailles Art. 214</strong> (repatriate "with the greatest rapidity") and <strong style="color:var(--text)">Art. 221</strong> (a leverage clause tying release to other terms). French-held Germans held to spring 1920.</div>
+    </div>
+  </section>
+
+  <!-- 3. Labor-vs-parole mortality slider -->
+  <section class="block" id="labor">
+    <div class="tag">Figure 3 · The labor-vs-parole knob</div>
+    <h2>Same capture, different sentence</h2>
+    <p class="sub">Two documented endpoints of postwar disposition, blended by policy — plus a what-if toggle for protections that didn't exist yet.</p>
+    <div class="panel">
+      <svg class="fig" id="laborSvg" viewBox="0 0 900 120" role="img" aria-label="Bar showing a blended mortality estimate between a hazardous-labor endpoint and a paroled endpoint, adjustable by slider.">
+        <rect x="40" y="40" width="820" height="26" rx="13" fill="var(--edge)"/>
+        <rect id="laborFill" x="40" y="40" width="0" height="26" rx="13" fill="url(#laborGrad)"/>
+        <defs><linearGradient id="laborGrad" x1="0" x2="1"><stop offset="0" stop-color="var(--teal)"/><stop offset="1" stop-color="var(--amber)"/></linearGradient></defs>
+        <text class="lbl" x="40" y="30">← paroled / light agricultural duty</text>
+        <text class="lbl" x="860" y="30" text-anchor="end">hazardous labor (Murmansk railway) →</text>
+        <circle id="laborKnob" cx="40" cy="53" r="9" fill="var(--text)" stroke="var(--void)" stroke-width="2"/>
+      </svg>
+      <div class="readout" id="laborReadout">≈ 4% modeled mortality <span class="band">(near parole endpoint)</span></div>
+      <div class="controls">
+        <div class="ctrl">
+          <label for="laborSlider">Labor-vs-parole mix <span class="val" id="laborVal">5%</span></label>
+          <input type="range" id="laborSlider" min="0" max="100" value="5" step="1">
+        </div>
+      </div>
+      <div class="switchrow" style="margin-top:14px">
+        <button class="switch" id="genevaSwitch" role="switch" aria-checked="false" aria-label="Toggle 1929 Geneva protections what-if">
+          <span class="knob"></span>
+        </button>
+        <span class="switchlabel">What-if: 1929 Geneva-style protections applied retroactively (illustrative −30% mortality)</span>
+      </div>
+      <div class="caveat">Endpoints: paroled agricultural cohort (low-hazard, illustrative ~2–3%) vs. Murmansk railway construction, <strong style="color:var(--text)">25,000 of 70,000 workers died (~36%)</strong>; French 1919 demining put 270,000 German POWs to work clearing munitions at unknown but real risk. This slider blends a modeled composite — not a documented single statistic.</div>
+    </div>
+  </section>
+
+  <!-- 4. Adjustable-assumptions panel -->
+  <section class="block" id="assumptions">
+    <details class="assump">
+      <summary>Adjustable assumptions — what moves these numbers</summary>
+      <div class="assump-body">
+        <div class="knob-note"><strong style="color:var(--text)">Total captured (±2M caveat):</strong> ~8.5M is a commonly cited aggregate; Russian-front intake is the least reliably documented figure in the whole system, so totals swing by up to ±2M across sources depending which fronts and which "captured vs missing" definition is used.</div>
+        <div class="knob-note"><strong style="color:var(--text)">Overall mortality (~10%, ~750k):</strong> By 1916, ~90% of German-held POWs were already working — labor was the default, not the exception, which is why the labor-vs-parole slider above matters more than any single "captor" label.</div>
+        <div class="knob-note"><strong style="color:var(--text)">Legal floor:</strong> Hague 1899/1907 Arts. 4–20 set the baseline (humane treatment, no reprisals) but had no enforcement teeth; Brest-Litovsk Arts. VIII/XII briefly restructured Eastern-front exchange before the treaty itself collapsed. The 1929 Geneva Convention (16→97 articles, reprisals banned) is the direct reform this war forced — it did not exist yet for anyone modeled here.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- 5. Citation block -->
+  <section class="block" id="citations">
+    <div class="cite">
+      <div class="row">
+        <h3>Documented record</h3>
+        Heather Jones, <em>Violence Against Prisoners of War in the First World War: Britain, France and Germany, 1914–1920</em> (2011) · Alon Rachamimov, <em>POWs and the Great War: Captivity on the Eastern Front</em> (2002) · Reinhard Nachtigal on postwar repatriation (2008) · <em>1914-1918-Online</em> International Encyclopedia of the First World War · Treaty of Versailles Arts. 214–224 · Hague Conventions 1899/1907 Arts. 4–20 · Treaty of Brest-Litovsk Arts. VIII, XII · 1929 Geneva Convention on POWs.
+      </div>
+      <div class="row">
+        <h3>Caveats</h3>
+        Totals vary by up to ±2M across sources; Russian-front figures are the least reliable in the dataset. "Armistice ≠ freedom" — legal release lagged the guns by up to three years for some cohorts.
+      </div>
+      <div class="row">
+        <h3>Genre &amp; further reading (German cluster — WW1-avoided umbrella)</h3>
+        Oliver Henkel, <em>Kaisertag</em> (2002) — flagship German WW1-avoided alt-history, Kaiserreich persisting to 1988 <span class="gentag">novel</span><br>
+        Hannes Stein, <em>Der Komet</em> (2013) — Franz Ferdinand survives Sarajevo, neither World War happens <span class="gentag">novel</span><br>
+        Jan Becher, <em>Sedanstag</em> (2020/21) — 18 stories set in a WW1-free, peacefully united post-1871 Europe <span class="gentag">novel</span><br>
+        German Wikipedia, "Alternativweltgeschichte" — genre hub for the broader tradition <span class="gentag">reference, living genre</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Promotable-to-chain footer -->
+  <div class="footer-promote">
+    This is an explorable explainer, not a frozen result — it computes over assumptions you can adjust above, and ships <strong>no canonical hash</strong>. POW disposition reads alongside the <a href="ottoman-partition.html">Ottoman-partition page</a> as the second beat of the chain-8 finance→demographics→POW sequence, but unlike that page's <code>ah_war_finance_default</code> widget, there is no deterministic POW-ledger tool proposed — the accounting here (captor shares, labor-vs-parole mix) is too contested to freeze into a single kernel. It stays illustrative by design.
+  </div>
+
+  <div class="footnote">SOURCE // NEWTRIPOLI-ALTHIST-EXPLAINER-ENHANCEMENTS.md §2 (POW disposition) · NEWTRIPOLI-EXPLAINER-TEMPLATE-SPEC.md. Figures are ✦ documented-record anchors with stated caveats, not asserted precision. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ── Figure 1: captor fan-out ────────────────────────────────────────────
+  // cohorts: illustrative share of ~8.5M captured (NOT an official per-captor tally),
+  // paired with the documented mortality-rate range per captor (ENH §2).
+  var COHORTS = [
+    { id:"germany",  label:"Germany (captor)",           share:0.32, rateLo:0.035, rateHi:0.05,  count:null },
+    { id:"ah",       label:"Austria-Hungary (captor)",   share:0.14, rateLo:0.07,  rateHi:0.07,  count:null },
+    { id:"alliedGer",label:"Allied-held Germans",         share:0.20, rateLo:0.124, rateHi:0.124, count:"122k German dead" },
+    { id:"russia",   label:"Russia (captor)",             share:0.34, rateLo:0.15,  rateHi:0.20,  count:"411k died in Russia" }
+  ];
+  var COLORS_SHARE = ["#34e6e0","#5fd0e0","#8fb8d8","#c0a0d0"];
+  function rateColor(rateMid){
+    // low mortality -> teal, high mortality -> amber (interpolate)
+    var t = Math.max(0, Math.min(1, (rateMid - 0.03) / (0.20 - 0.03)));
+    var teal = [52,230,224], amber = [255,180,84];
+    var c = teal.map(function(v,i){ return Math.round(v + (amber[i]-v)*t); });
+    return "rgb(" + c.join(",") + ")";
+  }
+
+  var mode = "share"; // "share" | "rate"
+  var flowsG = document.getElementById("flows");
+  var barsG = document.getElementById("captorBars");
+  var srcX = 150, srcYtop = 120, srcH = 80;
+  var barX = 620, barW = 220, areaTop = 20, areaBot = 300;
+
+  function renderFanout(){
+    flowsG.innerHTML = "";
+    barsG.innerHTML = "";
+    var y = srcYtop;
+    var gap = 8;
+    var usableH = srcH;
+    COHORTS.forEach(function(c, i){
+      var flowH = usableH * c.share;
+      var rateMid = (c.rateLo + c.rateHi) / 2;
+      var fill = mode === "rate" ? rateColor(rateMid) : COLORS_SHARE[i];
+      var y0 = y, y1 = y + flowH;
+      var barY = areaTop + (areaBot - areaTop) * (i / COHORTS.length) + 6;
+      var barH = (areaBot - areaTop) / COHORTS.length - 12;
+      // flow path: simple curved ribbon from source right edge to bar left edge
+      var x0 = srcX, x1 = barX;
+      var midX = (x0 + x1) / 2;
+      var path = "M " + x0 + " " + y0 +
+        " C " + midX + " " + y0 + " " + midX + " " + (barY) + " " + x1 + " " + (barY) +
+        " L " + x1 + " " + (barY + barH) +
+        " C " + midX + " " + (barY + barH) + " " + midX + " " + y1 + " " + x0 + " " + y1 + " Z";
+      var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", path);
+      p.setAttribute("fill", fill);
+      p.setAttribute("opacity", "0.55");
+      flowsG.appendChild(p);
+      y = y1 + gap;
+
+      // captor bar
+      var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", barX); rect.setAttribute("y", barY);
+      rect.setAttribute("width", barW); rect.setAttribute("height", barH);
+      rect.setAttribute("rx", 6); rect.setAttribute("fill", "var(--panel)");
+      rect.setAttribute("stroke", fill); rect.setAttribute("stroke-width", "1.6");
+      barsG.appendChild(rect);
+
+      var t1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t1.setAttribute("x", barX + 12); t1.setAttribute("y", barY + 18);
+      t1.setAttribute("class", "lbl-hi");
+      t1.textContent = c.label;
+      barsG.appendChild(t1);
+
+      var rateStr = c.rateLo === c.rateHi ? (Math.round(c.rateLo*1000)/10 + "%") : (Math.round(c.rateLo*1000)/10 + "–" + Math.round(c.rateHi*1000)/10 + "%");
+      var t2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t2.setAttribute("x", barX + 12); t2.setAttribute("y", barY + 34);
+      t2.setAttribute("class", "lbl-amber");
+      t2.textContent = "mortality ≈ " + rateStr;
+      barsG.appendChild(t2);
+
+      if (c.count) {
+        var t3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t3.setAttribute("x", barX + 12); t3.setAttribute("y", barY + Math.min(barH - 6, 48));
+        t3.setAttribute("class", "lbl");
+        t3.textContent = c.count;
+        barsG.appendChild(t3);
+      }
+    });
+  }
+  renderFanout();
+
+  var modeSwitch = document.getElementById("modeSwitch");
+  var modeLabel = document.getElementById("modeLabel");
+  function setMode(m){
+    mode = m;
+    modeSwitch.setAttribute("aria-checked", m === "rate" ? "true" : "false");
+    modeLabel.textContent = m === "rate" ? "Fill: documented mortality rate" : "Fill: illustrative captor share";
+    renderFanout();
+  }
+  modeSwitch.addEventListener("click", function(){ setMode(mode === "share" ? "rate" : "share"); });
+  modeSwitch.addEventListener("keydown", function(e){
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); modeSwitch.click(); }
+  });
+
+  // ── Figure 2: repatriation drain ────────────────────────────────────────
+  // reservoir points (year fraction 0..1 across Nov1918..1922, count still held)
+  var DRAIN_POINTS = [
+    { t: 0.00, n: 1200000, label: "Nov 1918" },
+    { t: 0.22, n: 182748,  label: "Oct 1919 · 182,748" },
+    { t: 0.55, n: 60000,   label: "1920 · French-held Germans to spring" },
+    { t: 1.00, n: 500,     label: "1922 · Siberia/Japan last out" }
+  ];
+  function interpDrain(t){
+    for (var i = 0; i < DRAIN_POINTS.length - 1; i++){
+      var a = DRAIN_POINTS[i], b = DRAIN_POINTS[i+1];
+      if (t >= a.t && t <= b.t){
+        var f = (t - a.t) / (b.t - a.t);
+        return a.n + (b.n - a.n) * f;
+      }
+    }
+    return DRAIN_POINTS[DRAIN_POINTS.length-1].n;
+  }
+  var drainFill = document.getElementById("drainFill");
+  var drainReadout = document.getElementById("drainReadout");
+  var drainMarkers = document.getElementById("drainMarkers");
+  var yearSlider = document.getElementById("yearSlider");
+  var yearVal = document.getElementById("yearVal");
+  var trackX0 = 40, trackX1 = 850;
+
+  function drawDrainMarkers(){
+    drainMarkers.innerHTML = "";
+    var art214x = trackX0 + (trackX1 - trackX0) * 0.05;
+    var art221x = trackX0 + (trackX1 - trackX0) * 0.10;
+    [[art214x,"Art. 214"], [art221x,"Art. 221"]].forEach(function(m){
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      l.setAttribute("x1", m[0]); l.setAttribute("x2", m[0]);
+      l.setAttribute("y1", 50); l.setAttribute("y2", 90);
+      l.setAttribute("stroke", "var(--amber)"); l.setAttribute("stroke-width", "1");
+      l.setAttribute("stroke-dasharray", "3 3");
+      drainMarkers.appendChild(l);
+      var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t.setAttribute("x", m[0]); t.setAttribute("y", 105);
+      t.setAttribute("class", "lbl-amber"); t.setAttribute("text-anchor", "middle");
+      t.textContent = m[1];
+      drainMarkers.appendChild(t);
+    });
+  }
+  drawDrainMarkers();
+
+  function renderDrain(){
+    var t = yearSlider.value / 100;
+    var n = interpDrain(t);
+    var w = (trackX1 - trackX0) * (1 - t); // shrinking reservoir bar, full at t=0
+    drainFill.setAttribute("width", Math.max(0, w));
+    drainFill.setAttribute("x", trackX0);
+    var months = ["Nov 1918","1919","1920","1921","1922"];
+    var idx = Math.min(months.length - 1, Math.floor(t * (months.length)));
+    yearVal.textContent = months[idx];
+    drainReadout.innerHTML = "≈ " + Math.round(n).toLocaleString() + " still held <span class=\"band\">(" + months[idx] + ")</span>";
+  }
+  yearSlider.addEventListener("input", renderDrain);
+  renderDrain();
+
+  // ── Figure 3: labor-vs-parole mortality slider ──────────────────────────
+  var laborSlider = document.getElementById("laborSlider");
+  var laborVal = document.getElementById("laborVal");
+  var laborFill = document.getElementById("laborFill");
+  var laborKnob = document.getElementById("laborKnob");
+  var laborReadout = document.getElementById("laborReadout");
+  var genevaSwitch = document.getElementById("genevaSwitch");
+  var genevaOn = false;
+
+  var PAROLE_RATE = 0.025;   // illustrative low-hazard endpoint
+  var LABOR_RATE = 0.36;     // Murmansk railway, 25,000/70,000
+
+  function renderLabor(){
+    var mix = laborSlider.value / 100; // 0 = parole, 1 = hazardous labor
+    laborVal.textContent = laborSlider.value + "%";
+    var w = 820 * mix;
+    laborFill.setAttribute("width", w);
+    laborKnob.setAttribute("cx", 40 + w);
+    var rate = PAROLE_RATE + (LABOR_RATE - PAROLE_RATE) * mix;
+    if (genevaOn) rate *= 0.70; // illustrative -30% under retroactive 1929-style protections
+    var band = mix < 0.33 ? "near parole endpoint" : (mix > 0.66 ? "near hazardous-labor endpoint" : "blended");
+    laborReadout.innerHTML = "≈ " + (Math.round(rate*1000)/10) + "% modeled mortality <span class=\"band\">(" + band + (genevaOn ? ", Geneva what-if applied" : "") + ")</span>";
+  }
+  laborSlider.addEventListener("input", renderLabor);
+  genevaSwitch.addEventListener("click", function(){
+    genevaOn = !genevaOn;
+    genevaSwitch.setAttribute("aria-checked", genevaOn ? "true" : "false");
+    renderLabor();
+  });
+  genevaSwitch.addEventListener("keydown", function(e){
+    if (e.key === " " || e.key === "Enter") { e.preventDefault(); genevaSwitch.click(); }
+  });
+  renderLabor();
+
+  // deep-link seeding: #year=NN&labor=NN&geneva=1
+  (function seedFromHash(){
+    var h = location.hash.replace("#", "");
+    if (!h) return;
+    var params = {};
+    h.split("&").forEach(function(kv){ var p = kv.split("="); if (p.length===2) params[p[0]] = p[1]; });
+    if (params.year !== undefined) { yearSlider.value = Math.max(0, Math.min(100, +params.year)); renderDrain(); }
+    if (params.labor !== undefined) { laborSlider.value = Math.max(0, Math.min(100, +params.labor)); renderLabor(); }
+    if (params.geneva === "1") { genevaSwitch.click(); }
+    if (params.mode === "rate") { setMode("rate"); }
+  })();
+})();
+</script>
+</body>
+</html>

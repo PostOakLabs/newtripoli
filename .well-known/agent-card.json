@@ -1,0 +1,78 @@
+{
+  "protocolVersion": "1.0",
+  "name": "New Tripoli Simulation Terminal",
+  "description": "Deterministic, hash-verifiable science instruments for the New Tripoli scenario — relativistic delivery, time-dilation, digital-mind feasibility (Landauer vs Sahara cap), and a graded D1–D10 claim ledger. 13 client-side, zero-egress calculators; each emits an OpenChainGraph-conformant artifact carrying a verifiable SHA-256 execution_hash.",
+  "url": "https://mcp.newtripoli.xyz/mcp",
+  "preferredTransport": "JSONRPC",
+  "version": "0.8.0",
+  "provider": {
+    "organization": "Post Oak Labs",
+    "url": "https://newtripoli.xyz"
+  },
+  "documentationUrl": "https://newtripoli.xyz/ch-sims/mcp.html",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false,
+    "extensions": [
+      {
+        "uri": "https://postoaklabs.github.io/chaingraph/ext/x-chaingraph/v0.1",
+        "required": false,
+        "params": {
+          "spec_version": "0.8.0",
+          "conformance_level": "L2",
+          "graph_index": "https://newtripoli.xyz/chaingraph.json",
+          "verify_endpoint": "verify_execution_hash",
+          "hash_alg": "sha256",
+          "mandate_namespace": "me.newtripoli",
+          "tool_count": 13,
+          "mandate_families": ["canon", "feasibility", "real-science"],
+          "compliance_registers": ["canon", "feasibility", "real-science"],
+          "l2_runtime_chaining": true
+        }
+      }
+    ]
+  },
+  "skills": [
+    {
+      "id": "canon",
+      "name": "New Tripoli Canon Instruments",
+      "description": "Deterministic calculators over New Tripoli canon: time dilation, comms lag between subjective-time rates, orbital ring housing density, birthday-sacrifice subjective time cost, synthetic body mass, mind-upload selection cost, post-Wake tech-tree path solving, and relativistic kinetic-probe delivery (deceleration lottery). All guest-legal, hash-verifiable via execution_hash.",
+      "tags": ["canon", "time-dilation", "kinetic-probe", "tech-tree", "hash-verifiable"],
+      "examples": [
+        "Compute the subjective-year multiplier at 400x dilation with a 6-month Universal Sabbath reset.",
+        "What's the round-trip comms lag between a 1x and a 400x observer over a 4-light-year link?",
+        "Solve the shortest post-Wake tech-tree path to a femtoscale assembler."
+      ]
+    },
+    {
+      "id": "feasibility",
+      "name": "Feasibility & Energy Envelope",
+      "description": "Vat/Landauer digital-mind pricing versus the Sahara solar cap, augmentation-stage acceleration ceilings, and the graded D1–D10 feasibility crosswalk. Most feasibility-register tools are non-guest-legal — hash-verifiable only, not narratively canon.",
+      "tags": ["feasibility", "landauer", "sahara-cap", "acceleration-ceiling", "d1-d10"],
+      "examples": [
+        "At 90% digital substrate split and 10x acceleration, does population power draw exceed the Sahara cap?",
+        "What's the acceleration ceiling for the synaptic augmentation stage?",
+        "Grade all ten C-D1..C-D10 feasibility claims against this scenario config."
+      ]
+    },
+    {
+      "id": "real-science",
+      "name": "Real-Science & Provenance",
+      "description": "The brain-computer interface bandwidth gap against whole-brain neuron count, and the ChainGraph provenance manifest that anchors any tool run's tamper-evident audit trail. Interface bandwidth is non-guest-legal (hash-verifiable only); provenance is guest-legal.",
+      "tags": ["real-science", "interface-bandwidth", "provenance", "chaingraph"],
+      "examples": [
+        "How far is a 1,024-channel BCI from whole-brain bandwidth?",
+        "Anchor a provenance manifest for this kinetic-probe run, threaded to its parent hash."
+      ]
+    }
+  ],
+  "defaultInputModes": ["application/json", "text/plain"],
+  "defaultOutputModes": ["application/json", "text/plain"],
+  "license": {
+    "code": "MIT",
+    "prose": "CC BY 4.0",
+    "data": "CC0"
+  },
+  "updated": "2026-07-13"
+}

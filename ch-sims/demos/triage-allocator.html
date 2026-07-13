@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<!--
+  Explainer: Triage allocator — who gets the ventilator?
+  New Tripoli / Cognitive Husbandry — Sim Catalogue
+  Live client-side simulation over a stipulated synthetic patient population. No golden hash, no worker call.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triage Allocator — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Four ventilator-allocation policies, one crisis: lottery, SOFA-bands, age-band, and SOFA+comorbidity trade lives against life-years against equity. Run the seeded reveal yourself.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--border:rgba(52,230,224,0.16);--amber:#ffb454}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 4%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--gold)}
+.demo-head h1{font-size:clamp(2rem,4.4vw,3rem);text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--teal);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.demo-head .lede{font-size:1.05rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+section{margin-top:40px}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.panel{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));border:1px solid var(--edge);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.policy-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.policy-btn{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.03em;color:var(--body);background:var(--deep);border:1px solid var(--edge);border-radius:7px;padding:9px 14px;cursor:pointer;transition:all .15s;text-align:left}
+.policy-btn:hover{border-color:var(--teal);color:var(--text)}
+.policy-btn[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-glow);background:rgba(35,255,136,.08);box-shadow:0 0 0 1px var(--gold) inset}
+.policy-btn .pname{display:block;font-weight:700;color:inherit;font-family:'Chakra Petch',sans-serif;font-size:13px;text-transform:uppercase;margin-bottom:2px}
+.policy-btn .pdesc{display:block;font-size:10px;color:var(--muted);font-family:'DM Sans',sans-serif}
+.figure-wrap{overflow-x:auto}
+svg text{font-family:'JetBrains Mono',monospace}
+.readout-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+.readout{flex:1;min-width:180px;background:var(--deep);border:1px solid var(--edge);border-radius:8px;padding:12px 14px}
+.readout .rlabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.readout .rval{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.3rem;color:var(--teal-glow)}
+.readout .rval.gold{color:var(--gold-glow)}
+.readout .rband{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:2px}
+.knob-row{display:flex;flex-direction:column;gap:16px}
+.knob{display:flex;flex-direction:column;gap:6px}
+.knob-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--body);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.knob-label .kval{color:var(--teal-glow);font-weight:700}
+.knob input[type="range"]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--rim);outline:none}
+.knob input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--teal);border:2px solid var(--void);cursor:pointer;box-shadow:0 0 8px rgba(52,230,224,.5)}
+.knob input[type="range"]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--teal);border:2px solid var(--void);cursor:pointer}
+.tooltip-note{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.5}
+.reveal-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.seed-input{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--deep);border:1px solid var(--edge);border-radius:6px;color:var(--text);padding:7px 10px;width:110px}
+.reroll-btn,.cta{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:9px 16px;border-radius:6px;font-weight:600;transition:background .15s;border:none;cursor:pointer}
+.reroll-btn:hover,.cta:hover{background:var(--teal-glow);color:var(--void)}
+.grid-legend{display:flex;gap:16px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:10px}
+.grid-legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.equity-callout{border-left:3px solid var(--amber);padding:12px 16px;background:rgba(255,180,84,.06);margin-top:16px;font-size:.92rem;color:var(--body)}
+.equity-callout strong{color:var(--amber)}
+.cite-block{font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.85;color:var(--body)}
+.cite-block .clabel{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:10px;display:block;margin-top:14px;margin-bottom:4px}
+.cite-block .clabel:first-child{margin-top:0}
+.cite-block .living{color:var(--muted)}
+.footer-promo{border:1px solid var(--edge);border-radius:10px;padding:18px 20px;background:linear-gradient(180deg,rgba(12,19,17,.5),rgba(8,13,12,.4));font-size:.9rem;color:var(--body);line-height:1.7}
+.footer-promo code{font-family:'JetBrains Mono',monospace;color:var(--teal-glow);font-size:.85em}
+.footnote{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:620px){.container{padding:30px 16px 70px}.readout-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Speculative explainer · triage allocator</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Speculative explainer · crisis-standard-of-care</span>
+    <h1>Who gets the <span class="acc">ventilator?</span></h1>
+    <p class="lede">One bed, two patients, four rulebooks. Every crisis-standard-of-care policy trades <strong>lives</strong> against <strong>life-years</strong> against <strong>equity</strong> — none of them wins on all three at once. Pick a policy, run the seeded reveal, and watch who it selects.</p>
+  </header>
+
+  <section id="policy">
+    <div class="section-tag">Step 1 · Policy selector</div>
+    <div class="panel">
+      <div class="policy-group" role="radiogroup" aria-label="Allocation policy">
+        <button class="policy-btn" role="radio" data-policy="lottery" aria-pressed="false">
+          <span class="pname">Lottery</span><span class="pdesc">pure random draw, no clinical input</span>
+        </button>
+        <button class="policy-btn" role="radio" data-policy="sofa" aria-pressed="false">
+          <span class="pname">SOFA-bands</span><span class="pdesc">NY-2015 tiers ≤7 / 8–11 / ≥12, ties by lottery</span>
+        </button>
+        <button class="policy-btn" role="radio" data-policy="age" aria-pressed="false">
+          <span class="pname">Age-band</span><span class="pdesc">youngest prioritized, maximizes life-years</span>
+        </button>
+        <button class="policy-btn" role="radio" data-policy="sofacomorbid" aria-pressed="false">
+          <span class="pname">SOFA + comorbidity</span><span class="pdesc">Maryland-2021: +3 SOFA pts per severe comorbidity</span>
+        </button>
+      </div>
+
+      <div class="figure-wrap">
+        <svg id="barchart" viewBox="0 0 900 260" width="100%" style="min-width:560px;max-height:280px">
+          <!-- populated live by JS -->
+        </svg>
+      </div>
+
+      <div class="readout-row">
+        <div class="readout">
+          <div class="rlabel">Lives saved / 1,000</div>
+          <div class="rval" id="rv-lives">—</div>
+          <div class="rband" id="rb-lives">—</div>
+        </div>
+        <div class="readout">
+          <div class="rlabel">Life-years saved / 1,000</div>
+          <div class="rval gold" id="rv-ly">—</div>
+          <div class="rband" id="rb-ly">—</div>
+        </div>
+        <div class="readout">
+          <div class="rlabel">Selection-rate gap (equity)</div>
+          <div class="rval" id="rv-disp">—</div>
+          <div class="rband" id="rb-disp">—</div>
+        </div>
+      </div>
+
+      <div class="equity-callout" id="equity-callout">
+        Loading equity read…
+      </div>
+    </div>
+  </section>
+
+  <section id="assumptions">
+    <div class="section-tag">Step 2 · Adjustable assumptions</div>
+    <div class="panel">
+      <div class="knob-row">
+        <div class="knob">
+          <div class="knob-label"><span>Vent : patient ratio <span class="tooltip-note" title="PLOS ONE 2024 base case is 1 bed per 2 patients — this knob widens or narrows the crisis.">ⓘ</span></span><span class="kval" id="kv-ratio">1 : 2</span></div>
+          <input type="range" id="k-ratio" min="1" max="4" step="1" value="2">
+        </div>
+        <div class="knob">
+          <div class="knob-label"><span>Access-gap severity <span class="tooltip-note" title="Synthetic driver dramatizing the documented finding that non-lottery/non-SOFA-band protocols produce racial disparities — NOT a literal coefficient from the study. 0 = no baseline gap between demographic groups; 1 = maximal.">ⓘ</span></span><span class="kval" id="kv-gap">40%</span></div>
+          <input type="range" id="k-gap" min="0" max="100" step="5" value="40">
+        </div>
+      </div>
+      <p class="tooltip-note" style="margin-top:14px">Every figure above is a synthetic 1,000-patient population regenerated from the seed below — this panel controls the accounting, the seed controls the instance.</p>
+    </div>
+  </section>
+
+  <section id="reveal">
+    <div class="section-tag">Step 3 · Seeded-lottery reveal</div>
+    <div class="panel">
+      <div class="reveal-controls">
+        <label class="tooltip-note" for="seed-input">Seed</label>
+        <input class="seed-input" type="number" id="seed-input" value="1000" min="0" max="999999" step="1">
+        <button class="reroll-btn" id="reroll-btn">Re-roll seed →</button>
+      </div>
+      <p class="tooltip-note">Same seed always produces the same population and the same "who lives" outcome — reproducibility is the point. Re-rolling shows how much a single draw's tie-breaks can swing around the banded estimate above. Grid shows the first 100 of 1,000 simulated patients.</p>
+      <div class="figure-wrap">
+        <svg id="patientgrid" viewBox="0 0 620 400" width="100%" style="min-width:420px;max-height:420px">
+        </svg>
+      </div>
+      <div class="grid-legend">
+        <span><span class="sw" style="background:var(--gold)"></span>selected + survives</span>
+        <span><span class="sw" style="background:var(--teal)"></span>not selected + survives anyway</span>
+        <span><span class="sw" style="background:var(--dim)"></span>not selected + dies</span>
+        <span><span class="sw" style="background:var(--amber);opacity:.55"></span>selected + dies anyway</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="citation">
+    <div class="section-tag">Documented record &amp; further reading</div>
+    <div class="panel cite-block">
+      <span class="clabel">Documented record</span>
+      Rubin JB et al., "Equitable Allocation and Ventilator Triage" — simulation cohort study, <em>PLOS ONE</em> (2024): 1 ventilator per 2 patients base case; age-banding ≈28.7 lives + 3,408 life-years saved per 1,000 (maximizes life-years); SOFA-bands ≈13.2 lives + 416 life-years saved per 1,000 (fewest lives, most equitable). All protocols except lottery and banded-SOFA produced statistically significant racial disparities in the study cohort.<br>
+      White DB, Lo B et al., COVID-era crisis-standard-of-care allocation simulation, <em>Am J Respir Crit Care Med</em>.
+      <span class="clabel">Caveats</span>
+      This page's SOFA-bands and age-band headline figures anchor on the PLOS ONE point estimates; lottery and SOFA+comorbidity outcomes, and every band shown, come from this page's own small synthetic 1,000-patient simulation (12 reseeds) built to the same tiers — <strong>not</strong> a reproduction of the study's full patient-arrival model. Age carries uncertain legal status as an allocation criterion in several US jurisdictions. Read every number here as illustrative, not a clinical recommendation.
+      <span class="clabel">Genre / further reading <span class="living">(living-genre color, not scholarship, where noted)</span></span>
+      NY State Task Force on Life and the Law, <em>Ventilator Allocation Guidelines</em> (2015, rev.) — source of the ≤7 / 8–11 / ≥12 SOFA tiers used here.<br>
+      Maryland Department of Health, Crisis Standards of Care framework (2021) — source of the +3-point severe-comorbidity SOFA adjustment.
+    </div>
+  </section>
+
+  <section id="promote">
+    <div class="footer-promo">
+      This is an explorable explainer, not a frozen result — it computes over assumptions you can change above, and ships no canonical hash. When the underlying allocation model locks, <code>nt_triage_allocator</code> can be promoted to a deterministic MCP chain (parameters → hashed identity), the way <code>ch_stadium_capacity</code> already is.
+    </div>
+    <div class="footnote">SOURCE // Rubin et al. <em>PLOS ONE</em> (2024); NY-2015 / Maryland-2021 allocation frameworks. This page runs a client-side synthetic-population simulation only — no network calls, no worker call, no golden hash. <a href="../index.html" style="color:inherit">All instruments →</a></div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ---- seeded RNG (mulberry32) ----
+function mulberry32(a){
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const N = 1000;
+const GRID_N = 100;
+
+function genPopulation(seed, gapKnob){
+  const rng = mulberry32(seed);
+  const gap = gapKnob / 100; // 0..1
+  const pop = [];
+  for (let i = 0; i < N; i++){
+    const age = 18 + rng() * 72;
+    const group = rng() < 0.5 ? 'A' : 'B';
+    // group B carries a synthetic baseline-severity offset scaled by the access-gap knob —
+    // dramatizes the documented disparity finding, not a literal published coefficient.
+    const offset = group === 'B' ? gap * 6 : 0;
+    const sofaRaw = (rng() + rng() + rng()) / 3 * 24 + offset;
+    const sofa = Math.min(24, Math.max(0, sofaRaw));
+    const comorbid = rng() < (0.20 + (group === 'B' ? gap * 0.15 : 0));
+    const sofaEff = comorbid ? Math.min(24, sofa + 3) : sofa;
+    const remainingLife = Math.max(3, 85 - age);
+    // ventilator marginal benefit: narrow band of patients are actually swayed by the vent —
+    // too well and they survive anyway, too sick and the vent doesn't change the outcome.
+    // Gaussian bump tuned so SOFA-bands/age-band land near the PLOS ONE (2024) 13.2/28.7-per-1,000
+    // order of magnitude — see citation-block caveat: not a reproduction of that study's own model.
+    const benefitProb = 0.01 + 0.12 * Math.exp(-Math.pow(sofa - 9, 2) / (2 * 4.5 * 4.5));
+    const survivalWithout = Math.max(0.02, 1 - sofa / 26);
+    pop.push({ i, age, group, sofa, sofaEff, comorbid, remainingLife, benefitProb, survivalWithout, tie: rng() });
+  }
+  return pop;
+}
+
+function selectPatients(pop, policy, ratioKnob){
+  const K = Math.round(N / ratioKnob);
+  let ordered;
+  if (policy === 'lottery'){
+    ordered = pop.slice().sort((a,b) => a.tie - b.tie);
+  } else if (policy === 'sofa'){
+    ordered = pop.slice().sort((a,b) => (a.sofa - b.sofa) || (a.tie - b.tie));
+  } else if (policy === 'age'){
+    ordered = pop.slice().sort((a,b) => (a.age - b.age) || (a.tie - b.tie));
+  } else { // sofacomorbid
+    ordered = pop.slice().sort((a,b) => (a.sofaEff - b.sofaEff) || (a.tie - b.tie));
+  }
+  const selected = new Set(ordered.slice(0, K).map(p => p.i));
+  return selected;
+}
+
+function scoreFor(pop, selected){
+  let lives = 0, lifeYears = 0;
+  let selA = 0, totalA = 0, selB = 0, totalB = 0;
+  for (const p of pop){
+    if (p.group === 'A') totalA++; else totalB++;
+    if (selected.has(p.i)){
+      lives += p.benefitProb;
+      lifeYears += p.benefitProb * p.remainingLife;
+      if (p.group === 'A') selA++; else selB++;
+    }
+  }
+  const rateA = totalA ? selA / totalA : 0;
+  const rateB = totalB ? selB / totalB : 0;
+  return { lives, lifeYears, gapPts: (rateA - rateB) * 100 };
+}
+
+// central estimate + band across reseeds, at current knob settings
+function bandFor(policy, ratioKnob, gapKnob, seed){
+  const seeds = [];
+  for (let s = 0; s < 12; s++) seeds.push(seed + s * 97);
+  const runs = seeds.map(s => scoreFor(genPopulation(s, gapKnob), selectPatients(genPopulation(s, gapKnob), policy, ratioKnob)));
+  const pick = (f) => runs.map(f);
+  const stat = (arr) => ({ mean: arr.reduce((a,b)=>a+b,0)/arr.length, lo: Math.min(...arr), hi: Math.max(...arr) });
+  return {
+    lives: stat(pick(r => r.lives)),
+    lifeYears: stat(pick(r => r.lifeYears)),
+    gapPts: stat(pick(r => r.gapPts)),
+  };
+}
+
+const POLICIES = ['lottery', 'sofa', 'age', 'sofacomorbid'];
+const PLABEL = { lottery: 'Lottery', sofa: 'SOFA-bands', age: 'Age-band', sofacomorbid: 'SOFA+comorbid' };
+
+let state = { policy: 'sofa', ratioKnob: 2, gapKnob: 40, seed: 1000 };
+
+const svgns = 'http://www.w3.org/2000/svg';
+function el(tag, attrs){
+  const e = document.createElementNS(svgns, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+function drawBarChart(){
+  const svg = document.getElementById('barchart');
+  svg.innerHTML = '';
+  const metrics = [
+    { key: 'lives', label: 'Lives / 1,000', color: 'var(--teal)', max: 40 },
+    { key: 'lifeYears', label: 'Life-years / 1,000', color: 'var(--gold)', max: 3800 },
+    { key: 'gapPts', label: 'Equity gap (pts)', color: 'var(--amber)', max: 30, abs: true },
+  ];
+  const bandsByPolicy = {};
+  POLICIES.forEach(p => bandsByPolicy[p] = bandFor(p, state.ratioKnob, state.gapKnob, state.seed));
+
+  const colW = 280, groupPad = 20, barW = 44, chartH = 170, top = 20;
+  metrics.forEach((m, mi) => {
+    const gx = mi * colW + groupPad;
+    svg.appendChild(el('text', { x: gx, y: 12, fill: 'var(--muted)', 'font-size': 11 })).textContent = m.label;
+    POLICIES.forEach((p, pi) => {
+      const b = bandsByPolicy[p][m.key];
+      const val = m.abs ? Math.abs(b.mean) : b.mean;
+      const lo = m.abs ? Math.abs(b.lo) : b.lo;
+      const hi = m.abs ? Math.abs(b.hi) : b.hi;
+      const h = Math.max(2, (val / m.max) * chartH);
+      const x = gx + pi * (barW + 8);
+      const y = top + chartH - h + 20;
+      const rect = el('rect', { x, y, width: barW, height: h, rx: 3, fill: p === state.policy ? m.color.replace('var(','').replace(')','') : m.color, opacity: p === state.policy ? 1 : 0.38 });
+      // use CSS var via style since attribute fill can't resolve var() reliably in all renderers
+      rect.setAttribute('fill', `${m.color}`);
+      rect.style.opacity = p === state.policy ? '1' : '0.35';
+      svg.appendChild(rect);
+      // band whisker
+      const hiH = Math.max(2,(hi/m.max)*chartH), loH = Math.max(2,(lo/m.max)*chartH);
+      const yHi = top + chartH - hiH + 20, yLo = top + chartH - loH + 20;
+      const whisker = el('line', { x1: x + barW/2, y1: yHi, x2: x + barW/2, y2: yLo, stroke: 'var(--text)', 'stroke-width': 1.4, opacity: 0.55 });
+      svg.appendChild(whisker);
+      const lbl = el('text', { x: x + barW/2, y: top + chartH + 34, fill: 'var(--muted)', 'font-size': 8.6, 'text-anchor': 'middle' });
+      lbl.textContent = PLABEL[p].split(' ')[0];
+      svg.appendChild(lbl);
+    });
+  });
+  return bandsByPolicy;
+}
+
+function fmtInterval(central, lo, hi, decimals){
+  const f = (x) => x.toFixed(decimals);
+  return `≈ ${f(central)} (${f(lo)}–${f(hi)})`;
+}
+
+function drawGrid(){
+  const svg = document.getElementById('patientgrid');
+  svg.innerHTML = '';
+  const pop = genPopulation(state.seed, state.gapKnob);
+  const selected = selectPatients(pop, state.policy, state.ratioKnob);
+  const rng = mulberry32(state.seed ^ 0x9e3779b9);
+  const cols = 10, cell = 58, pad = 6;
+  for (let idx = 0; idx < GRID_N; idx++){
+    const p = pop[idx];
+    const isSel = selected.has(p.i);
+    const survivalProb = isSel ? (p.survivalWithout + p.benefitProb) : p.survivalWithout;
+    const lives = rng() < Math.min(0.98, survivalProb);
+    let color;
+    if (isSel && lives) color = 'var(--gold)';
+    else if (!isSel && lives) color = 'var(--teal)';
+    else if (isSel && !lives) color = 'var(--amber)';
+    else color = 'var(--dim)';
+    const cx = (idx % cols) * cell + pad;
+    const cy = Math.floor(idx / cols) * cell + pad;
+    const rect = el('rect', { x: cx, y: cy, width: cell - pad*1.4, height: cell - pad*1.4, rx: 4, fill: color, opacity: (isSel && !lives) ? 0.55 : 1 });
+    if (isSel){ rect.setAttribute('stroke', 'var(--text)'); rect.setAttribute('stroke-width', '1'); rect.setAttribute('stroke-opacity','0.4'); }
+    svg.appendChild(rect);
+  }
+}
+
+function updateEquityCallout(bandsByPolicy){
+  const el2 = document.getElementById('equity-callout');
+  const b = bandsByPolicy[state.policy].gapPts;
+  const lot = bandsByPolicy.lottery.gapPts;
+  const magnitude = Math.abs(b.mean);
+  const lotterySpread = Math.abs(lot.hi - lot.lo) / 2 + Math.abs(lot.mean);
+  let verdict;
+  if (magnitude <= lotterySpread){
+    verdict = `Selection-rate gap of ${fmtInterval(b.mean, b.lo, b.hi, 1)} points is <strong>within uncertainty</strong> of the lottery baseline — no clear disparity at this access-gap-severity setting.`;
+  } else {
+    verdict = `This policy opens a selection-rate gap of ${fmtInterval(b.mean, b.lo, b.hi, 1)} points between the synthetic groups, clear of the lottery baseline — echoing the study's finding that most non-lottery protocols produced measurable disparities. Raise the access-gap-severity knob to zero to see it collapse.`;
+  }
+  el2.innerHTML = `<strong>Equity read —</strong> ${verdict}`;
+}
+
+function render(){
+  document.querySelectorAll('.policy-btn').forEach(btn => {
+    btn.setAttribute('aria-pressed', btn.dataset.policy === state.policy ? 'true' : 'false');
+  });
+  document.getElementById('kv-ratio').textContent = `1 : ${state.ratioKnob}`;
+  document.getElementById('kv-gap').textContent = `${state.gapKnob}%`;
+
+  const bandsByPolicy = drawBarChart();
+  const cur = bandsByPolicy[state.policy];
+  document.getElementById('rv-lives').textContent = cur.lives.mean.toFixed(1);
+  document.getElementById('rb-lives').textContent = fmtInterval(cur.lives.mean, cur.lives.lo, cur.lives.hi, 1);
+  document.getElementById('rv-ly').textContent = Math.round(cur.lifeYears.mean).toLocaleString();
+  document.getElementById('rb-ly').textContent = fmtInterval(cur.lifeYears.mean, cur.lifeYears.lo, cur.lifeYears.hi, 0);
+  document.getElementById('rv-disp').textContent = `${cur.gapPts.mean.toFixed(1)} pts`;
+  document.getElementById('rb-disp').textContent = fmtInterval(cur.gapPts.mean, cur.gapPts.lo, cur.gapPts.hi, 1);
+
+  updateEquityCallout(bandsByPolicy);
+  drawGrid();
+}
+
+document.querySelectorAll('.policy-btn').forEach(btn => {
+  btn.addEventListener('click', () => { state.policy = btn.dataset.policy; render(); });
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); state.policy = btn.dataset.policy; render(); }
+  });
+});
+document.getElementById('k-ratio').addEventListener('input', (e) => { state.ratioKnob = Number(e.target.value); render(); });
+document.getElementById('k-gap').addEventListener('input', (e) => { state.gapKnob = Number(e.target.value); render(); });
+document.getElementById('seed-input').addEventListener('change', (e) => { state.seed = Math.max(0, Number(e.target.value) || 0); render(); });
+document.getElementById('reroll-btn').addEventListener('click', () => {
+  state.seed = (state.seed + 1 + Math.floor(Math.random() * 50)) % 1000000;
+  document.getElementById('seed-input').value = state.seed;
+  render();
+});
+
+// deep-link seeding: #policy=sofa&seed=1000&ratio=2&gap=40
+(function seedFromHash(){
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get('policy') && POLICIES.includes(h.get('policy'))) state.policy = h.get('policy');
+  if (h.get('seed')) state.seed = Math.max(0, Number(h.get('seed')) || state.seed);
+  if (h.get('ratio')) { state.ratioKnob = Number(h.get('ratio')) || state.ratioKnob; document.getElementById('k-ratio').value = state.ratioKnob; }
+  if (h.get('gap')) { state.gapKnob = Number(h.get('gap')) || state.gapKnob; document.getElementById('k-gap').value = state.gapKnob; }
+  document.getElementById('seed-input').value = state.seed;
+})();
+
+render();
+})();
+</script>
+</body>
+</html>

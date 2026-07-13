@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "newtripoli": {
+      "url": "https://mcp.newtripoli.xyz/mcp",
+      "name": "New Tripoli Simulation Terminal",
+      "description": "Deterministic, hash-verifiable science instruments for the New Tripoli scenario — relativistic delivery, time-dilation, digital-mind feasibility (Landauer vs Sahara cap), and a graded D1–D10 claim ledger. 13 client-side, zero-egress calculators; each emits an OpenChainGraph-conformant artifact carrying a verifiable SHA-256 execution_hash.",
+      "version": "0.3.0"
+    }
+  }
+}

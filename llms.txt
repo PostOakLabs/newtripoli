@@ -1,0 +1,46 @@
+# New Tripoli
+
+> Speculative alt-history world (New Tripoli) with a hash-verifiable simulation portal — every sim run emits an OpenChainGraph provenance artifact whose execution_hash can be independently re-verified.
+
+## MCP
+
+- [MCP endpoint](https://mcp.newtripoli.xyz/mcp): Streamable-HTTP MCP server (spec 2025-11-25). Connect via Claude Desktop (Settings → Connectors → add custom MCP server) or any generic MCP/HTTP client (`tools/list`).
+- [MCP Connector page](https://newtripoli.xyz/ch-sims/mcp.html): human-facing guide to connecting, the tool/chain catalog, and the execution-hash provenance story.
+- [.well-known/mcp.json](https://newtripoli.xyz/.well-known/mcp.json): MCP server discovery document.
+- [chaingraph.json](https://newtripoli.xyz/chaingraph.json): OpenChainGraph v0.8.0 tool + chain catalog.
+
+## Tools
+
+- [New Tripoli time dilation (subjective-year multiplier)](https://newtripoli.xyz/ch-sims/sims/time-dilation.html): subjective-years-lived multipliers for a given dilation rate and Universal Sabbath reset interval.
+- [New Tripoli kinetic probe (relativistic delivery + deceleration lottery)](https://newtripoli.xyz/ch-sims/sims/kinetic-probe.html): travel time, relativistic cruise kinetic energy, and the vaporization margin gating the deceleration lottery.
+- [New Tripoli vat feasibility (Landauer digital-mind pricing vs Sahara cap)](https://newtripoli.xyz/ch-sims/sims/feasibility.html): total population power draw across biological/digital substrate split vs the Sahara solar cap.
+- [New Tripoli acceleration ceiling by augmentation stage](https://newtripoli.xyz/ch-sims/sims/acceleration-ceiling.html): subjective-time acceleration ceiling, thermal load, and named bottleneck per augmentation stage.
+- [New Tripoli comms lag between subjective-time rates](https://newtripoli.xyz/ch-sims/sims/comms-lag.html): round-trip communications lag between two parties at different subjective-time rates.
+- [New Tripoli orbital ring housing density](https://newtripoli.xyz/ch-sims/sims/ring-density.html): housing capacity of the orbital ring plus core habitat.
+- [New Tripoli birthday-sacrifice subjective time cost](https://newtripoli.xyz/ch-sims/sims/birthday-sacrifice.html): subjective time cost of a dilation-rate gap between you and a family member.
+- [New Tripoli synthetic body mass](https://newtripoli.xyz/ch-sims/sims/synthetic-body.html): mass, human-mass ratio, and water-buoyancy of a synthetic body scaled from the canon osmium reference.
+- [New Tripoli selection cost](https://newtripoli.xyz/ch-sims/sims/selection-sorter.html): how many of the 8.1B canon population are excluded/remain under a named upload-selection criterion.
+- [New Tripoli brain-interface bandwidth gap](https://newtripoli.xyz/ch-sims/sims/interface-bandwidth.html): distance of a given BCI channel count from whole-brain bandwidth (~86B neurons).
+- [New Tripoli post-Wake tech-tree path solver](https://newtripoli.xyz/ch-sims/sims/tech-tree.html): solves the 35-node, T0–T9 post-Wake reindustrialization dependency graph.
+- [New Tripoli chaingraph provenance manifest](https://newtripoli.xyz/ch-sims/about.html): emits a tamper-evident provenance manifest for an arbitrary sim run, optionally chained to a parent execution_hash.
+- [New Tripoli feasibility crosswalk (graded D1–D10 claim ledger)](https://newtripoli.xyz/ch-sims/sims/feasibility.html): grades the ten load-bearing feasibility claims against a single scenario config via the five physics kernels.
+
+## Chains
+
+- [Intake to arc](https://mcp.newtripoli.xyz/mcp): kinetic-probe → vat-feasibility → time-dilation → acceleration-ceiling; no gate, terminal verdict = weakest link. Run via `run_chain("intake-to-arc")`.
+- [Deceleration lottery](https://mcp.newtripoli.xyz/mcp): kinetic-probe → provenance; gates on the probe's survive/vaporized branch. Run via `run_chain("deceleration-lottery")`.
+- [Substrate decision](https://mcp.newtripoli.xyz/mcp): time-dilation → provenance; gates on the /upload_required flag. Run via `run_chain("substrate-decision")`.
+- [Energy envelope](https://mcp.newtripoli.xyz/mcp): vat-feasibility → interface-bandwidth → acceleration-ceiling; gates on /sahara_pct capacity. Run via `run_chain("energy-envelope")`.
+- [Friendship across tiers](https://mcp.newtripoli.xyz/mcp): time-dilation (you) → time-dilation (them) → comms-lag; no gate. Run via `run_chain("friendship-across-tiers")`.
+- [Provenance anchor](https://mcp.newtripoli.xyz/mcp): any tool's run → provenance; the OCG backbone every other chain terminates into. Run via `run_chain("provenance-anchor")`.
+- [Feasibility audit crosswalk](https://mcp.newtripoli.xyz/mcp): feasibility-crosswalk → provenance; gates on binding_verdict != Barred. Run via `run_chain("feasibility-audit-crosswalk")`.
+
+## Corpus
+
+- [Portal home](https://newtripoli.xyz/ch-sims/index.html): catalogue of all 13 instruments + explainers.
+- [About / provenance](https://newtripoli.xyz/ch-sims/about.html): the ChainGraph provenance story.
+- [Alt-history & speculative explainers](https://newtripoli.xyz/ch-sims/index.html#explainers): narrative visual-explainer catalogue (POW disposition, divergence cascade, triage allocator, outbreak SIR, last city, and more).
+
+---
+
+Code MIT · Prose CC BY 4.0 · Data CC0

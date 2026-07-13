@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!--
+  Speculative explainer: "Divergence Cascade — could the Taiping have won?"
+  Alt-History cluster (chain 11, STANDALONE — no kernel, no golden hash).
+  New Tripoli / Cognitive Husbandry — Sim Catalogue.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divergence Cascade: Could the Taiping Have Won? — New Tripoli Sim Catalogue</title>
+<meta name="description" content="A confidence-fade cascade tracing the Taiping Rebellion from documented fact into speculative divergence — adjustable per-hop confidence, honest 20M–75M toll band, Chinese counterfactual refs.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#07060d;--deep:#0b0916;--panel:#12101c;--edge:#241c33;--rim:#332a49;--text:#e8e0f5;--body:#a99cc4;--muted:#6b5e86;--dim:#3d3454;--teal:#34e6e0;--teal-glow:#86f6f2;--amber:#ffb454;--amber-glow:#ffd08a;--border:rgba(52,230,224,.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 4%,rgba(52,230,224,.08),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(255,180,84,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.02) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--amber-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(7,6,13,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--amber)}
+.demo-head h1{font-size:clamp(1.8rem,4vw,2.8rem);text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--teal);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.demo-head .lede{font-size:1.02rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+
+.panel{background:linear-gradient(180deg,rgba(18,16,28,.75),rgba(11,9,22,.6));border:1px solid var(--edge);border-radius:10px;padding:18px 20px;margin:22px 0}
+.panel h2{font-size:1rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;color:var(--text)}
+.panel .sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.05em;margin-bottom:14px}
+
+/* real-toll band */
+.band{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.band-bar{position:relative;flex:1;min-width:200px;height:34px;border:1px solid var(--rim);border-radius:6px;background:var(--deep);overflow:hidden}
+.band-fill{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,rgba(52,230,224,.15),rgba(255,180,84,.35));border-right:1px solid var(--amber)}
+.band-mid{position:absolute;top:0;bottom:0;width:2px;background:var(--amber-glow);box-shadow:0 0 8px var(--amber-glow)}
+.band-readout{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--amber-glow);white-space:nowrap}
+.band-labels{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+
+/* toggles */
+.toggles{display:flex;flex-direction:column;gap:12px}
+.tog{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border:1px solid var(--edge);border-radius:8px;background:rgba(36,28,51,.25)}
+.tog-switch{position:relative;width:38px;height:20px;border-radius:12px;background:var(--dim);border:1px solid var(--rim);flex-shrink:0;cursor:pointer;margin-top:2px;transition:background .15s}
+.tog-switch[aria-checked="true"]{background:var(--teal);border-color:var(--teal)}
+.tog-knob{position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:var(--text);transition:left .15s}
+.tog-switch[aria-checked="true"] .tog-knob{left:19px;background:var(--void)}
+.tog-body{flex:1}
+.tog-label{font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:.92rem;color:var(--text);cursor:pointer}
+.tog-flavor{font-size:.86rem;color:var(--body);margin-top:4px;line-height:1.55}
+.tog-flavor b{color:var(--teal-glow);font-weight:500}
+
+/* scrubber */
+.scrub-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+input[type=range]{-webkit-appearance:none;flex:1;min-width:180px;height:4px;border-radius:2px;background:var(--rim);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--teal);border:2px solid var(--void);box-shadow:0 0 8px rgba(52,230,224,.6);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--teal);border:2px solid var(--void);cursor:pointer}
+.scrub-readout{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--teal-glow);min-width:11ch;text-align:right}
+
+/* assumptions panel */
+.assume{display:grid;grid-template-columns:1fr;gap:14px}
+.assume-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.assume-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--body);min-width:19ch}
+.assume-tip{font-size:.78rem;color:var(--muted);flex-basis:100%;margin-left:0;line-height:1.5}
+.compound{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--amber-glow);border-top:1px dashed var(--edge);padding-top:12px}
+
+/* cascade svg */
+.fig-wrap{border:1px solid var(--edge);border-radius:10px;background:linear-gradient(180deg,rgba(18,16,28,.6),rgba(11,9,22,.5));padding:16px;overflow-x:auto}
+.fig-wrap svg{display:block;width:100%;height:auto;min-width:640px}
+.cascade-node text{font-family:'JetBrains Mono',monospace}
+.horizon-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;fill:var(--amber)}
+
+/* citation + footer */
+.cite h2{font-size:1rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text);margin-bottom:10px}
+.cite h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin:14px 0 6px}
+.cite ul{margin-left:18px;font-size:.88rem;color:var(--body);line-height:1.7}
+.cite .tier{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--edge);border-radius:3px;padding:1px 6px;margin-left:6px}
+.cite .caveat{font-size:.86rem;color:var(--amber-glow);margin:10px 0;line-height:1.6}
+
+.promote{border:1px solid var(--amber);border-radius:10px;padding:18px 20px;background:linear-gradient(135deg,rgba(255,180,84,.07),rgba(11,9,22,.4));font-size:.9rem;color:var(--body);line-height:1.7}
+.promote code{font-family:'JetBrains Mono',monospace;color:var(--amber-glow)}
+
+.footnote{margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:620px){
+  .container{padding:30px 16px 60px}
+  .assume-label{min-width:100%}
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Speculative explainer</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Speculative explainer · Alt-History cluster</span>
+    <h1>Divergence cascade: could the <span class="acc">Taiping</span> have won?</h1>
+    <p class="lede">The real toll of the Taiping Rebellion (1850–1864) is itself contested — the war destroyed the census it would have been counted by. Every hop past documented fact <strong>compounds uncertainty</strong>, rendered here as fading confidence, not false precision.</p>
+  </header>
+
+  <section class="panel" aria-label="Real toll, honesty at hop zero">
+    <h2>Hop zero: even the REAL toll is a range</h2>
+    <div class="sub">Because the war destroyed the census, famine/plague dominate over combat deaths, and three simultaneous rebellions (Nian/Panthay/Miao) confound attribution — say so before speculating at all.</div>
+    <div class="band">
+      <div class="band-bar">
+        <div class="band-fill" style="left:0%;width:100%"></div>
+        <div class="band-mid" style="left:50%"></div>
+      </div>
+      <div class="band-readout">≈ 45M (20M low – 70M mid – 75M+ high)</div>
+    </div>
+    <div class="band-labels"><span>20M · Spence low</span><span>70M · Cao Shuji</span><span>75M+ · upper bound</span></div>
+  </section>
+
+  <section class="panel" aria-label="Divergence toggles">
+    <h2>Divergence toggles <span style="color:var(--muted);font-weight:400;font-size:.8rem;text-transform:none">— all historically attested</span></h2>
+    <div class="sub">Toggling recomputes only the nodes right of the SPECULATION HORIZON below — anchored facts never move.</div>
+    <div class="toggles" id="toggles"></div>
+  </section>
+
+  <section class="panel" aria-label="Cascade depth scrubber">
+    <h2>Cascade depth</h2>
+    <div class="sub">Scrub how far past the horizon the cascade is allowed to speculate. Confidence compounds hop over hop.</div>
+    <div class="scrub-row">
+      <input type="range" id="depth" min="0" max="4" step="1" value="4">
+      <span class="scrub-readout" id="depthReadout">4 hops</span>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Confidence cascade figure">
+    <h2>Confidence-fade cascade</h2>
+    <div class="sub">Node opacity ← running product of the per-hop multipliers below. Dashed rule = SPECULATION HORIZON.</div>
+    <div class="fig-wrap">
+      <svg id="cascadeSvg" viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cascade of nodes from documented Taiping history into three speculative branches"></svg>
+    </div>
+    <div class="compound" id="compoundReadout">compounded confidence: 100%</div>
+  </section>
+
+  <section class="panel" aria-label="Adjustable assumptions">
+    <h2>Adjustable-assumptions panel</h2>
+    <div class="sub">These per-hop multipliers are illustrative, tunable knobs — not canon, not hardcoded. Moving one re-dims every node right of it.</div>
+    <div class="assume" id="assume"></div>
+  </section>
+
+  <section class="panel cite" aria-label="Citations">
+    <h2>Documented record</h2>
+    <ul>
+      <li>Platt, <em>Autumn in the Heavenly Kingdom</em> (2012) — contingency thesis: "all signs pointed to a Taiping victory" before Western intervention flipped.</li>
+      <li>Spence, <em>God's Chinese Son</em> (1996).</li>
+      <li>Meyer-Fong, <em>What Remains</em> (2013).</li>
+      <li>LSE Working Paper 320 — likin / indirect taxation as fiscal workaround.</li>
+    </ul>
+    <div class="caveat">Caveat: Ferguson's <em>Virtual History</em> and Cowley's <em>What If?</em> contain <strong>no Taiping essay</strong> — cited here as Western counterfactual-methodology precedent only, not as a source on this scenario. Census figures for 1850–1864 are contested; treat every number on this page as a range, never a point.</div>
+    <h3>Genre &amp; further reading <span style="color:var(--muted);font-weight:400">— incl. the Chinese-language counterfactual tradition</span></h3>
+    <ul>
+      <li>陈舜臣 (Chin Shunshin), <em>《太平天国》</em> <span class="tier">literary</span> — major historical novel, fictional merchant 连理文 POV; the serious literary anchor.</li>
+      <li>黄世仲, <em>《洪秀全演义》</em> (1908) <span class="tier">literary</span> — early novel openly sympathetic to the Taiping; a period pro-Taiping counter-voice to Qing-victor history.</li>
+      <li>知乎 essay 「架空历史世界观：假如太平天国推翻了清朝」 <span class="tier">analytic</span> — argues a Taiping victory fragments China Soviet-civil-war-style; used below as the pessimistic branch.</li>
+      <li>《太平血》, 《这个天国不太平》, 《乱清》, 《回到太平天国当康王》 <span class="tier">web-novel</span> — living participatory genre, labelled color, not scholarship.</li>
+    </ul>
+    <div class="caveat" style="color:var(--body)">Clean province before/after totals still need Cao Shuji's monograph, not web sources.</div>
+  </section>
+
+  <section class="promote">
+    This is an explorable explainer, not a frozen result — it computes over assumptions you can change above, and ships <strong>no canonical hash</strong>. When the underlying canon locks, <code>ah_taiping_counterfactual</code> can be promoted to a deterministic MCP chain (parameters → hashed identity), the way <code>ch_stadium_capacity</code> already is.
+  </section>
+
+  <div class="footnote">SOURCE // NEWTRIPOLI-ALTHIST-EXPLAINER-ENHANCEMENTS.md §5 · NEWTRIPOLI-EXPLAINER-TEMPLATE-SPEC.md. Anchors: Jintian 1850 → Nanjing/Tianjing 19–20 Mar 1853 → fall 1864 (~14 yrs). Taiping army ~500k · Xiang Army (Zeng Guofan) ~130k · Ever-Victorious Army 3,500–5,000. Likin tax introduced 1853, province-wide by 1860. STANDALONE explainer — no kernel, no hash. · <a href="/sitemap.html" style="color:inherit">Sitemap</a></div>
+</div>
+
+<script>
+"use strict";
+// Divergence toggles: [id, label, real-flavor, counterfactual-flavor, multiplier delta]
+var TOGGLES = [
+  { id:"west", label:"Western intervention", real:"<b>Real:</b> Western powers arm the Qing (Ever-Victorious Army, 3,500–5,000 men) after 1860.", counter:"<b>Counterfactual:</b> Western neutrality holds — Platt's contingency thesis: \"all signs pointed to a Taiping victory\" before the flip." },
+  { id:"opium", label:"Second Opium War overlap (1856–60)", real:"<b>Real:</b> Qing fights both the Taiping and the Anglo-French expedition simultaneously — resources split.", counter:"<b>Counterfactual:</b> Opium War resolves early or never erupts — Qing concentrates fully against Nanjing." },
+  { id:"likin", label:"Likin-tax fiscal workaround", real:"<b>Real:</b> Likin (transit tax) introduced 1853, province-wide by 1860 — funds the Qing war effort.", counter:"<b>Counterfactual:</b> Likin collection fails to scale — Qing treasury starves faster than the Taiping's." },
+  { id:"tianjing", label:"Tianjing Incident (1856) / Hong Rengan reforms", real:"<b>Real:</b> 1856 internal massacre guts Taiping leadership; Hong Rengan's 1859 reform program arrives too late.", counter:"<b>Counterfactual:</b> Incident is contained or Hong Rengan's reforms land early — Taiping state modernizes instead of fracturing." }
+];
+
+var state = {};
+TOGGLES.forEach(function(t){ state[t.id] = false; });
+
+var MULT_DEFAULTS = [0.9, 0.7, 0.5, 0.3];
+var MULT_LABELS = ["Hop 1 · post-horizon", "Hop 2", "Hop 3", "Hop 4 · fork"];
+var MULT_TIPS = [
+  "First hop past documented fact — Western-intervention-flip scenario carries the least added uncertainty (canon.js: altHistory tuning convention, illustrative here).",
+  "Second hop — likin/fiscal divergence compounds onto hop 1.",
+  "Third hop — Tianjing Incident / Hong Rengan divergence compounds further.",
+  "Fourth hop — the three-way fork (modernizer / fragmented state / theocracy); lowest confidence, widest cone."
+];
+var mult = MULT_DEFAULTS.slice();
+
+// seed depth from location.hash (#depth=N), optional deep-link
+(function seedFromHash(){
+  var m = /depth=(\d)/.exec(location.hash);
+  if (m) { var v = Math.max(0, Math.min(4, parseInt(m[1], 10))); document.addEventListener("DOMContentLoaded", function(){ document.getElementById("depth").value = v; }); }
+})();
+
+function buildToggles(){
+  var wrap = document.getElementById("toggles");
+  TOGGLES.forEach(function(t){
+    var row = document.createElement("div"); row.className = "tog";
+    var sw = document.createElement("div");
+    sw.className = "tog-switch"; sw.setAttribute("role","switch"); sw.setAttribute("tabindex","0");
+    sw.setAttribute("aria-checked","false"); sw.setAttribute("aria-label", t.label);
+    var knob = document.createElement("div"); knob.className = "tog-knob"; sw.appendChild(knob);
+    var body = document.createElement("div"); body.className = "tog-body";
+    var lab = document.createElement("div"); lab.className = "tog-label"; lab.textContent = t.label;
+    var flavor = document.createElement("div"); flavor.className = "tog-flavor"; flavor.innerHTML = t.real;
+    body.appendChild(lab); body.appendChild(flavor);
+    row.appendChild(sw); row.appendChild(body);
+    wrap.appendChild(row);
+
+    function flip(){
+      state[t.id] = !state[t.id];
+      sw.setAttribute("aria-checked", String(state[t.id]));
+      flavor.innerHTML = state[t.id] ? t.counter : t.real;
+      render();
+    }
+    sw.addEventListener("click", flip);
+    lab.addEventListener("click", flip);
+    sw.addEventListener("keydown", function(e){ if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } });
+  });
+}
+
+function buildAssume(){
+  var wrap = document.getElementById("assume");
+  mult.forEach(function(v, i){
+    var row = document.createElement("div"); row.className = "assume-row";
+    var label = document.createElement("span"); label.className = "assume-label"; label.textContent = MULT_LABELS[i] + ":";
+    var input = document.createElement("input"); input.type = "range"; input.min = "0.1"; input.max = "1"; input.step = "0.05"; input.value = String(v);
+    var readout = document.createElement("span"); readout.className = "scrub-readout"; readout.textContent = "×" + v.toFixed(2);
+    var tip = document.createElement("div"); tip.className = "assume-tip"; tip.textContent = MULT_TIPS[i];
+    input.addEventListener("input", function(){
+      mult[i] = parseFloat(input.value);
+      readout.textContent = "×" + mult[i].toFixed(2);
+      render();
+    });
+    row.appendChild(label); row.appendChild(input); row.appendChild(readout); row.appendChild(tip);
+    wrap.appendChild(row);
+  });
+}
+
+// Cascade layout: 3 real anchors, SPECULATION HORIZON, up to 4 speculative hops, final fork into 3 branches
+var REAL_NODES = [
+  { x:60,  y:150, label:"Jintian\n1850" },
+  { x:220, y:150, label:"Tianjing\ncapital 1853" },
+  { x:380, y:150, label:"Tianjing\nIncident 1856" }
+];
+var HOP_X = [480, 580, 680, 780];
+var FORK_LABELS = ["Modernizer\n(Platt optimistic)", "Fragmented state\n(知乎 pessimistic)", "Reactionary\ntheocracy"];
+
+function svgNode(x, y, label, opacity, isFork){
+  var lines = label.split("\n");
+  var r = isFork ? 30 : 26;
+  var textLines = lines.map(function(l, i){
+    return '<text x="'+x+'" y="'+(y + r + 14 + i*11)+'" text-anchor="middle" class="lbl" font-size="9.5" fill="var(--body)">'+l+'</text>';
+  }).join("");
+  return '<g class="cascade-node" opacity="'+opacity.toFixed(3)+'">'+
+    '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="var(--panel)" stroke="var(--teal)" stroke-width="1.5"/>'+
+    textLines +
+    '</g>';
+}
+
+function render(){
+  var depth = parseInt(document.getElementById("depth").value, 10);
+  document.getElementById("depthReadout").textContent = depth + (depth === 1 ? " hop" : " hops");
+
+  var svgParts = [];
+  // rail through real nodes
+  svgParts.push('<line x1="60" y1="150" x2="380" y2="150" stroke="var(--teal)" stroke-width="2"/>');
+  REAL_NODES.forEach(function(n){ svgParts.push(svgNode(n.x, n.y, n.label, 1)); });
+
+  // horizon line
+  svgParts.push('<line x1="430" y1="30" x2="430" y2="270" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="6,5"/>');
+  svgParts.push('<text x="430" y="20" text-anchor="middle" class="horizon-label">SPECULATION HORIZON</text>');
+
+  // toggle-derived per-hop bump: a toggled (counterfactual) divergence adds +0.05 confidence to that hop, capped at 1
+  var deltas = [
+    state.west ? 0.05 : 0,
+    state.opium ? 0.05 : 0,
+    state.likin ? 0.05 : 0,
+    state.tianjing ? 0.05 : 0
+  ];
+
+  var running = 1;
+  var prevX = 380, prevY = 150;
+  for (var i = 0; i < depth; i++) {
+    var m = Math.min(1, mult[i] + deltas[i]);
+    running *= m;
+    var x = HOP_X[i], y = 150;
+    svgParts.push('<line x1="'+prevX+'" y1="'+prevY+'" x2="'+x+'" y2="'+y+'" stroke="var(--teal)" stroke-width="2" opacity="'+running.toFixed(3)+'"/>');
+    if (i < 3) {
+      svgParts.push(svgNode(x, y, "hop "+(i+1)+"\n×"+m.toFixed(2), running));
+      prevX = x; prevY = y;
+    } else {
+      // final hop: fork into 3 branches
+      var forkYs = [90, 150, 210];
+      forkYs.forEach(function(fy, fi){
+        svgParts.push('<line x1="'+prevX+'" y1="'+prevY+'" x2="'+x+'" y2="'+fy+'" stroke="var(--teal)" stroke-width="1.5" opacity="'+running.toFixed(3)+'"/>');
+        svgParts.push(svgNode(x, fy, FORK_LABELS[fi], running, true));
+      });
+    }
+  }
+
+  document.getElementById("cascadeSvg").innerHTML = svgParts.join("");
+  document.getElementById("compoundReadout").textContent = "compounded confidence: " + Math.round(running * 100) + "%";
+}
+
+document.getElementById("depth").addEventListener("input", render);
+buildToggles();
+buildAssume();
+render();
+</script>
+</body>
+</html>

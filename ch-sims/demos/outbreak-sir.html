@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--
+  Visual explainer: "Outbreak, Counterfactually" (SIR)
+  Cognitive Husbandry / New Tripoli — Sim Catalogue
+  ENH §9 · standalone (no live chain widget, no golden hash) · CANON phosphor-green.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no network calls at runtime (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outbreak, Counterfactually — New Tripoli Sim Catalogue</title>
+<meta name="description" content="Live SIR solver: drag R0 and intervention strength and watch a settlement's outbreak curve flatten, or not. Threshold flips at R_eff=1; herd immunity marked at 1-1/R0.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../data/canon.js"></script>
+<style>
+:root{--void:#05080a;--deep:#080d0c;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;--text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;--teal:#34e6e0;--teal-glow:#86f6f2;--gold:#23ff88;--gold-glow:#7dffb8;--red:#ff5c5c;--red-glow:#ff9a9a;--border:rgba(52,230,224,0.16)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;background-image:radial-gradient(ellipse at 12% 4%,rgba(52,230,224,.10),transparent 55%),radial-gradient(ellipse at 88% 40%,rgba(35,255,136,.05),transparent 55%)}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(52,230,224,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.022) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%);-webkit-mask-image:radial-gradient(ellipse at 50% 18%,#000 35%,transparent 92%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.09) 3px,rgba(0,0,0,0) 4px),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.42) 100%)}
+.nav,.container{position:relative;z-index:3}
+a{color:var(--teal-glow);text-decoration:none}a:hover{color:var(--gold-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.14}
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.86);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:980px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;letter-spacing:.04em;color:var(--text)}.nav-brand span{color:var(--teal)}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-right:auto}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}.nav-link:hover{color:var(--teal-glow)}
+.container{max-width:980px;margin:0 auto;padding:44px 26px 90px}
+.demo-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:9px;margin-bottom:16px}
+.demo-head .kicker::before{content:'';width:24px;height:1px;background:var(--gold)}
+.demo-head h1{font-size:clamp(2rem,4.4vw,3rem);text-transform:uppercase;letter-spacing:.01em;margin-bottom:14px}
+.demo-head h1 .acc{color:var(--teal);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.demo-head .lede{font-size:1.05rem;color:var(--body);max-width:62ch;line-height:1.7}
+.demo-head .lede strong{color:var(--text);font-weight:500}
+
+section{margin-top:40px}
+.sec-h{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+
+.chart-wrap{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));border:1px solid var(--edge);border-radius:10px;padding:18px 18px 10px}
+svg{width:100%;height:auto;display:block}
+.curve-baseline{fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:5 4}
+.curve-i{fill:none;stroke:var(--gold);stroke-width:2.5;filter:drop-shadow(0 0 5px rgba(35,255,136,.4))}
+.curve-i-area{fill:url(#iGrad);opacity:.55}
+.axis-line{stroke:var(--rim);stroke-width:1}
+.axis-label{font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--muted)}
+.threshold-line{stroke:var(--red);stroke-width:1;stroke-dasharray:3 3;opacity:.6}
+.herd-tick{stroke:var(--teal);stroke-width:2}
+.herd-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--teal-glow)}
+
+.controls{display:grid;grid-template-columns:1fr;gap:18px;margin-top:20px}
+.ctrl{display:flex;flex-direction:column;gap:6px}
+.ctrl-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctrl label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--body)}
+.ctrl .val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold-glow);font-weight:700}
+.ctrl input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--rim);outline:none}
+.ctrl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(52,230,224,.6);cursor:pointer;border:2px solid var(--void)}
+.ctrl input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(52,230,224,.6);cursor:pointer;border:2px solid var(--void)}
+.ctrl .caveat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:.02em}
+
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--body);background:transparent;border:1px solid var(--edge);border-radius:6px;padding:6px 11px;cursor:pointer;transition:border-color .15s,color .15s}
+.preset-btn:hover,.preset-btn:focus-visible{border-color:var(--teal);color:var(--teal-glow)}
+.preset-btn[aria-pressed=true]{border-color:var(--gold);color:var(--gold-glow);background:rgba(35,255,136,.08)}
+
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}
+.panel{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.55));border:1px solid var(--edge);border-radius:10px;padding:14px 16px}
+.panel .bignum{font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:1.5rem;color:var(--teal-glow);line-height:1.1}
+.panel .bignum.gold{color:var(--gold-glow)}
+.panel .bignum.red{color:var(--red-glow)}
+.panel .pn-cap{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.03em;margin-top:6px}
+
+.badge{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:20px;border:1px solid var(--rim)}
+.badge.decay{color:var(--gold-glow);border-color:var(--gold);background:rgba(35,255,136,.07)}
+.badge.grow{color:var(--red-glow);border-color:var(--red);background:rgba(255,92,92,.08)}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+
+.assumptions{border:1px solid var(--edge);border-radius:10px;background:rgba(12,19,17,.5)}
+.assumptions > summary{cursor:pointer;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text);list-style:none;display:flex;align-items:center;gap:10px}
+.assumptions > summary::-webkit-details-marker{display:none}
+.assumptions > summary::before{content:'▸';color:var(--teal);transition:transform .15s}
+.assumptions[open] > summary::before{transform:rotate(90deg)}
+.assumptions-body{padding:0 18px 18px}
+
+.cite-block{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--body);line-height:1.9;background:rgba(12,19,17,.4);border:1px solid var(--edge);border-radius:10px;padding:16px 18px}
+.cite-block .cb-h{color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-top:12px}
+.cite-block .cb-h:first-child{margin-top:0}
+.cite-block .tier{color:var(--dim);font-style:italic}
+
+.footer-note{margin-top:30px;border:1px solid var(--rim);border-radius:10px;padding:18px 20px;background:linear-gradient(135deg,rgba(35,255,136,.05),rgba(8,13,12,.3))}
+.footer-note p{font-size:.9rem;color:var(--body);line-height:1.7}
+.footer-note code{font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--gold-glow)}
+.footnote{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.03em;line-height:1.7}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:620px){.container{padding:30px 16px 70px}.readouts{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a class="nav-brand" href="../index.html">NEW <span>TRIPOLI</span></a>
+  <span class="nav-title">Speculative explainer · epidemiology</span>
+  <a class="nav-link" href="../index.html">← Catalogue</a>
+</div></nav>
+<div class="container">
+  <header class="demo-head">
+    <span class="kicker">Visual explainer · no golden hash</span>
+    <h1>Outbreak, <span class="acc">counterfactually</span></h1>
+    <p class="lede">Drag R₀ and an intervention's strength and watch a settlement's outbreak curve live-solve underneath. The same three-compartment model (Kermack–McKendrick, 1927) that flattened real curves flattens this one — or doesn't, if R_eff never drops below 1.</p>
+  </header>
+
+  <section>
+    <div class="sec-h">Live SIR solver</div>
+    <div class="chart-wrap">
+      <svg id="chart" viewBox="0 0 900 380" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Infected-fraction curve over time, intervention vs no-intervention baseline">
+        <defs>
+          <linearGradient id="iGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--gold)" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- axes -->
+        <line class="axis-line" x1="60" y1="20" x2="60" y2="320"></line>
+        <line class="axis-line" x1="60" y1="320" x2="880" y2="320"></line>
+        <text class="axis-label" x="60" y="14">fraction infected</text>
+        <text class="axis-label" x="820" y="340">days →</text>
+        <g id="yticks"></g>
+        <g id="xticks"></g>
+        <line id="thresholdLine" class="threshold-line" x1="60" y1="20" x2="880" y2="20"></line>
+        <path id="curveBaseline" class="curve-baseline" d=""></path>
+        <path id="curveIArea" class="curve-i-area" d=""></path>
+        <path id="curveI" class="curve-i" d=""></path>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <div class="ctrl">
+        <div class="ctrl-top"><label for="r0">Basic reproduction number R₀</label><span class="val" id="r0Val">2.5</span></div>
+        <input type="range" id="r0" min="0.8" max="16" step="0.1" value="2.5">
+        <div class="caveat">Drives β=R₀·γ. Herd-immunity threshold 1−1/R₀ marked as a teal tick on the R₀ track below.</div>
+        <div class="presets" id="presetRow">
+          <button type="button" class="preset-btn" data-r0="2.5" data-gamma-days="5">COVID early (R₀≈2–3)</button>
+          <button type="button" class="preset-btn" data-r0="8" data-gamma-days="4">COVID superspread (R₀≈4.7–11.4)</button>
+          <button type="button" class="preset-btn" data-r0="2" data-gamma-days="4">1918 flu (R₀≈1.4–2.8)</button>
+          <button type="button" class="preset-btn" data-r0="15" data-gamma-days="8">Measles (R₀≈12–18)</button>
+        </div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-top"><label for="c">Intervention strength c</label><span class="val" id="cVal">0.00</span></div>
+        <input type="range" id="c" min="0" max="0.95" step="0.01" value="0">
+        <div class="caveat">Distancing / masking / closures — cuts transmission to R_eff = R₀·(1−c). Set c so R_eff&lt;1 to flip the threshold badge.</div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-top"><label for="gamma">Infectious period 1/γ (days)</label><span class="val" id="gammaVal">5.0</span></div>
+        <input type="range" id="gamma" min="1" max="14" step="0.5" value="5">
+        <div class="caveat">Time before recovery/removal. Anchor range ≈3–10 days across respiratory diseases.</div>
+      </div>
+    </div>
+
+    <div class="readouts">
+      <div class="panel">
+        <div id="reffBadgeWrap"><span class="badge grow" id="reffBadge"><span class="dot"></span><span id="reffText">R_eff = 2.50 — grows</span></span></div>
+        <div class="pn-cap">threshold flips at R_eff = 1</div>
+      </div>
+      <div class="panel">
+        <div class="bignum" id="herdPct">60%</div>
+        <div class="pn-cap">herd-immunity threshold<br>1 − 1/R₀</div>
+      </div>
+      <div class="panel">
+        <div class="bignum gold" id="deltaCases">0%</div>
+        <div class="pn-cap">Δ cumulative cases<br>vs no-intervention baseline</div>
+      </div>
+      <div class="panel">
+        <div class="bignum red" id="deltaDeaths">≈ 0 (0–0)</div>
+        <div class="pn-cap">Δ deaths vs baseline<br>IFR band applied</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h">Adjustable assumptions</div>
+    <details class="assumptions" open>
+      <summary>Accounting panel — every knob that moves the death estimate</summary>
+      <div class="assumptions-body">
+        <div class="ctrl">
+          <div class="ctrl-top"><label for="ifr">Infection fatality rate (IFR), midpoint</label><span class="val" id="ifrVal">1.0%</span></div>
+          <input type="range" id="ifr" min="0.1" max="3" step="0.05" value="1.0">
+          <div class="caveat">Deaths = IFR × cumulative infections. Band shown is midpoint ±50% — IFR is one of the most contested numbers in any real outbreak's accounting; this page ships a range, not a point.</div>
+        </div>
+        <div class="ctrl" style="margin-top:14px">
+          <div class="ctrl-top"><label>Settlement population N</label><span class="val" id="popVal">—</span></div>
+          <div class="caveat">Held fixed at the New Tripoli post-Wake population for scale — swap R₀/c/γ above, not this. <span id="popCite"></span></div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <div class="sec-h">Documented record</div>
+    <div class="cite-block">
+      <div class="cb-h">Documented record</div>
+      Kermack, W.O. &amp; McKendrick, A.G. (1927), "A Contribution to the Mathematical Theory of Epidemics," <em>Proc. R. Soc. A</em> 115(772) — the SIR model this page solves live.<br>
+      Delamater, P.L. et al. (2019), "Complexity of the Basic Reproduction Number (R₀)," <em>Emerging Infectious Diseases</em> 25(1) — R₀ estimation caveats.<br>
+      Heffernan, J.M., Smith, R.J. &amp; Wahl, L.M. (2005), "Perspectives on the basic reproductive ratio," <em>J. R. Soc. Interface</em> 2(4).
+      <div class="cb-h">Caveats</div>
+      R₀ and IFR are both estimation ranges, not fixed constants — real outbreaks revise both mid-event. This solver holds γ constant across the outbreak (no reinfection, no waning immunity, no age structure) — a simplification, not a forecast.
+      <div class="cb-h">Genre &amp; further reading <span class="tier">(published epidemiology, not alt-history genre — this page has no local-language counterfactual corpus to cite)</span></div>
+      Standard SIR pedagogy; see also Anderson &amp; May, <em>Infectious Diseases of Humans</em> (1991) for compartmental-model extensions.
+    </div>
+  </section>
+
+  <div class="footer-note">
+    <p>This is an explorable explainer, not a frozen result — it computes over the R₀/c/γ/IFR you set above, and ships no canonical hash. When the underlying outbreak-response canon locks, <code>nt_outbreak_counterfactual</code> can be promoted to a deterministic MCP chain (parameters → hashed identity), the way <code>ch_stadium_capacity</code> already is.</p>
+  </div>
+  <div class="footnote">SOURCE // New Tripoli Genre VII (outbreak response) · ENH §9. Figures are ✦ speculative estimates over a standard compartmental model; population scale ◆ canon §5. No network calls at runtime (fonts excepted). · <a href="/sitemap.html" style="color:inherit">Sitemap</a></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var C = (typeof CH_CANON !== 'undefined') ? CH_CANON : null;
+  var POP = (C && C.population && C.population.humans) ? C.population.humans : 8.1e9; // canon.js: population.humans §5
+
+  var svg = document.getElementById('chart');
+  var curveBaseline = document.getElementById('curveBaseline');
+  var curveI = document.getElementById('curveI');
+  var curveIArea = document.getElementById('curveIArea');
+  var thresholdLine = document.getElementById('thresholdLine');
+  var yticksG = document.getElementById('yticks');
+  var xticksG = document.getElementById('xticks');
+
+  var r0El = document.getElementById('r0'), cEl = document.getElementById('c'), gammaEl = document.getElementById('gamma'), ifrEl = document.getElementById('ifr');
+  var r0Val = document.getElementById('r0Val'), cVal = document.getElementById('cVal'), gammaVal = document.getElementById('gammaVal'), ifrVal = document.getElementById('ifrVal');
+  var reffBadge = document.getElementById('reffBadge'), reffText = document.getElementById('reffText');
+  var herdPct = document.getElementById('herdPct'), deltaCases = document.getElementById('deltaCases'), deltaDeaths = document.getElementById('deltaDeaths');
+  var popVal = document.getElementById('popVal'), popCite = document.getElementById('popCite');
+
+  var CHART_X0 = 60, CHART_X1 = 880, CHART_Y0 = 20, CHART_Y1 = 320;
+  var DAYS = 200, DT = 0.25;
+
+  function fmtPop(n){
+    if (n >= 1e9) return (n/1e9).toFixed(1) + 'B';
+    if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+    return String(n);
+  }
+  popVal.textContent = fmtPop(POP);
+  popCite.textContent = C ? ('canon.js: population.humans (CANON_VERSION ' + C.CANON_VERSION + ')') : 'canon.js unavailable — using fallback 8.1e9';
+
+  // Euler-integrate SIR (fractions of N=1). Returns {t:[], I:[], cumInf:[]}
+  function solveSIR(R0, c, gammaDays){
+    var gamma = 1 / gammaDays;
+    var beta = R0 * (1 - c) * gamma;
+    var S = 1 - 1e-6, I = 1e-6, R = 0;
+    var steps = Math.round(DAYS / DT);
+    var t = [], Iarr = [], cumInf = [];
+    for (var i = 0; i <= steps; i++){
+      t.push(i * DT);
+      Iarr.push(I);
+      cumInf.push(1 - S);
+      var dS = -beta * S * I;
+      var dI = beta * S * I - gamma * I;
+      var dR = gamma * I;
+      S += dS * DT; I += dI * DT; R += dR * DT;
+      if (S < 0) S = 0; if (I < 0) I = 0;
+    }
+    return { t: t, I: Iarr, cumInf: cumInf, peakI: Math.max.apply(null, Iarr), finalCumInf: cumInf[cumInf.length-1] };
+  }
+
+  function pathFor(arr, maxI){
+    var pts = [];
+    for (var i = 0; i < arr.length; i++){
+      var x = CHART_X0 + (arr === arr ? (i / (arr.length-1)) : 0) * (CHART_X1 - CHART_X0);
+      var y = CHART_Y1 - (arr[i] / maxI) * (CHART_Y1 - CHART_Y0);
+      pts.push((i===0?'M':'L') + x.toFixed(2) + ',' + y.toFixed(2));
+    }
+    return pts.join(' ');
+  }
+  function areaFor(arr, maxI){
+    var d = pathFor(arr, maxI);
+    var lastX = CHART_X1;
+    return d + ' L' + lastX + ',' + CHART_Y1 + ' L' + CHART_X0 + ',' + CHART_Y1 + ' Z';
+  }
+
+  function drawTicks(maxI){
+    yticksG.innerHTML = '';
+    xticksG.innerHTML = '';
+    var yTickVals = [0, maxI*0.25, maxI*0.5, maxI*0.75, maxI];
+    for (var i = 0; i < yTickVals.length; i++){
+      var y = CHART_Y1 - (yTickVals[i] / maxI) * (CHART_Y1 - CHART_Y0);
+      var txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt.setAttribute('class','axis-label'); txt.setAttribute('x', 8); txt.setAttribute('y', y + 3);
+      txt.textContent = (yTickVals[i]*100).toFixed(0) + '%';
+      yticksG.appendChild(txt);
+    }
+    var xTickDays = [0, 50, 100, 150, 200];
+    for (var j = 0; j < xTickDays.length; j++){
+      var x = CHART_X0 + (xTickDays[j] / DAYS) * (CHART_X1 - CHART_X0);
+      var txt2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt2.setAttribute('class','axis-label'); txt2.setAttribute('x', x - 6); txt2.setAttribute('y', CHART_Y1 + 16);
+      txt2.textContent = String(xTickDays[j]);
+      xticksG.appendChild(txt2);
+    }
+  }
+
+  function render(){
+    var R0 = parseFloat(r0El.value), c = parseFloat(cEl.value), gammaDays = parseFloat(gammaEl.value), ifrPct = parseFloat(ifrEl.value);
+    r0Val.textContent = R0.toFixed(1);
+    cVal.textContent = c.toFixed(2);
+    gammaVal.textContent = gammaDays.toFixed(1);
+    ifrVal.textContent = ifrPct.toFixed(2) + '%';
+
+    var withIntervention = solveSIR(R0, c, gammaDays);
+    var baseline = solveSIR(R0, 0, gammaDays);
+    var maxI = Math.max(withIntervention.peakI, baseline.peakI, 0.01) * 1.15;
+
+    curveI.setAttribute('d', pathFor(withIntervention.I, maxI));
+    curveIArea.setAttribute('d', areaFor(withIntervention.I, maxI));
+    curveBaseline.setAttribute('d', pathFor(baseline.I, maxI));
+    drawTicks(maxI);
+    thresholdLine.style.display = 'none'; // threshold is on R_eff, not the I-axis; hidden here, badge carries it
+
+    var reff = R0 * (1 - c);
+    var decays = reff < 1;
+    reffBadge.className = 'badge ' + (decays ? 'decay' : 'grow');
+    reffText.textContent = 'R_eff = ' + reff.toFixed(2) + (decays ? ' — decays' : ' — grows');
+
+    var herd = Math.max(0, 1 - 1/R0);
+    herdPct.textContent = (herd*100).toFixed(0) + '%';
+
+    var dCases = baseline.finalCumInf > 0 ? (withIntervention.finalCumInf - baseline.finalCumInf) / baseline.finalCumInf * 100 : 0;
+    deltaCases.textContent = (dCases <= 0 ? '' : '+') + dCases.toFixed(0) + '%';
+
+    var ifr = ifrPct / 100;
+    var deathsWith = ifr * withIntervention.finalCumInf * POP;
+    var deathsBase = ifr * baseline.finalCumInf * POP;
+    var dDeaths = deathsWith - deathsBase;
+    var lowMult = 0.5, highMult = 1.5; // IFR band: midpoint ±50%, ENH §9 / cross-cutting uncertainty-band rule
+    var magLow = Math.abs(dDeaths) * lowMult, magHigh = Math.abs(dDeaths) * highMult;
+    deltaDeaths.textContent = (dDeaths<0?'-':(dDeaths>0?'+':'')) + '≈' + fmtPop(Math.abs(dDeaths)) + ' (' + fmtPop(magLow) + '–' + fmtPop(magHigh) + ')';
+
+    var hash = 'r0=' + R0 + '&c=' + c + '&gamma=' + gammaDays + '&ifr=' + ifrPct;
+    if (history.replaceState) history.replaceState(null, '', '#' + hash);
+  }
+
+  function seedFromHash(){
+    var h = location.hash.replace('#','');
+    if (!h) return;
+    var params = {};
+    h.split('&').forEach(function(pair){ var kv = pair.split('='); if (kv[0]) params[kv[0]] = kv[1]; });
+    if (params.r0) r0El.value = params.r0;
+    if (params.c) cEl.value = params.c;
+    if (params.gamma) gammaEl.value = params.gamma;
+    if (params.ifr) ifrEl.value = params.ifr;
+  }
+
+  [r0El, cEl, gammaEl, ifrEl].forEach(function(el){ el.addEventListener('input', render); });
+
+  document.querySelectorAll('.preset-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      r0El.value = btn.getAttribute('data-r0');
+      gammaEl.value = btn.getAttribute('data-gamma-days');
+      document.querySelectorAll('.preset-btn').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      render();
+    });
+  });
+
+  seedFromHash();
+  render();
+})();
+</script>
+</body>
+</html>

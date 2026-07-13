@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<!--
+  New Tripoli — MCP Connector
+  Human-facing "what the MCP exposes" page. Mirrors OCS mcp.html section structure.
+  Aesthetic: "Simulation Terminal" — phosphor green console on green-black, shared tokens w/ index.html.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no runtime network calls (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Tripoli — MCP Connector</title>
+<meta name="description" content="Connect an AI assistant to the New Tripoli MCP server — 13 deterministic, hash-verifiable science instruments and 7 chained workflows, zero-egress client-side compute.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--deep:#080d0c;--panel:#0c1311;--panel-2:#101a16;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#8fb0a2;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;--teal-glow:#7dffb8;--signal:#34e6e0;
+  --border:rgba(52,230,224,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:linear-gradient(rgba(52,230,224,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(52,230,224,.025) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 90%)}
+body::after{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.10) 3px,rgba(0,0,0,0) 4px),
+  radial-gradient(ellipse at 50% 50%,transparent 60%,rgba(0,0,0,.45) 100%)}
+.wrap{position:relative;z-index:3}
+a{color:var(--green-glow);text-decoration:none;transition:color .15s}
+a:hover{color:var(--teal-glow)}
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;font-weight:600;color:var(--text);line-height:1.12;letter-spacing:.01em}
+
+.nav{border-bottom:1px solid var(--border);background:rgba(5,8,10,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:50}
+.nav-inner{max-width:1180px;margin:0 auto;padding:13px 28px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:13.5px;letter-spacing:.06em;color:var(--text);display:flex;align-items:center;gap:9px}
+.nav-brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.4s steps(1) infinite}
+@keyframes blink{0%,70%{opacity:1}71%,100%{opacity:.35}}
+.nav-brand span{color:var(--green)}
+.nav-links{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--body)}
+.nav-links a:hover{color:var(--green-glow)}
+
+.hero{max-width:900px;margin:0 auto;padding:54px 28px 20px}
+.hero .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:inline-flex;align-items:center;gap:10px}
+.hero .eyebrow::before{content:'';width:26px;height:1px;background:var(--green)}
+.hero h1{font-size:clamp(1.8rem,4vw,2.7rem);color:var(--text);margin-bottom:16px;letter-spacing:0}
+.hero h1 .accent{color:var(--green);text-shadow:0 0 18px rgba(52,230,224,.35)}
+.hero .lede{font-size:1.02rem;color:var(--body);max-width:66ch;line-height:1.7}
+.hero .lede strong{color:var(--text);font-weight:500}
+.statusline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:20px}
+.statusline span{color:var(--body)}
+.statusline b{color:var(--green);font-weight:400}
+
+.section{max-width:900px;margin:0 auto;padding:40px 28px 8px}
+.section-head .kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:500}
+.section-head h2{font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--text);margin-top:8px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.02em}
+.section-head p{color:var(--body);max-width:70ch;font-size:.97rem;margin-bottom:18px}
+
+.panel{background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(8,13,12,.6));border:1px solid var(--edge);border-radius:10px;padding:20px 22px;margin-bottom:16px}
+.panel h3{font-size:1.02rem;color:var(--text);margin-bottom:8px}
+.panel p{font-size:.92rem;color:var(--body);line-height:1.65}
+.kv{font-family:'JetBrains Mono',monospace;font-size:12.5px;display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:10px}
+.kv .k{color:var(--muted)}
+.kv .v{color:var(--green-glow)}
+
+pre{background:var(--deep);border:1px solid var(--edge);border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--teal-glow);line-height:1.55;margin-top:10px}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;color:var(--green-glow)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.tab-btn{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--edge);border-radius:6px 6px 0 0;padding:7px 14px;cursor:pointer;transition:color .15s,border-color .15s}
+.tab-btn:hover{color:var(--body)}
+.tab-btn.active{color:var(--green-glow);border-color:var(--green);border-bottom-color:transparent}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin-top:6px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--edge);vertical-align:top}
+th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td{color:var(--body)}
+td a{color:var(--green-glow)}
+.reg-badge{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap;display:inline-block}
+.reg-badge.canon{color:var(--teal-glow);background:rgba(35,255,136,.08);border:1px solid rgba(35,255,136,.3)}
+.reg-badge.feasibility{color:var(--green-glow);background:rgba(52,230,224,.08);border:1px solid rgba(52,230,224,.3)}
+.reg-badge.real-science{color:#ffe09a;background:rgba(255,194,77,.08);border:1px solid rgba(255,194,77,.3)}
+.gl-yes{color:var(--teal-glow)}
+.gl-no{color:var(--muted)}
+
+.chain-card{border-left:2px solid var(--edge);padding:10px 0 10px 16px;margin-bottom:14px}
+.chain-card h4{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--text);letter-spacing:.01em;margin-bottom:4px}
+.chain-card .gate{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px}
+.chain-card .steps{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--green-glow);margin-top:6px}
+
+.note{font-size:.87rem;color:var(--muted);border-left:2px solid var(--rim);padding-left:12px;margin-top:10px}
+
+footer{max-width:900px;margin:50px auto 0;padding:28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-brand{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;color:var(--text);letter-spacing:.04em}
+.foot-copy{font-size:13px;color:var(--muted);max-width:46ch;margin-top:6px;line-height:1.6}
+.foot-links{display:flex;flex-direction:column;gap:6px;font-size:13px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html"><span class="dot"></span>NEW <span>TRIPOLI</span> :: MCP_CONNECTOR</a>
+    <div class="nav-links">
+      <a href="#endpoint">Endpoint</a>
+      <a href="#connect">Connect</a>
+      <a href="#discovery">Discovery</a>
+      <a href="#catalog">Catalog</a>
+      <a href="#chains">Chains</a>
+      <a href="#provenance">Provenance</a>
+      <a href="index.html">Sim Catalogue</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 1. HEADER / HERO -->
+<header class="hero">
+  <span class="eyebrow">Model Context Protocol · connector</span>
+  <h1>Give your assistant <span class="accent">13 deterministic instruments</span>.</h1>
+  <p class="lede">
+    The New Tripoli MCP server exposes the same physics kernels that power this site's sim catalogue — as <strong>MCP tools</strong> any compliant assistant can call directly. Every run is client-computed and emits an <strong>OpenChainGraph</strong>-conformant artifact carrying a verifiable SHA-256 <code>execution_hash</code>.
+  </p>
+  <div class="statusline">
+    <span>◆ <b>19 MCP tools</b></span><span>▸ <b>13 kernels · 7 chains</b></span><span>▸ <b>zero-egress</b></span><span>▸ <b>stateless</b></span><span>▸ <b>CC&nbsp;BY&nbsp;4.0</b></span>
+  </div>
+</header>
+
+<!-- 2. ENDPOINT -->
+<div class="section" id="endpoint">
+  <div class="section-head">
+    <span class="kicker">Endpoint · the live server</span>
+    <h2>mcp.newtripoli.xyz</h2>
+  </div>
+  <div class="panel">
+    <h3>Streamable-HTTP MCP transport</h3>
+    <p>A stateless Cloudflare Worker speaking the MCP 2025-11-25 Streamable-HTTP transport. No sessions persist between calls; nothing about a run is stored server-side beyond the response it returns.</p>
+    <div class="kv">
+      <span class="k">endpoint</span><span class="v">https://mcp.newtripoli.xyz/mcp</span>
+      <span class="k">·&nbsp;health</span><span class="v">https://mcp.newtripoli.xyz/health</span>
+      <span class="k">·&nbsp;server</span><span class="v">newtripoli-mcp v0.3.0</span>
+    </div>
+    <p class="note">Zero-egress: all tool <em>logic</em> runs the same client-side compute the sim pages use — the MCP server returns deep-links and hash-verifiable metadata, never scenario data pulled from anywhere else. No PII in, no PII out.</p>
+  </div>
+</div>
+
+<!-- 3. CONNECTING -->
+<div class="section" id="connect">
+  <div class="section-head">
+    <span class="kicker">Connect · four ways in</span>
+    <h2>Connecting your AI assistant</h2>
+    <p>Pick whichever your client supports — all four point at the same endpoint.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="claude">Claude Desktop</button>
+    <button class="tab-btn" data-tab="cursor">Cursor</button>
+    <button class="tab-btn" data-tab="vscode">VS Code</button>
+    <button class="tab-btn" data-tab="curl">Generic HTTP</button>
+  </div>
+
+  <div class="panel" style="border-radius:0 10px 10px 10px">
+    <div class="tab-panel active" data-tab="claude">
+      <p>Settings → Connectors → <strong>Add custom connector</strong> → paste the URL below.</p>
+      <pre>https://mcp.newtripoli.xyz/mcp</pre>
+    </div>
+    <div class="tab-panel" data-tab="cursor">
+      <p>Add to <code>~/.cursor/mcp.json</code>:</p>
+      <pre>{
+  "mcpServers": {
+    "newtripoli": {
+      "url": "https://mcp.newtripoli.xyz/mcp"
+    }
+  }
+}</pre>
+    </div>
+    <div class="tab-panel" data-tab="vscode">
+      <p>Add to <code>.vscode/mcp.json</code> (HTTP server type):</p>
+      <pre>{
+  "servers": {
+    "newtripoli": {
+      "type": "http",
+      "url": "https://mcp.newtripoli.xyz/mcp"
+    }
+  }
+}</pre>
+    </div>
+    <div class="tab-panel" data-tab="curl">
+      <p>Raw JSON-RPC over HTTP — list every tool:</p>
+      <pre>curl -s https://mcp.newtripoli.xyz/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</pre>
+    </div>
+  </div>
+</div>
+
+<!-- 4. DISCOVERY TOOLS -->
+<div class="section" id="discovery">
+  <div class="section-head">
+    <span class="kicker">Discovery &amp; control · 6 tools</span>
+    <h2>Never hardcode a tool name</h2>
+    <p>The catalog is 13 kernels + 7 chains today — it grows. Cold agents should resolve everything through these, not a baked-in list.</p>
+  </div>
+  <div class="panel">
+    <table>
+      <tr><th>tool</th><th>what it returns</th></tr>
+      <tr><td><code>list_newtripoli_tools</code></td><td>Every registered tool: id, mandate, register, guest-legal flag, one-line description — read live off the tools manifest.</td></tr>
+      <tr><td><code>find_tool</code></td><td>Free-text query → best-matching tools (BM25-ranked over titles/descriptions/citations).</td></tr>
+      <tr><td><code>find_chain</code></td><td>Free-text query → best-matching chains, with step order and gate summary.</td></tr>
+      <tr><td><code>build_workflow_links</code></td><td>An ordered set of deep-links for a named chain, inputs preset per step.</td></tr>
+      <tr><td><code>run_chain</code></td><td>Executes a named chain end-to-end server-side, threading each step's <code>execution_hash</code> into a composite hash; stops at the chain's gate if one trips.</td></tr>
+      <tr><td><code>verify_execution_hash</code></td><td>Recomputes a hash from a supplied <code>{policy_parameters, output_payload}</code> pair and reports match/mismatch — the tamper check.</td></tr>
+    </table>
+    <p class="note">Counts drift on purpose: alt-history kernels are queued and will move this from 13→18 tools without changing this page's contract. Always call <code>list_newtripoli_tools</code> / <code>find_tool</code> rather than assuming a fixed set.</p>
+  </div>
+</div>
+
+<!-- 5. TOOL CATALOG -->
+<div class="section" id="catalog">
+  <div class="section-head">
+    <span class="kicker">Catalog · 13 kernels</span>
+    <h2>The tool catalog</h2>
+    <div class="colorkey" style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:6px">
+      <span class="reg-badge canon">canon</span><span class="reg-badge feasibility">feasibility</span><span class="reg-badge real-science">real-science</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)">guest-legal = safe to run without gating the response behind a hash-only note</span>
+    </div>
+  </div>
+  <div class="panel">
+    <table>
+      <tr><th>tool</th><th>register</th><th>guest</th><th>description</th></tr>
+      <tr><td><a href="sims/time-dilation.html"><code>nt_time_dilation</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Subjective-years-lived multipliers for a given dilation rate and Universal Sabbath reset interval.</td></tr>
+      <tr><td><a href="sims/kinetic-probe.html"><code>nt_kinetic_probe</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>ETI kinetic-probe delivery: travel time, relativistic cruise KE, and the vaporization margin gating the deceleration lottery.</td></tr>
+      <tr><td><a href="sims/feasibility.html"><code>nt_vat_feasibility</code></a></td><td><span class="reg-badge feasibility">feasibility</span></td><td class="gl-no">no</td><td>Total power draw of a biological/digital population split, Landauer-priced, vs the Sahara solar cap.</td></tr>
+      <tr><td><a href="sims/acceleration-ceiling.html"><code>nt_acceleration_ceiling</code></a></td><td><span class="reg-badge feasibility">feasibility</span></td><td class="gl-yes">yes</td><td>Subjective-time acceleration ceiling by augmentation stage — floor, ceiling, midpoint, thermal load, named bottleneck.</td></tr>
+      <tr><td><a href="sims/comms-lag.html"><code>nt_comms_lag</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Round-trip comms lag between two parties running at different subjective-time rates.</td></tr>
+      <tr><td><a href="sims/ring-density.html"><code>nt_ring_density</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Orbital ring + core habitat housing capacity given depth, area allowance, floors, core population.</td></tr>
+      <tr><td><a href="sims/birthday-sacrifice.html"><code>nt_birthday_sacrifice</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Subjective time cost of a dilation-rate gap between you and a family member, in Tripoli-block units.</td></tr>
+      <tr><td><a href="sims/synthetic-body.html"><code>nt_synthetic_body</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Mass, human-mass ratio, and water-buoyancy of a synthetic body skeleton scaled from the canon osmium reference build.</td></tr>
+      <tr><td><a href="sims/selection-sorter.html"><code>nt_selection_cost</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>How many of the 8.1B canon population are excluded/remain under a named upload-selection criterion.</td></tr>
+      <tr><td><a href="sims/interface-bandwidth.html"><code>nt_interface_bandwidth</code></a></td><td><span class="reg-badge real-science">real-science</span></td><td class="gl-no">no</td><td>How far a given brain-computer interface channel count is from whole-brain (~86B neuron) bandwidth.</td></tr>
+      <tr><td><a href="sims/tech-tree.html"><code>nt_tech_tree_path</code></a></td><td><span class="reg-badge canon">canon</span></td><td class="gl-yes">yes</td><td>Solves the post-Wake reindustrialization dependency graph (35 nodes, tiers T0–T9) to a femtoscale assembler.</td></tr>
+      <tr><td><a href="about.html"><code>nt_provenance</code></a></td><td><span class="reg-badge real-science">real-science</span></td><td class="gl-yes">yes</td><td>Emits a tamper-evident ChainGraph provenance manifest for an arbitrary sim run, optionally threaded to a parent hash.</td></tr>
+      <tr><td><a href="sims/feasibility.html"><code>nt_feasibility_crosswalk</code></a></td><td><span class="reg-badge feasibility">feasibility</span></td><td class="gl-no">no</td><td>Grades the ten load-bearing feasibility claims (C-D1..C-D10) against one scenario config; emits verdict ledger + binding verdict.</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 6. CHAINS -->
+<div class="section" id="chains">
+  <div class="section-head">
+    <span class="kicker">Chains · 7 named workflows</span>
+    <h2>Reasoning you can run, not just read</h2>
+    <p>Each chain sequences 2–4 tools into a single argument. Call <code>run_chain</code> with the chain name to execute it end-to-end and get back a composite <code>execution_hash</code>.</p>
+  </div>
+  <div class="panel">
+    <div class="chain-card">
+      <h4>intake-to-arc <span style="color:var(--muted);font-weight:400">· 4 steps · no gate</span></h4>
+      <p>The whole scenario as a delivery→power→dilation→thermal pipeline; terminal verdict = weakest link.</p>
+      <div class="steps">kinetic-probe → feasibility → time-dilation → acceleration-ceiling</div>
+    </div>
+    <div class="chain-card">
+      <h4>deceleration-lottery <span style="color:var(--muted);font-weight:400">· 2 steps</span></h4>
+      <p>The D1 delivery fix as a fast-fail decision.</p>
+      <div class="steps">kinetic-probe → about (provenance)</div>
+      <div class="gate">gate: probe's own /branch — vaporized/destroyed ends the chain; survives → anchor provenance</div>
+    </div>
+    <div class="chain-card">
+      <h4>substrate-decision <span style="color:var(--muted);font-weight:400">· 2 steps</span></h4>
+      <p>The D10 → D7 hinge.</p>
+      <div class="steps">time-dilation → about (provenance)</div>
+      <div class="gate">gate: /upload_required — biological holds ends the chain; upload required → anchor provenance</div>
+    </div>
+    <div class="chain-card">
+      <h4>energy-envelope <span style="color:var(--muted);font-weight:400">· 3 steps</span></h4>
+      <p>"Can it actually run": power → interface → thermal.</p>
+      <div class="steps">feasibility → interface-bandwidth → acceleration-ceiling</div>
+      <div class="gate">gate: vat feasibility's /sahara_pct — over capacity ends the chain (binding constraint = power)</div>
+    </div>
+    <div class="chain-card">
+      <h4>friendship-across-tiers <span style="color:var(--muted);font-weight:400">· 3 steps · no gate</span></h4>
+      <p>The physics of friendship: two dilated parties at different rates, plus the comms budget across the gap.</p>
+      <div class="steps">time-dilation → time-dilation → comms-lag</div>
+    </div>
+    <div class="chain-card">
+      <h4>provenance-anchor <span style="color:var(--muted);font-weight:400">· 2 steps · terminal spine</span></h4>
+      <p>The OCG backbone every other chain terminates into: any tool's run, threaded to a provenance-manifest anchor.</p>
+      <div class="steps">time-dilation → about (provenance)</div>
+    </div>
+    <div class="chain-card">
+      <h4>feasibility-audit-crosswalk <span style="color:var(--muted);font-weight:400">· meta · 2 steps</span></h4>
+      <p>The meta fan-in: grades all C-D1..C-D10 claims against one scenario config, then anchors provenance.</p>
+      <div class="steps">feasibility-crosswalk → about (provenance)</div>
+      <div class="gate">gate: /binding_verdict == Barred ends the chain — a "passing" run is never anchored</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. PROVENANCE -->
+<div class="section" id="provenance">
+  <div class="section-head">
+    <span class="kicker">Provenance · the execution-hash story</span>
+    <h2>Not who owns the number — how it came to exist</h2>
+  </div>
+  <div class="panel">
+    <p>Every run emits an OpenChainGraph v0.4 artifact carrying a SHA-256 <code>execution_hash</code> over <code>{policy_parameters, output_payload}</code>. Same inputs → same hash, deterministically; change one input and it changes. <code>verify_execution_hash</code> recomputes and re-checks it — anyone can audit a claimed result without trusting the party who ran it.</p>
+    <p style="margin-top:10px">Chains thread each step's hash into a <code>composite_execution_hash</code>, so a multi-tool argument is verifiable as one unit, not just its parts. See <a href="about.html">the provenance instrument</a> for a live, minimal version of this in the sim catalogue, and the <a href="../chaingraph.json">machine-readable catalog</a> for the full tool+chain graph.</p>
+  </div>
+</div>
+
+<!-- 8. TECHNICAL DETAILS -->
+<div class="section" id="technical">
+  <div class="section-head">
+    <span class="kicker">Technical details</span>
+    <h2>Under the hood</h2>
+  </div>
+  <div class="panel">
+    <div class="kv">
+      <span class="k">runtime</span><span class="v">Cloudflare Workers</span>
+      <span class="k">·&nbsp;compute</span><span class="v">client-side kernels, mirrored server-side for run_chain/verify</span>
+      <span class="k">·&nbsp;hash&nbsp;alg</span><span class="v">SHA-256</span>
+    </div>
+    <p style="margin-top:12px">CORS allowlist: <code>newtripoli.xyz</code>, <code>www.newtripoli.xyz</code>, <code>claude.ai</code>, <code>app.claude.ai</code>, plus localhost dev ports. No cookies, no session storage — the transport is stateless per request.</p>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="foot-brand">NEW TRIPOLI <span style="color:var(--green)">// MCP CONNECTOR</span></div>
+    <p class="foot-copy">An interactive companion to the Cognitive Husbandry / New Tripoli series. Client-side, zero PII, no runtime network calls (web fonts excepted). Code MIT · Prose CC BY 4.0.</p>
+  </div>
+  <div class="foot-links">
+    <a href="index.html">Sim Catalogue</a>
+    <a href="../chaingraph.json">ChainGraph JSON</a>
+    <a href="../.well-known/mcp.json">.well-known/mcp.json</a>
+    <a href="about.html">About</a>
+    <a href="https://github.com/PostOakLabs/newtripoli-mcp-worker">GitHub</a>
+    <a href="/sitemap.html">Sitemap</a>
+  </div>
+</footer>
+</div>
+
+<script>
+(function(){
+  var btns = document.querySelectorAll('.tab-btn'), panels = document.querySelectorAll('.tab-panel');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      document.querySelector('.tab-panel[data-tab="'+b.dataset.tab+'"]').classList.add('active');
+    });
+  });
+})();
+</script>
+</body>
+</html>
