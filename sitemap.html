@@ -31,6 +31,8 @@ h1{font-family:'Chakra Petch',sans-serif;font-size:26px;font-weight:600;color:va
 .slist a{color:var(--body);display:flex;gap:10px;align-items:baseline}
 .slist a:hover{color:var(--green-glow);opacity:1}
 .slist .slug{color:var(--dim);font-size:10px;min-width:118px;flex-shrink:0}
+.slist.stack a{flex-direction:column;gap:3px}
+.slist.stack .slug{min-width:0}
 .foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--border);font-size:10px;letter-spacing:.1em;color:var(--dim);display:flex;gap:14px;flex-wrap:wrap}
 .foot a{color:var(--muted)}
 .foot .r{margin-left:auto}
@@ -61,8 +63,9 @@ h1{font-family:'Chakra Petch',sans-serif;font-size:26px;font-weight:600;color:va
 
     <div>
       <div class="sec-head">// PAPERS</div>
-      <ul class="slist">
+      <ul class="slist stack">
         <li><a href="/cognitive-husbandry-feasibility.html"><span class="slug">cognitive-husbandry-feasibility</span>The Science in Cognitive Husbandry — Feasibility Audit</a></li>
+        <li><a href="/cognitive-husbandry-bionics-feasibility.html"><span class="slug">cognitive-husbandry-bionics-feasibility</span>Bionics Feasibility — Iterating a Brain Toward a Synthetic Substrate</a></li>
       </ul>
     </div>
 
