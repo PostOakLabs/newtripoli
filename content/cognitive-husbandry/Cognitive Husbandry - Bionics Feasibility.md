@@ -351,7 +351,13 @@ wall is real, but it is nowhere near the floor, and the room between them is exa
 the room the ladder is trying to climb into. This is the same
 thermodynamics-of-computation lens the sibling audit applies to the accelerated-
 simulation and energy-budget premises, where the Landauer bound sets the per-mind
-compute cost on the far side of migration (see that paper's §4.6).[^sibling]
+compute cost on the far side of migration (see that paper's §4.6).[^sibling] The same
+lens runs outward as well as inward. The OCS corpus's Paper E forward-models a
+Landauer-limited waste-heat technosignature at astrophysical scale, the black-hole-scale
+counterpart to the interface-scale heat wall of §1, so the two papers bound the
+thermodynamics of computation from opposite ends: a single cortex under 40 mW/cm² here,
+an engineered intermediate-mass black-hole system dumping the waste heat of computation
+there.[^papere]
 
 One further number reframes the budget from the other end. Section 1 fixed the cost
 of moving a bit; the traffic itself is smaller than intuition suggests. Zheng and
@@ -546,6 +552,13 @@ minds at the Landauer floor; §4.5 sets the alpha-band roughly 10 Hz cadence as 
 candidate hard ceiling on subjective acceleration. This paper and that one share one
 physics, the thermodynamics of computation, approached from the interface side here
 and the whole-scenario side there.
+
+[^papere]: Swanson (2026), "Engineered Intermediate-Mass Black Hole Systems:
+Infrastructure Constraints, Observable Residue, and a Multi-Messenger Adjudication
+Framework," Omega Centauri Society corpus, Paper E. Forward-models a Landauer-limited
+waste-heat technosignature at astrophysical scale, the black-hole-scale counterpart to
+this paper's interface-scale heat wall; both apply the same thermodynamics-of-computation
+lens shared across the corpus (cf. [^sibling], §4.6 of the sibling audit).
 
 [^landauer]: Landauer, R., "Irreversibility and heat generation in the computing
 process," *IBM Journal of Research and Development* 5(3), 183–191 (1961).
