@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<!--
+  Bionics Feasibility: Iterating a Biological Brain Toward a Synthetic Substrate
+  newtripoli.xyz/cognitive-husbandry-bionics-feasibility · Cognitive Husbandry series
+  Companion to the ETI-framed feasibility audit. Preprint draft. Listed in sitemap.html; not in the top nav.
+  Code: MIT · Prose: CC BY 4.0 · No PII, no runtime network calls (fonts excepted).
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bionics Feasibility: Iterating a Biological Brain Toward a Synthetic Substrate</title>
+<meta name="description" content="A hard technical review of the path from today's brain-computer interfaces toward substrate independence, held against the thermodynamic heat wall. Companion to the Cognitive Husbandry feasibility audit.">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05080a;--panel:#0c1311;--edge:#1b2722;--rim:#2a3c34;
+  --text:#dcf3e6;--body:#a9c6ba;--muted:#5b7a6c;--dim:#3b5045;
+  --green:#34e6e0;--green-glow:#86f6f2;--teal:#23ff88;
+  --border:rgba(52,230,224,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--body);
+  font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;
+  -webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.06) 3px,rgba(0,0,0,0) 4px),
+    radial-gradient(ellipse at 50% 40%,transparent 65%,rgba(0,0,0,.4) 100%);
+}
+.wrap{position:relative;z-index:3;max-width:820px;margin:0 auto;padding:0 24px 120px}
+a{color:var(--green-glow);text-decoration:none;border-bottom:1px solid var(--border)}
+a:hover{opacity:.8}
+
+.topbar{
+  border-bottom:1px solid var(--border);margin-bottom:48px;
+  padding:16px 0;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.14em;color:var(--muted);
+  display:flex;align-items:center;gap:10px;
+}
+.topbar .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.topbar .tag{margin-left:auto;color:var(--dim)}
+
+h1,h2,h3{font-family:'Chakra Petch',sans-serif;color:var(--text);line-height:1.2}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;letter-spacing:-.01em;margin-bottom:14px;text-shadow:0 0 40px rgba(52,230,224,.12)}
+h2{font-size:1.35rem;font-weight:600;margin:52px 0 16px;padding-top:22px;border-top:1px solid var(--border);color:var(--green-glow)}
+h3{font-size:1.05rem;font-weight:600;margin:32px 0 12px;color:var(--text)}
+.byline{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);letter-spacing:.04em;margin-bottom:6px}
+.subhead{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);letter-spacing:.03em;margin-bottom:40px;line-height:1.6}
+p{margin:0 0 18px}
+strong{color:var(--text);font-weight:600}
+em{font-style:italic;color:var(--body)}
+
+.keywords{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.02em;margin:0 0 8px}
+.abstract{
+  background:linear-gradient(180deg,rgba(12,19,17,.6),transparent);
+  border:1px solid var(--border);border-left:2px solid var(--green);
+  padding:22px 26px;margin:0 0 20px;font-size:15px;
+}
+.abstract .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--green);margin-bottom:12px}
+
+ul,ol{margin:0 0 18px;padding-left:22px}
+li{margin-bottom:9px}
+
+blockquote{
+  border-left:2px solid var(--rim);background:rgba(12,19,17,.45);
+  padding:14px 20px;margin:18px 0;font-size:14.5px;
+}
+blockquote p{margin:0 0 8px}
+blockquote p:last-child{margin:0}
+blockquote strong{color:var(--green-glow)}
+
+.sidebar{
+  background:linear-gradient(180deg,rgba(12,19,17,.7),rgba(12,19,17,.35));
+  border:1px solid var(--border);border-left:2px solid var(--teal);
+  padding:20px 24px;margin:26px 0;font-size:14.5px;
+}
+.sidebar .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--teal);margin-bottom:14px}
+.sidebar h4{font-family:'Chakra Petch',sans-serif;color:var(--text);font-size:.98rem;font-weight:600;margin:16px 0 6px}
+.sidebar h4:first-of-type{margin-top:0}
+.sidebar p{margin:0 0 10px}
+.sidebar p:last-child{margin:0}
+
+.fnlabel{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--teal);font-weight:500}
+
+.tbl-scroll{overflow-x:auto;margin:20px 0;border:1px solid var(--border)}
+table{border-collapse:collapse;width:100%;font-size:12.5px;font-family:'JetBrains Mono',monospace}
+th,td{border:1px solid var(--edge);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:rgba(52,230,224,.06);color:var(--green-glow);font-weight:500;letter-spacing:.03em}
+td{color:var(--body)}
+.sym{color:var(--teal);text-align:center}
+
+code{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--green-glow);background:rgba(52,230,224,.06);padding:1px 5px;border-radius:3px}
+
+figure{margin:26px 0}
+figure svg{width:100%;height:auto;display:block;background:rgba(8,13,12,.4);border:1px solid var(--border);border-radius:6px}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.55}
+figcaption b{color:var(--green-glow);font-weight:500}
+.fig-t{fill:var(--body);font-family:'JetBrains Mono',monospace;font-size:11px}
+.fig-k{fill:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px}
+.fig-h{fill:var(--text);font-family:'Chakra Petch',sans-serif;font-size:12px;font-weight:600}
+.fig-ok{fill:var(--teal)}
+.fig-no{fill:#e05050}
+.fig-warn{fill:#ffc24d}
+.fig-axis{stroke:var(--rim);stroke-width:1}
+.fig-tick{stroke:var(--edge);stroke-width:1}
+.fig-line{stroke:var(--green);stroke-width:1.5;fill:none}
+.fig-wall{stroke:#e05050;stroke-width:1.5;stroke-dasharray:5 4;fill:none}
+.fig-dot{fill:var(--teal)}
+
+.foot{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:.04em;line-height:1.7}
+
+sup a{border-bottom:none;font-size:11px}
+.refs{font-size:13.5px}
+.refs li{margin-bottom:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <span class="dot"></span>
+    NEW TRIPOLI <span style="color:var(--dim)">// COMPANION PAPER</span>
+    <span class="tag">PREPRINT · DRAFT v0.5</span>
+  </div>
+
+  <h1>Bionics Feasibility: Iterating a Biological Brain Toward a Synthetic Substrate</h1>
+  <div class="byline">Tim Swanson · Post Oak Labs · tim@postoaklabs.com</div>
+  <div class="subhead">Companion to the Cognitive Husbandry world bible and sibling to the ETI-framed feasibility audit. Preprint, work in progress.</div>
+
+  <div class="keywords"><strong style="color:var(--green)">Keywords:</strong> brain-computer interface; substrate independence; whole-brain emulation; neural dust; thermodynamic heat wall; Landauer bound; reversible computing; connectome; cortical microstimulation; electrode longevity; gradual replacement; biological computationalism; feasibility review</div>
+
+  <div class="abstract">
+    <div class="label">// ABSTRACT</div>
+    <p>The first paper in this pair audited a speculative scenario through the lens of an alien intelligence that farms human cognition. This companion drops that framing and asks the human-engineering question underneath it directly. By what path, if any, is a biological brain iterated toward a bionic or synthetic substrate without killing the person, and what physical limits govern how far the path can run?</p>
+    <p>The paper is organized around a single hard bound. Living neural tissue tolerates only about 2&nbsp;°C of local heating, a limit the implanted-device literature frames as a thermal dose of CEM43&nbsp;≤&nbsp;2, and that ceiling sets an areal dissipation limit near 40&nbsp;mW/cm² and a link budget near 12&nbsp;pJ/bit at neural-dust scale, with two independent derivations converging on the same figure. That chain is derived once, in a boxed sidebar, and every downstream claim is asserted against it rather than re-derived. Against 86&nbsp;billion neurons and 10¹⁴ synapses, the best interfaces today, Neuralink's 1,024-channel N1 and Paradromics' roughly 65,000-electrode Connexus, sit six orders of magnitude short of whole-neuron density, and the shortfall is thermodynamic rather than lithographic.</p>
+    <p>The paper reframes the race from electrode count to bits per picojoule per watt of waste heat, measures the gap between that budget and the best demonstrated wireless neural link (about 52&nbsp;pJ/bit, roughly four times over the wall at region scale), lays out an evidence-gated ladder of capability thresholds rather than dated milestones, and argues that the ladder should favor gradual in-vivo replacement because that design survives either answer to the still-open substrate question, whose cleanest argument, Chalmers's fading-qualia thought experiment, doubles as the engineering spec for that very procedure. Four harsh consequences are noted as conjecture rather than made central. The contribution is the constraint and the ladder, not a claim that anyone will reach the top on any date.</p>
+  </div>
+
+  <h2>0. Frame</h2>
+  <p>The first paper in this pair told the story through an alien. An extraterrestrial intelligence crosses interstellar distance, converts a population into brains on life support, and farms their cognition inside an accelerated simulation. That framing was a device. This paper drops it and asks what the device concealed: the alien is us, later, if the substrate transition works. What follows is a human-engineering question stated in human-engineering terms. By what path, if any, does a biological brain get iterated toward a bionic or synthetic substrate without killing the person along the way, and what physical limits govern how far that path can run?</p>
+  <p>The question people reach for first is the continuity-of-self question, which asks whether the upgraded mind is the same person or a copy wearing its memories. That question is real, but it has been argued to exhaustion and it is not where the engineering lives, so it is confined to a footnote here.<sup><a href="#fn1" id="r1">[1]</a></sup> The organizing constraint of this paper is not philosophical. It is thermodynamic, and it is the subject of the next section.</p>
+
+  <h2>1. The heat wall</h2>
+  <p>Every forward claim in this paper is held against one bound, derived once, here. The bound is not an engineering nuisance to be optimized away with a better process node. It is a wall set by the physics of warm tissue, and it reframes the entire race.</p>
+  <p>Living neural tissue tolerates only a small local temperature rise before function degrades and damage begins, on the order of 2&nbsp;°C. This is not a round number pulled from intuition. It is the consensus ceiling in the implanted-device thermal literature. Wolf's standard treatment of thermal considerations for implanted cortical interfaces holds chronic device-induced heating below roughly 1 to 2&nbsp;°C of local rise, and the implantable-device standard frames the same limit as a thermal dose, allowing no device surface to impose more than a CEM43 of 2, meaning two cumulative-equivalent-minutes at 43&nbsp;°C, on brain tissue.<sup><a href="#fn2b" id="r2b">[2b]</a></sup> The ceiling is not merely a damage threshold either. Stujenske and colleagues showed that light delivered for optogenetics warms nearby cortex enough to change the firing rates of individual neurons before it does any harm, which means a fraction of a degree is already enough to corrupt the very signal an interface is trying to read or write.<sup><a href="#fn2d" id="r2d">[2d]</a></sup> An implanted device that dissipates power into that tissue must therefore keep its areal heat flux below roughly 40&nbsp;mW/cm², the ceiling consistent both with the thermal-dose limit and with the ultrasonic neural-dust analysis of Seo and colleagues.<sup><a href="#fn2" id="r2">[2]</a></sup> Divide the sustainable power by the data rate a whole-brain-density interface would have to carry, and the link budget collapses to about 12&nbsp;pJ per bit at neural-dust scale. That number, not electrode count, is the governing figure of merit. The derivation is set out in full in the sidebar below and is not repeated elsewhere; every rung of the ladder asserts against it rather than re-deriving it.</p>
+
+  <div class="sidebar">
+    <div class="label">// SIDEBAR: DERIVING THE 12 pJ/bit LINK BUDGET (WORKED ONCE)</div>
+    <h4>Thermal ceiling</h4>
+    <p>Chronic heating of cortical tissue is held safe below about 2&nbsp;°C of local rise. Translated to a sustainable areal dissipation, that is a ceiling near 40&nbsp;mW/cm², the figure the implanted-BMI thermal literature and the neural-dust work both adopt as the design limit.<sup><a href="#fn2b">[2b]</a><a href="#fn2">[2]</a></sup></p>
+    <h4>Power available to a node</h4>
+    <p>A neural-dust mote is a roughly 100&nbsp;μm node powered ultrasonically at about 2&nbsp;mm depth. Seo and colleagues estimate about 500&nbsp;μW delivered to such a node at a link efficiency on the order of 7&nbsp;percent, well within the 40&nbsp;mW/cm² thermal envelope for a sparse population of motes.<sup><a href="#fn2">[2]</a></sup></p>
+    <h4>Bits per joule, the arithmetic</h4>
+    <p>Take the thermal envelope and hand a single node its fair share of the area it heats. A node monitoring a patch on the order of 50 by 50&nbsp;μm, roughly the tissue holding a handful of neurons, is allotted a power share of order 1&nbsp;μW before it starts pushing that patch past the 2&nbsp;°C rise. Require it to stream telemetry continuously at a target rate near 10⁵&nbsp;bit/s, and the sustainable cost of moving one bit off the node, meaning to sense, encode, and transmit it through the tissue at the stated efficiency, lands near 12&nbsp;pJ/bit. This is not a lone estimate. An independent low-power-BMI design study derives the same figure from the identical 2&nbsp;°C and 40&nbsp;mW/cm² starting point, by exactly this power-over-rate route.<sup><a href="#fn2c" id="r2c">[2c]</a></sup> Two derivations from different directions converging on one number is the reason it is treated as the spine. It remains an order-of-magnitude budget, flagged with a tilde, and every input is exposed so it can be revised.</p>
+    <h4>Why it is a wall and not a knob</h4>
+    <p>The waste heat scales with the aggregate bit rate, and the aggregate bit rate scales with how much of the brain is being interfaced. No one can buy their way past 40&nbsp;mW/cm² with more electrodes, because more electrodes moving more bits is precisely what the ceiling forbids. The only free variable is pJ/bit, meaning how cheaply each bit is moved. That is the whole game, and §4 asks how much room is left in it.</p>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-log sketch of interface areal power demand versus channel count against the 40 mW/cm2 heat wall">
+      <line class="fig-axis" x1="70" y1="250" x2="710" y2="250"/>
+      <line class="fig-axis" x1="70" y1="250" x2="70" y2="40"/>
+      <text class="fig-k" x="70" y="270">10³</text>
+      <text class="fig-k" x="230" y="270">10⁴</text>
+      <text class="fig-k" x="390" y="270">10⁵ · today (~65k)</text>
+      <text class="fig-k" x="560" y="270">10⁹</text>
+      <text class="fig-k" x="675" y="270">10¹¹</text>
+      <text class="fig-t" x="300" y="292">channel count (log)</text>
+      <text class="fig-t" x="18" y="150" transform="rotate(-90 18 150)">areal power (log)</text>
+      <line class="fig-wall" x1="70" y1="120" x2="710" y2="120"/>
+      <text class="fig-no" x="560" y="112" style="font-family:'JetBrains Mono',monospace;font-size:11px">40 mW/cm² heat wall</text>
+      <path class="fig-line" d="M70 235 L230 210 L390 178 L560 118 L675 70"/>
+      <circle class="fig-dot" cx="390" cy="178" r="4"/>
+      <text class="fig-ok" x="330" y="200" style="font-family:'JetBrains Mono',monospace;font-size:10px">frontier today</text>
+      <circle cx="560" cy="118" r="4" fill="#ffc24d"/>
+      <text class="fig-warn" x="500" y="148" style="font-family:'JetBrains Mono',monospace;font-size:10px">wall crossing</text>
+    </svg>
+    <figcaption><b>Figure 1.</b> Schematic, not a fit. Brute-forcing channel count at fixed pJ/bit drives areal power toward the 40&nbsp;mW/cm² ceiling long before whole-neuron density near 10¹¹. The only way the curve stays under the wall at scale is to push pJ/bit down, bending the line rather than extending it.</figcaption>
+  </figure>
+
+  <p>It helps to fix the scale the wall applies to. The human brain runs roughly 86&nbsp;billion neurons across on the order of 10¹⁴ synapses.<sup><a href="#fn3" id="r3">[3]</a></sup> The best interfaces in clinical hardware today sit six orders of magnitude short of that neuron count, and even that comparison flatters them, because a channel is not a neuron. Neuralink's N1 carries 1,024 channels on 64 threads of 16 electrodes each.<sup><a href="#fn4" id="r4">[4]</a></sup> Paradromics' Connexus array reports on the order of 65,000 recording electrodes.<sup><a href="#fn4">[4]</a></sup> Against 86&nbsp;billion neurons those figures are 10⁻⁵ to 10⁻⁶ of the count, and each channel samples a smear of nearby field potential rather than a single identified cell.</p>
+  <p>The consequence is blunt. To interface the brain at whole-neuron density, an engineer would have to raise channel count by something like a factor of a million while moving all of the additional waste heat out of a skull that tolerates 2&nbsp;°C. A whole-brain-density interface cannot be brute-powered inside living tissue. The race is not for more electrodes. It is for bits per picojoule per watt of waste heat, and every rung below is scored on it.</p>
+
+  <h2>2. The graveyard</h2>
+  <p>Before any forward claim comes a discipline check, because this field has a long record of confident timelines that did not survive contact with the calendar. The pattern is consistent enough to tabulate, with sources, so that the record is auditable rather than rhetorical.</p>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>Prediction</th><th>Made</th><th>Promised</th><th>Actual</th></tr></thead>
+    <tbody>
+      <tr><td>Practical consumer "neural typing" from cortical implants</td><td>2000s hype cycle</td><td>within a decade</td><td>still investigational; clinical spellers exist but at sub-conversational throughput</td></tr>
+      <tr><td>Whole-brain emulation "achievable by extrapolation of current technology"</td><td>Sandberg &amp; Bostrom roadmap, 2008<sup><a href="#fn5b" id="r5b">[5b]</a></sup></td><td>implied decades</td><td>a roughly 1 mm³ slab of one mouse cortex mapped, not one whole brain<sup><a href="#fn5">[5]</a></sup></td></tr>
+      <tr><td>High-bandwidth consumer BCI as a shipping product</td><td>2010s venture framing</td><td>"a few years"</td><td>dozen-plus experimental human implants, no consumer device<sup><a href="#fn4">[4]</a></sup></td></tr>
+      <tr><td>Mind uploading as a foreseeable clinical option</td><td>recurrent futurist claim</td><td>within a lifetime</td><td>no organism mapped at more than 90% of neurons at single-spike resolution<sup><a href="#fn5">[5]</a></sup></td></tr>
+      <tr><td>A validated running model of any nervous system</td><td>implicit since C. elegans</td><td>"the data is the hard part"</td><td>none exists, not even for a 302-neuron worm; the bottleneck moved from data to modeling<sup><a href="#fn5">[5]</a></sup></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The misses share two roots. The first is optimism about scaling, an assumption that channel counts, once climbing, would climb to whole-brain coverage on a Moore's-law curve, when the binding constraint was never lithography but the heat wall of §1. The second is silence about the connectome. Roadmaps costed the recording hardware and ignored the far larger problem of knowing what to record from and how the wiring is arranged. The 2008 Sandberg and Bostrom roadmap is the honest exemplar of the era's optimism, being careful, explicit about its assumptions, and still framing whole-brain emulation as reachable "by extrapolations of current technology."<sup><a href="#fn5b">[5b]</a></sup> Nearly two decades on, the newer accounting is starker in one specific way. The field now holds terabytes of connectome data and still has no validated running model of any brain, not even a 302-neuron worm.<sup><a href="#fn5">[5]</a></sup> The bottleneck moved from collecting the data to building something that computes from it, which is a harder and less-funded problem than the roadmaps assumed.</p>
+  <p>The discipline this record earns is a rule the rest of the paper obeys without exception, namely no dated milestones. Where a year appears below, it is quoted as an external projection with its source, never adopted as a claim of this paper.</p>
+
+  <h2>3. The ladder</h2>
+  <p>The path from today's interfaces to substrate independence is a ladder, and the rungs are placed on two axes at once, biological scale and time horizon. Because the field's timelines have missed so reliably, the rungs are stated not as dates but as capability thresholds gated by evidence. Each rung names the thing that must be demonstrated and survived before the next is attempted. Horizon labels stay soft, near, mid, and far, and each is pinned to a technical precondition rather than a year. Every rung answers the same question: what fits under 40&nbsp;mW/cm²?</p>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>Rung (scale)</th><th>Horizon</th><th>Proven needed to advance</th><th>Where we are / anchor</th></tr></thead>
+    <tbody>
+      <tr><td>Region, read-only</td><td>near</td><td>chronic stability, explant-able, low drift</td><td>roughly here, motor decoding at about 1k channels</td></tr>
+      <tr><td>Region, closed-loop stim</td><td>near to mid</td><td>bidirectional traffic under the heat budget</td><td>early clinical</td></tr>
+      <tr><td>Subsystem hybrid</td><td>mid</td><td>sustained co-adaptation, no runaway heat</td><td>not demonstrated</td></tr>
+      <tr><td>Cortex-scale</td><td>far</td><td>a bits/pJ breakthrough and a connectome map</td><td>mouse whole-brain map projected around 2034; primate 2040s</td></tr>
+      <tr><td>Whole-brain / migrate</td><td>far</td><td>the substrate question resolved empirically</td><td>no defensible timeline</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The five-rung ladder from region read-only to whole-brain migration, each with its horizon and evidence gate, with a heat-wall band intensifying toward the top rungs.">
+      <text class="fig-h" x="20" y="24">THE LADDER — FIVE EVIDENCE-GATED RUNGS</text>
+      <defs>
+        <linearGradient id="heatband" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgba(224,80,80,0)"/>
+          <stop offset="55%" stop-color="rgba(224,80,80,0.05)"/>
+          <stop offset="100%" stop-color="rgba(224,80,80,0.20)"/>
+        </linearGradient>
+      </defs>
+      <rect x="600" y="44" width="150" height="248" fill="url(#heatband)"/>
+      <text class="fig-no fig-k" x="675" y="60" text-anchor="middle">heat wall</text>
+      <text class="fig-no fig-k" x="675" y="73" text-anchor="middle">binds harder ↑</text>
+      <g>
+        <rect x="40" y="248" width="540" height="34" rx="3" fill="rgba(35,255,136,0.10)" stroke="var(--rim)"/>
+        <rect x="40" y="202" width="540" height="34" rx="3" fill="rgba(35,255,136,0.07)" stroke="var(--rim)"/>
+        <rect x="40" y="156" width="540" height="34" rx="3" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+        <rect x="40" y="110" width="540" height="34" rx="3" fill="rgba(255,194,77,0.06)" stroke="var(--rim)"/>
+        <rect x="40" y="64"  width="540" height="34" rx="3" fill="rgba(224,80,80,0.06)" stroke="var(--rim)"/>
+      </g>
+      <g class="fig-t">
+        <text x="54" y="269">1 · Region, read-only</text>
+        <text x="54" y="223">2 · Region, closed-loop stim</text>
+        <text x="54" y="177">3 · Subsystem hybrid</text>
+        <text x="54" y="131">4 · Cortex-scale</text>
+        <text x="54" y="85">5 · Whole-brain / migrate</text>
+      </g>
+      <g class="fig-k">
+        <text x="330" y="269">gate: chronic stability · NEAR</text>
+        <text x="330" y="223">gate: bidirectional under budget · NEAR–MID</text>
+        <text x="330" y="177">gate: stable co-adaptation · MID</text>
+        <text x="330" y="131">gate: bits/pJ + connectome · FAR</text>
+        <text x="330" y="85">gate: substrate question · FAR</text>
+      </g>
+      <g fill="var(--teal)">
+        <circle cx="30" cy="265" r="4"/>
+      </g>
+      <text class="fig-ok fig-k" x="20" y="304">● frontier today sits at rung 1; the wall becomes binding from rung 3 up.</text>
+    </svg>
+    <figcaption><b>Figure 2.</b> The five rungs as one picture. Each carries its evidence gate and horizon, the frontier marker sits at the read-only base, and the red band shows the heat wall going from slack at the bottom to dominant at cortex scale and above.</figcaption>
+  </figure>
+
+  <p><strong>Region, read-only.</strong> This is roughly where the frontier sits. A patch of cortex is recorded, its population activity decoded, and an external effector driven from the decode. The gate to climb off this rung is not more channels but chronic survivability, meaning an array that stays stable for years, drifts little, and can be explanted without taking tissue with it. That gate is not hypothetical. The largest retrospective failure-mode study to date, Barrese and colleagues' analysis of 78 silicon microelectrode arrays implanted in 27 monkeys since 1996, found that performance degrades over months to a few years, and that the dominant failures are not electrical but material and biological. Insulation cracks, connectors and lead-wires fault, and the chronic foreign-body reaction walls electrodes off in glial scar and drives recording neurons away from the tips.<sup><a href="#fn11" id="r11">[11]</a></sup> The tissue treats a rigid probe as a wound it never stops healing. There is at least a credible path around this, however. Ultra-flexible mesh electronics, injected rather than inserted, are compliant enough that the brain stops treating them as a wound. Hong, Lieber, and colleagues report a gliosis-free interface that tracks individual neurons stably for eight months to a year with minimal chronic immune response.<sup><a href="#fn16" id="r16">[16]</a></sup> That does not yet meet the decade-stable, cleanly-explantable bar this rung demands, but it shows the bar is an engineering target rather than a biological impossibility. The heat wall is not yet binding here, because the channel counts are low. It becomes binding two rungs up.</p>
+  <p><span class="fnlabel">Falsifier.</span> The read-only base of the ladder would be barred if the foreign-body response were shown to impose a hard ceiling on chronic yield, with recording sites lost to encapsulation faster than any biocompatible material or geometry can preserve them.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Recording yield falling over years for a rigid array, with onset of material and biological failures marked, against a flatter curve for a compliant mesh interface.">
+      <text class="fig-h" x="20" y="24">RECORDING YIELD vs TIME — viable channels, %</text>
+      <line class="fig-axis" x1="70" y1="210" x2="720" y2="210"/>
+      <line class="fig-axis" x1="70" y1="210" x2="70" y2="44"/>
+      <g class="fig-k" text-anchor="end">
+        <text x="62" y="52">100</text><text x="62" y="130">50</text><text x="62" y="214">0</text>
+      </g>
+      <g class="fig-k" text-anchor="middle">
+        <text x="70" y="228">0</text><text x="200" y="228">1 yr</text><text x="330" y="228">2 yr</text><text x="460" y="228">3 yr</text><text x="590" y="228">4 yr</text><text x="720" y="228">5 yr</text>
+      </g>
+      <path class="fig-line" d="M70 48 L160 70 L260 108 L380 150 L520 182 L700 200"/>
+      <text class="fig-ok fig-k" x="150" y="60">rigid silicon array (Barrese)</text>
+      <circle cx="200" cy="80" r="4" fill="#ffc24d"/>
+      <text class="fig-warn fig-k" x="210" y="96">material failures onset</text>
+      <circle cx="330" cy="128" r="4" fill="#e05050"/>
+      <text class="fig-no fig-k" x="340" y="120">foreign-body response dominant</text>
+      <path d="M70 52 L200 60 L360 70 L520 82 L700 96" fill="none" stroke="var(--teal)" stroke-width="1.6" stroke-dasharray="6 4"/>
+      <text class="fig-ok fig-k" x="470" y="70" text-anchor="start">compliant mesh (reported)</text>
+    </svg>
+    <figcaption><b>Figure 3.</b> Schematic, not a fit. A rigid array's viable-channel count decays over months to years as material faults and then the foreign-body response take hold, the pattern Barrese and colleagues document. A compliant injected mesh is reported to hold a far flatter trajectory, which is what turns this rung's gate from a biological ceiling into an engineering target.</figcaption>
+  </figure>
+
+  <p><strong>Region, closed-loop stimulation.</strong> Reading is only half a loop. Writing back, meaning stimulating the same region in a controlled, information-bearing way while continuing to read, closes it, and closed loops are where bidirectional traffic begins to press on the 12&nbsp;pJ/bit budget. The gate is a demonstrated closed loop that carries useful bidirectional bandwidth without exceeding 40&nbsp;mW/cm² across the interfaced area. Early clinical closed-loop systems exist for narrow indications, but general closed-loop cortical interfaces at bandwidth do not.</p>
+  <p>The under-appreciated half of this rung is that writing is the hard direction. Reading only has to eavesdrop, whereas writing has to inject a signal the cortex will accept as its own, and the two are not symmetric problems. Intracortical microstimulation can already evoke crude, localized tactile percepts by injecting current into somatosensory cortex, so the write channel exists in principle, and the evoked percepts have proven stable over months.<sup><a href="#fn12" id="r12">[12]</a></sup> Doing so at the fidelity, spatial selectivity, and channel count a full sensory feed demands, while avoiding the stimulation-induced adaptation, current spread, and seizure risk that all scale with injected charge, remains unsolved. Every stimulating channel also dissipates more heat than a recording one for the same information, so the write side hits the 40&nbsp;mW/cm² wall sooner than the read side does. The sibling feasibility audit grades this same asymmetry as the dominant unsolved sub-problem of the interface premise, requiring roughly seven to eight orders of magnitude of channel scaling on the write side alone (see that paper's §4.4).<sup><a href="#fn13" id="r13">[13]</a></sup></p>
+  <p><span class="fnlabel">Falsifier.</span> Every rung above this one would be barred by a proof that stable, high-fidelity write-side stimulation to large cortical fractions is bounded, thermodynamically or biologically, below the bandwidth a closed loop needs.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Read versus write asymmetry. Reading eavesdrops on existing fields; writing injects charge the cortex must accept. Cost bars for heat, fidelity difficulty, and channel-count demand are higher for writing.">
+      <text class="fig-h" x="20" y="24">READ vs WRITE — why writing reaches the wall first</text>
+      <g>
+        <rect x="40" y="44" width="330" height="150" rx="5" fill="rgba(52,230,224,0.05)" stroke="var(--rim)"/>
+        <rect x="390" y="44" width="330" height="150" rx="5" fill="rgba(224,80,80,0.06)" stroke="var(--rim)"/>
+      </g>
+      <text class="fig-h fig-ok" x="56" y="66">READ · eavesdrop</text>
+      <text class="fig-h fig-no" x="406" y="66">WRITE · inject</text>
+      <text class="fig-k" x="56" y="84">listen to fields tissue already makes</text>
+      <text class="fig-k" x="406" y="84">supply signal cortex accepts as its own</text>
+      <g class="fig-k" text-anchor="end">
+        <text x="150" y="116">heat / bit</text>
+        <text x="150" y="144">fidelity difficulty</text>
+        <text x="150" y="172">channel demand</text>
+      </g>
+      <g>
+        <rect x="160" y="106" width="70" height="12" rx="2" fill="var(--teal)"/>
+        <rect x="160" y="134" width="55" height="12" rx="2" fill="var(--teal)"/>
+        <rect x="160" y="162" width="80" height="12" rx="2" fill="var(--teal)"/>
+      </g>
+      <g class="fig-k" text-anchor="end">
+        <text x="500" y="116">heat / bit</text>
+        <text x="500" y="144">fidelity difficulty</text>
+        <text x="500" y="172">channel demand</text>
+      </g>
+      <g>
+        <rect x="510" y="106" width="170" height="12" rx="2" fill="#e05050"/>
+        <rect x="510" y="134" width="200" height="12" rx="2" fill="#e05050"/>
+        <rect x="510" y="162" width="185" height="12" rx="2" fill="#e05050"/>
+      </g>
+      <text class="fig-k" x="40" y="220">Bars are illustrative. The point is direction, not magnitude: every write axis runs longer than its read counterpart.</text>
+    </svg>
+    <figcaption><b>Figure 4.</b> The two directions are not symmetric. Reading listens to fields the tissue already produces; writing must inject charge the cortex accepts as its own, at higher heat per bit, harder fidelity, and greater channel demand. That asymmetry is why the write side reaches the 40&nbsp;mW/cm² wall before the read side does.</figcaption>
+  </figure>
+
+  <p><strong>Subsystem hybrid.</strong> Here a functional subsystem, a sensory relay or a memory-adjacent circuit, is run in sustained partnership with synthetic hardware, the biological and the artificial co-adapting over time. This rung has not been demonstrated in any organism. Its gate is sustained co-adaptation with no runaway heat. The hybrid must hold a stable operating point for a long period under the areal budget, since a co-adapting loop that slowly drives its own dissipation upward fails the wall even if it passes on day one.</p>
+  <p><span class="fnlabel">Falsifier.</span> The hybrid substrate would be barred, regardless of channel technology, if any co-adapting biological and synthetic loop were shown to be dynamically unable to settle, its dissipation climbing without bound as the two sides chase each other.</p>
+
+  <p><strong>Cortex-scale.</strong> Interfacing an entire cortex at meaningful density requires two things at once, and neither is in hand. The first is a bits-per-picojoule breakthrough, a way to move whole-cortex traffic under the same 40&nbsp;mW/cm² ceiling that today's pJ/bit figures do not permit at that scale; §4 measures how large that gap actually is. The second is a connectome map to interface against, and here the gap is stark. The densest reconstruction to date covers only about a 1&nbsp;mm³ slab of mouse cortex, on the order of 120,000 neurons and 523 million synapses densely reconstructed.<sup><a href="#fn5" id="r5">[5]</a></sup> To put that in proportion, the volume is roughly a millionth of a mouse brain and something like a five-millionth of a human one, and the cost curve, while falling fast from an estimated $16,500 per reconstructed neuron in the original C. elegans work to roughly $100 in recent larval-zebrafish efforts, still multiplies to prohibitive totals at human scale.<sup><a href="#fn5">[5]</a></sup> No organism has yet been mapped at more than 90% of its neurons with single-spike, simultaneous resolution. External projections put a mouse whole-brain map around 2034 and a primate map in the 2040s, with a larval zebrafish full connectome expected sooner,<sup><a href="#fn5">[5]</a><a href="#fn6" id="r6">[6]</a></sup> and those are cited as others' estimates, not as this paper's schedule.</p>
+  <p><span class="fnlabel">Falsifier.</span> This rung would be barred as physics rather than engineering distance by a demonstration that the two gates are jointly unsatisfiable under the wall, meaning that any interface dense enough to be useful at cortex scale necessarily exceeds 40&nbsp;mW/cm² however cheaply its bits are moved.</p>
+
+  <p><strong>Whole-brain and migrate.</strong> The top rung, interfacing or replacing an entire human brain so that the mind persists onto a new substrate, has no defensible timeline, and its gate is not an engineering demonstration at all but the resolution of a scientific question that is still open. That question is §5.</p>
+  <p><span class="fnlabel">Falsifier.</span> There is no engineering falsifier for this rung, only a scientific one. Migration would be barred outright if the substrate question of §5 resolved against gradual replacement, with a finding that continuity of computation cannot survive any incremental substrate swap.</p>
+
+  <p>Each rung's gate has the same shape, survivable and evidenced before the next is attempted. The ladder does not permit skipping a rung on the strength of a projection, because the graveyard of §2 is a graveyard of skipped rungs.</p>
+
+  <h2>4. The pJ/bit frontier: how much room is left in the only free variable</h2>
+  <p>Section 1 established that pJ/bit is the whole game, and §3 placed a bits-per-picojoule breakthrough as the hard gate on the cortex-scale rung. This section asks the quantitative question those two leave open. How far is the best demonstrated hardware from the 12&nbsp;pJ/bit budget, and along which physical routes might the gap close? The honest answer is that the frontier is close enough to be tantalizing and far enough to be sobering. The leading approaches sit within a single order of magnitude of the wall, and none has crossed it at scale.</p>
+  <p>The obstacle every route shares is that tissue is hostile to the obvious carrier. Radio-frequency electromagnetic signalling, the default for wearables, is absorbed strongly by warm saline tissue, so an implant radiating enough RF to be heard outside the skull spends most of its budget heating the very tissue the wall protects. The escape routes each swap the carrier for something tissue tolerates better, and each pays a different transduction tax.</p>
+  <ul>
+    <li><strong>Ultrasonic, as in neural dust.</strong> Acoustic power couples into tissue far more efficiently than RF, which is why the neural-dust analysis can deliver about 500&nbsp;μW to a mote and why the 12&nbsp;pJ/bit budget is derived at ultrasonic scale in the first place.<sup><a href="#fn2">[2]</a></sup> The open problem is not the physics of a single mote but aggregating millions of them without the beamforming and readout electronics breaching the wall in aggregate.</li>
+    <li><strong>Electro-quasistatic, using dipole coupling.</strong> Rather than radiate, this approach couples the body itself as a conductor. The biphasic quasistatic brain-communication work from Sen's group at Purdue avoids the transduction losses of ultrasound, optics, and magneto-electrics by keeping the signal path fully electrical, achieving an end-to-end channel loss of only about 60&nbsp;dB across the skull. It reports a measured uplink at roughly 52&nbsp;pJ/bit.<sup><a href="#fn9" id="r9">[9]</a></sup> That is the most directly comparable real number in the literature, and it is about four times the 12&nbsp;pJ/bit budget. The best demonstrated wireless neural link is, in other words, still a factor of a few over the wall, at region scale, before whole-cortex aggregation is even attempted.</li>
+    <li><strong>Optical and magneto-electric.</strong> Both offer attractive channels in principle but pay large energy-conversion penalties turning electrical signals into photons or mechanical strain and back, so they are live research directions rather than demonstrated wins against the budget.<sup><a href="#fn9">[9]</a></sup></li>
+  </ul>
+  <p>Two facts follow, and they set the tone for everything above the subsystem rung. First, the gap is not astronomical. A fourfold improvement on the best demonstrated link is a normal decade of device engineering, not a miracle. Second, the gap is real and it is measured against the friendliest scale, since 52&nbsp;pJ/bit is a single region's uplink, and the wall of §1 tightens as coverage grows, because aggregate heat scales with aggregate bits. Closing that fourfold gap at region scale and then holding it across a million-fold increase in channels are different problems, and only the first is within sight. This is the concrete content of the phrase "a bits-per-picojoule breakthrough": not one number, but a number held as the interface scales toward the whole cortex.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The pJ/bit landscape on a log scale, from the Landauer floor near 3e-21 J per bit through the 12 pJ per bit budget to the 52 pJ per bit quasistatic link and 295 pJ per bit legacy CMOS.">
+      <text class="fig-h" x="20" y="24">THE pJ/bit LANDSCAPE — energy per bit, log scale</text>
+      <line class="fig-axis" x1="70" y1="150" x2="720" y2="150"/>
+      <g class="fig-k" text-anchor="middle">
+        <line class="fig-tick" x1="90" y1="150" x2="90" y2="156"/><text x="90" y="168">10⁻²¹ J</text>
+        <line class="fig-tick" x1="300" y1="150" x2="300" y2="156"/><text x="300" y="168">10⁻¹² J</text>
+        <line class="fig-tick" x1="470" y1="150" x2="470" y2="156"/><text x="470" y="168">10⁻¹¹ J</text>
+        <line class="fig-tick" x1="640" y1="150" x2="640" y2="156"/><text x="640" y="168">10⁻¹⁰ J</text>
+      </g>
+      <rect x="90" y="70" width="394" height="24" fill="rgba(35,255,136,0.05)"/>
+      <text class="fig-ok fig-k" x="287" y="62" text-anchor="middle">room the ladder climbs into (~9 orders)</text>
+      <circle cx="90" cy="150" r="5" class="fig-ok"/>
+      <text class="fig-t" x="90" y="112" text-anchor="middle" style="font-size:10px">Landauer floor</text>
+      <text class="fig-k" x="90" y="126" text-anchor="middle">~3×10⁻²¹ J</text>
+      <circle cx="484" cy="150" r="5" fill="#ffc24d"/>
+      <line x1="484" y1="150" x2="484" y2="100" stroke="#ffc24d" stroke-width="1"/>
+      <text class="fig-warn fig-t" x="484" y="92" text-anchor="middle" style="font-size:10px">12 pJ/bit budget</text>
+      <circle cx="592" cy="150" r="5" class="fig-no"/>
+      <line x1="592" y1="150" x2="592" y2="120" stroke="#e05050" stroke-width="1"/>
+      <text class="fig-no fig-t" x="592" y="114" text-anchor="middle" style="font-size:10px">52 pJ/bit · best link</text>
+      <circle cx="700" cy="150" r="5" fill="var(--muted)"/>
+      <line x1="700" y1="150" x2="700" y2="134" stroke="var(--muted)" stroke-width="1"/>
+      <text class="fig-k" x="700" y="128" text-anchor="end">295 pJ/bit · legacy CMOS</text>
+    </svg>
+    <figcaption><b>Figure 5.</b> The energy-per-bit landscape. The 12&nbsp;pJ/bit thermal budget sits about nine orders of magnitude above the Landauer floor, with the best demonstrated quasistatic link near 52&nbsp;pJ/bit and legacy implantable CMOS near 295&nbsp;pJ/bit. The wide green band is the room the ladder is trying to climb into, and it is engineering room, not forbidden by physics.</figcaption>
+  </figure>
+
+  <p><strong>How far the floor actually is.</strong> The ultimate bottom of the pJ/bit axis shows that the wall is an engineering limit and not a physical one. The thermodynamic floor on erasing a bit is the Landauer bound, about 3&nbsp;×&nbsp;10⁻²¹ joules at body temperature, which is <em>kT</em>&nbsp;ln&nbsp;2 at 310&nbsp;K.<sup><a href="#fn14" id="r14">[14]</a></sup> The 12&nbsp;pJ/bit budget sits roughly nine orders of magnitude above that floor, and the best demonstrated neural link near 52&nbsp;pJ/bit sits higher still. The floor is not even fixed, since Bennett and others showed that logically reversible computation can in principle approach zero dissipation per operation, circumventing the Landauer cost that irreversible erasure must pay, though only in the limit of vanishing speed.<sup><a href="#fn17" id="r17">[17]</a></sup> The brain itself is no exemplar of efficiency here. It runs on about 20&nbsp;W,<sup><a href="#fn15" id="r15">[15]</a></sup> and its per-signal energy cost, dominated by restoring ion gradients after each synaptic event and action potential rather than by the Landauer-irreducible information itself, likewise sits many orders of magnitude above the physical minimum. The lesson is not that a near-Landauer interface is buildable soon. It is that nothing in physics forbids driving pJ/bit down by the factor the cortex-scale rung needs. The wall is real, but it is nowhere near the floor, and the room between them is exactly the room the ladder is trying to climb into. This is the same thermodynamics-of-computation lens the sibling audit applies to the accelerated-simulation and energy-budget premises, where the Landauer bound sets the per-mind compute cost on the far side of migration (see that paper's §4.6).<sup><a href="#fn13">[13]</a></sup></p>
+  <p>One further number reframes the budget from the other end. Section 1 fixed the cost of moving a bit; the traffic itself is smaller than intuition suggests. Zheng and Meister estimate that the human behavioral throughput, the rate at which a person actually decides and acts, is only about 10 bits per second, even though the sensory periphery gathers on the order of 10⁹ bits per second.<sup><a href="#fn18" id="r18">[18]</a></sup> The interface problem lives in that gap. An implant that merely rides along with conscious behavior needs a trivial bit rate, whereas one that reconstructs the full sensory and motor periphery needs a torrential one, and it is the second figure, not the first, that the heat wall taxes. This is why the write problem of §3 and the cortex-scale rung are the expensive ones. They are precisely the parts of the interface that operate at the 10⁹ end of the range rather than the 10 end.</p>
+
+  <h2>5. The agnostic bet</h2>
+  <p>The top of the ladder forks on a question no experiment has yet settled, and this paper deliberately declines to pick a side.</p>
+  <p>On one branch, cognition is substrate-independent. What matters is the computation a brain performs, not the meat it runs on, and a sufficiently faithful scan emulated on other hardware would be the same mind. The strongest positive argument for this branch is Chalmers's fading-qualia thought experiment. Imagine replacing a subject's neurons one at a time with functionally identical silicon units. If consciousness were substrate-bound, then somewhere in that replacement the subject's experience would have to fade, yet by construction the functional organization, and therefore every behavior and introspective report, is preserved, so the subject keeps insisting all is normal even as the qualia allegedly drain away. Chalmers argues that a gradually fading consciousness that consistently reports itself as vivid is so implausible that we should reject it, concluding that the fully silicon brain is as conscious as the original, and that functional organization, not biology, fixes experience.<sup><a href="#fn7" id="r7">[7]</a><a href="#fn8" id="r8">[8]</a></sup> If that holds, then at the cortex-scale rung a scan-and-emulate migration becomes a coherent engineering target, and the top rung is reachable in principle by copying rather than rebuilding. The argument is not unopposed. Recent work by Mogensen and others attacks the step that treats a subtly-fading-but-self-certain mind as absurd, so the debate is live rather than closed.<sup><a href="#fn8">[8]</a></sup></p>
+  <p>On the other branch, cognition is substrate-entangled. Milinković and Aru, arguing a biological-computationalism position, hold that neural computation is inseparable from the brain's physical structure, its energy constraints, and its continuous rather than discretized dynamics, not an abstract algorithm that a different substrate could simply rerun.<sup><a href="#fn10" id="r10">[10]</a></sup> If that is right, a static scan throws away exactly the part that does the computing, and upload-by-scanning is not merely hard but incoherent, dead on arrival. The only path that preserves the computation is gradual in-vivo replacement, swapping the substrate piece by piece while the system keeps running, so the continuous dynamics are never interrupted.</p>
+  <p>The two branches meet in a way worth pausing on. The same fading-qualia thought experiment that Chalmers runs in the abstract to argue for substrate independence is, read as an engineering spec, a description of gradual in-vivo replacement, one unit at a time, function preserved, the system never halted. The philosophy's cleanest argument for the permissive branch is, operationally, the conservative branch's only survivable procedure. That coincidence is the hinge of the bet.</p>
+  <p>The paper takes no position on which branch is real, because the question is both unfalsifiable and load-bearing at once, a bad combination to bet on. Instead it notes which design survives both outcomes, and gradual replacement works either way. If the substrate is independent, gradual replacement is a valid path to migration and merely a slower one than scanning. If the substrate is entangled, gradual replacement is the only path. Scan-and-emulate, by contrast, survives only the first branch and dies on the second. The ladder therefore favors gradual replacement regardless, not because the substrate question has been answered but precisely because it has not, and gradual replacement is the hedge that pays out under either answer. The bet is flagged here as open, unfalsifiable today, and structurally decisive for everything above the subsystem rung.</p>
+
+  <h2>6. Harsh realities</h2>
+  <p>Four consequences are commonly foregrounded in the popular treatment of this subject, and this paper deliberately demotes them. Each is speculative conjecture rather than a physical result, each is stated in a sentence or two, and each is tied to the rung where it would bite. They are not the backbone of the argument. The heat wall is the backbone, and these are what stand at the edges of the ladder.</p>
+  <ul>
+    <li><strong>Death during early iteration</strong> (conjecture, at the subsystem-hybrid rung). The first attempts at sustained hybrid substrate will be run on someone, and a co-adaptation loop that fails the heat wall fails it in living tissue, which raises, before any of it is technical, the question of who consents and who is treated as expendable.</li>
+    <li><strong>Access inequality</strong> (conjecture, at the whole-brain and migrate rung). If migration ever works, it works first for whoever can afford it, and substrate independence then becomes the ultimate wealth stratifier, an owning class that can extend and multiply its cognition over a biological underclass that cannot.</li>
+    <li><strong>Continuity may be a copy</strong> (conjecture, at the migrate rung). The upgraded self may feel perfectly continuous while the original biological process simply ends, which is the ship-of-Theseus worry the §0 footnote parks, unfalsifiable and yet adopted the moment anyone chooses to migrate.<sup><a href="#fn1">[1]</a></sup></li>
+    <li><strong>Simulated worlds as a trap</strong> (conjecture, as a post-migrate attractor). A mind cheaply hosted in a simulation is a mind that can be cheaply captured, so extended life in engineered worlds risks hedonic capture and a quiet, consensual loss of agency long before it risks anything dramatic.</li>
+  </ul>
+
+  <h2>7. Close</h2>
+  <p>The argument reduces to three claims held under one constraint. The race that matters is bits per picojoule under the 40&nbsp;mW/cm² wall, not electrode count, and every rung of the ladder is scored on it. The best demonstrated link still runs a factor of a few over the budget at region scale, and that factor tightens as coverage grows. The ladder is evidence-gated, built from capability thresholds rather than dates, because the field's record of dated promises is a graveyard and this paper adds no headstones to it. And it is built to survive either answer to the substrate question by favoring gradual replacement, the one design that pays out whether cognition turns out to be substrate-independent or substrate-entangled.</p>
+  <p>What sits at the top of the ladder, extended life lived in simulated worlds at whatever subjective rate the substrate permits, is offered here as motivation rather than prediction. It is the attractor that makes the climb worth attempting. It is not a place this paper claims anyone will arrive, on any date, by any described means. The wall is the only thing here stated as fact.</p>
+
+  <h2>AI assistance disclosure</h2>
+  <p>Drafting, citation verification, derivation checking, and figure preparation were performed with substantial assistance from a large language model (Claude, Anthropic), under the author's direction. The author reviewed and takes full responsibility for all claims, derivations, and references.</p>
+
+  <h2>Notes and references</h2>
+  <ol class="refs">
+    <li id="fn1">The continuity-of-self objection, whether a mind migrated onto a new substrate is the same person or a faithful copy that ends the original, is real and old, and it is argued elsewhere at length. It is treated here as a footnote rather than a spine (see §6, "Continuity may be a copy") because it is unfalsifiable and does not change the engineering. The same ladder is climbed whether or not one believes the person at the top is numerically identical to the person at the bottom. <a href="#r1">↩</a></li>
+    <li id="fn2">Seo, D., Carmena, J.M., Rabaey, J.M., Alon, E., and Maharbiz, M.M. "Neural Dust: An Ultrasonic, Low Power Solution for Chronic Brain-Machine Interfaces," arXiv:1307.2196. Adopts the roughly 2&nbsp;°C tissue limit and 40&nbsp;mW/cm² thermal ceiling, and estimates about 500&nbsp;μW delivered to a roughly 100&nbsp;μm node at about 2&nbsp;mm depth with roughly 7% link efficiency. <a href="https://arxiv.org/pdf/1307.2196">arxiv.org/pdf/1307.2196</a> <a href="#r2">↩</a></li>
+    <li id="fn2b">Wolf, P.D. "Thermal Considerations for the Design of an Implanted Cortical Brain–Machine Interface (BMI)," in <em>Indwelling Neural Implants</em> (CRC Press / NCBI Bookshelf, NBK3932). Chronic device-induced cortical heating held below roughly 1 to 2&nbsp;°C of local rise, with the implantable-device standard framing the same bound as a thermal dose of CEM43 at most 2 (cumulative-equivalent-minutes at 43&nbsp;°C). <a href="https://www.ncbi.nlm.nih.gov/books/NBK3932/">ncbi.nlm.nih.gov/books/NBK3932</a> <a href="#r2b">↩</a></li>
+    <li id="fn2c">"A low-power communication scheme for wireless, 1000-channel brain-machine interfaces," bioRxiv 2022.03.11.483996. Derives the same roughly 12&nbsp;pJ/bit transmission budget for a node monitoring a 50 by 50&nbsp;μm² patch (about 8 neurons at roughly 1&nbsp;μW each) from the identical 2&nbsp;°C and 40&nbsp;mW/cm² thermal limit, and notes that prior implantable CMOS transceivers ran near 295&nbsp;pJ/bit, far above the target. <a href="https://www.biorxiv.org/content/10.1101/2022.03.11.483996.full.pdf">biorxiv.org/…/2022.03.11.483996</a> <a href="#r2c">↩</a></li>
+    <li id="fn2d">Stujenske, J.M., Spellman, T., and Gordon, J.A. "Modeling the Spatiotemporal Dynamics of Light and Heat Propagation for In Vivo Optogenetics," <em>Cell Reports</em> 12(3), 525–534 (2015). Light delivered for optogenetics warms local cortex enough to alter single-neuron firing rates below any damage threshold, evidence that a fraction of a degree already perturbs the signal an interface reads or writes. doi:10.1016/j.celrep.2015.06.036. <a href="https://www.cell.com/cell-reports/fulltext/S2211-1247(15)00648-8">cell.com/cell-reports</a> <a href="#r2d">↩</a></li>
+    <li id="fn3">Human brain scale anchors, about 86 billion neurons and roughly 10¹⁴ synapses (Herculano-Houzel and the standard neuroscience consensus). <a href="#r3">↩</a></li>
+    <li id="fn4">BCI state of the art, 2026: Neuralink N1 at 1,024 channels (64 threads of 16 electrodes) across a dozen-plus experimental human implants; Paradromics Connexus at roughly 65,000 electrodes; Synchron's Stentrode leading on the safety and regulatory axis. <a href="https://www.fiercebiotech.com/medtech/elon-musks-neuralink-kickstart-high-volume-production-brain-computer-interface-devices">fiercebiotech.com</a> <a href="#r4">↩</a></li>
+    <li id="fn5">State of Brain Emulation report, 2025, arXiv:2510.15745. A roughly 1&nbsp;mm³ slab of mouse cortex densely reconstructed (about 120k neurons and 523M synapses); cost per reconstructed neuron falling from about $16,500 (C. elegans) to roughly $100 (larval zebrafish); no organism yet mapped at more than 90% of neurons with single-spike, simultaneous resolution; no validated running model of any nervous system yet exists, so the bottleneck has shifted from data collection to model-building; mouse whole-brain connectome projected around 2034, primate 2040s, larval zebrafish full connectome expected around 2026. <a href="https://arxiv.org/pdf/2510.15745">arxiv.org/pdf/2510.15745</a> <a href="#r5">↩</a></li>
+    <li id="fn5b">Sandberg, A. and Bostrom, N. "Whole Brain Emulation: A Roadmap," Technical Report #2008-3, Future of Humanity Institute, Oxford University (2008). The careful, explicit exemplar of 2000s roadmap optimism, framing WBE as reachable "by extrapolations of current technology," and the benchmark the §2 graveyard measures against. <a href="https://www.fhi.ox.ac.uk/brain-emulation-roadmap-report.pdf">fhi.ox.ac.uk</a> <a href="#r5b">↩</a></li>
+    <li id="fn6">Future projections for mammalian whole-brain simulations based on technological trends in related fields (mouse cellular-level simulation feasible in the 2030s, marmoset in the 2040s). <a href="https://www.sciencedirect.com/science/article/pii/S016801022400138X">sciencedirect.com</a> <a href="#r6">↩</a></li>
+    <li id="fn7">Chalmers, D.J. "The Singularity: A Philosophical Analysis" (uploading section), the standard survey of the substrate-independence and scan-and-emulate position. <a href="https://consc.net/papers/uploading.pdf">consc.net/papers/uploading.pdf</a> <a href="#r7">↩</a></li>
+    <li id="fn8">The fading-qualia argument and its critics. Chalmers, "Absent Qualia, Fading Qualia, Dancing Qualia" (1995), the gradual neuron-replacement thought experiment concluding that functional organization fixes conscious experience (<a href="https://philpapers.org/rec/CHAAQF">philpapers.org/rec/CHAAQF</a>); Mogensen, "How to Resist the Fading Qualia Argument," <em>Synthese</em> (2025), which contests the claim that a subtly-fading-but-self-certain mind is absurd (<a href="https://www.globalprioritiesinstitute.org/wp-content/uploads/Andreas-Mogensen-How-to-Resist-the-Fading-Qualia-Argument.pdf">globalprioritiesinstitute.org</a>). Read as an engineering spec rather than a philosophical device, the same one-unit-at-a-time procedure is gradual in-vivo replacement. <a href="#r8">↩</a></li>
+    <li id="fn9">Chatterjee, B., Nath, M., Kumar, G., Jayant, K., Sen, S. et al. "Biphasic quasistatic brain communication for energy-efficient wireless neural implants," <em>Nature Electronics</em> 6, 686–699 (2023). Electro-quasistatic dipole coupling avoids the transduction losses of ultrasound, optical, and magneto-electric links, with about 60&nbsp;dB end-to-end channel loss at 55&nbsp;mm and a measured uplink transmitter at roughly 52&nbsp;pJ/bit, about four times the 12&nbsp;pJ/bit budget. <a href="https://www.nature.com/articles/s41928-023-01000-3">nature.com/articles/s41928-023-01000-3</a> <a href="#r9">↩</a></li>
+    <li id="fn10">Milinković, B. and Aru, J. "On biological and artificial consciousness: A case for biological computationalism," <em>Neuroscience &amp; Biobehavioral Reviews</em> 181, 106524 (2025). doi:10.1016/j.neubiorev.2025.106524. Argues that neural computation is inseparable from the brain's physical, hybrid, and energy-constrained dynamics rather than an abstract algorithm running on hardware, so that if the position holds, upload-by-scanning is incoherent and only gradual in-vivo replacement preserves the computation. <a href="https://doi.org/10.1016/j.neubiorev.2025.106524">doi.org/10.1016/j.neubiorev.2025.106524</a> <a href="#r10">↩</a></li>
+    <li id="fn11">Barrese, J.C., Rao, N., Paroo, K., Triebwasser, C., Vargas-Irwin, C., Franquemont, L., and Donoghue, J.P. "Failure mode analysis of silicon-based intracortical microelectrode arrays in non-human primates," <em>Journal of Neural Engineering</em> 10(6), 066014 (2013). Retrospective analysis of 78 arrays implanted in 27 <em>Macaca mulatta</em> since 1996; performance degrades over months to a few years, dominated by material and mechanical failures (insulation, connectors, leads) and the chronic biological foreign-body reaction (glial encapsulation, neuronal die-back) rather than by electronics. doi:10.1088/1741-2560/10/6/066014. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4868924/">pmc.ncbi.nlm.nih.gov/articles/PMC4868924</a> <a href="#r11">↩</a></li>
+    <li id="fn12">Flesher, S.N., Collinger, J.L., Foldes, S.T., Weiss, J.M., Downey, J.E., Tyler-Kabara, E.C., Bensmaia, S.J., Schwartz, A.B., Boninger, M.L., and Gaunt, R.A. "Intracortical microstimulation of human somatosensory cortex," <em>Science Translational Medicine</em> 8(361), 361ra141 (2016). Microstimulation of hand-area somatosensory cortex evokes localized, somatotopically organized tactile percepts with graded, amplitude-dependent intensity, stable over months, so the write channel exists while fidelity, selectivity, channel count, and injected-charge limits remain open at full-sensory scale. doi:10.1126/scitranslmed.aaf8083. <a href="https://www.science.org/doi/abs/10.1126/scitranslmed.aaf8083">science.org/doi/abs/10.1126/scitranslmed.aaf8083</a> <a href="#r12">↩</a></li>
+    <li id="fn13">Companion audit, <em>The Science in Cognitive Husbandry: A Feasibility Audit of a Speculative Scenario</em> (<a href="/cognitive-husbandry-feasibility.html">cognitive-husbandry-feasibility</a>). Its §4.4 grades the BCI write problem as the dominant unsolved sub-problem, requiring roughly seven to eight orders of magnitude of write-side channel scaling; §4.6 prices post-migration minds at the Landauer floor; §4.5 sets the alpha-band roughly 10&nbsp;Hz cadence as the candidate hard ceiling on subjective acceleration. This paper and that one share one physics, the thermodynamics of computation, approached from the interface side here and the whole-scenario side there. <a href="#r13">↩</a></li>
+    <li id="fn14">Landauer, R. "Irreversibility and heat generation in the computing process," <em>IBM Journal of Research and Development</em> 5(3), 183–191 (1961). doi:10.1147/rd.53.0183. The thermodynamic floor on an irreversible bit operation, <em>kT</em>&nbsp;ln&nbsp;2, about 3&nbsp;×&nbsp;10⁻²¹&nbsp;J near body temperature. Used here only to fix the distance between the 12&nbsp;pJ/bit budget and the physical minimum, about nine orders of magnitude, showing the wall is an engineering limit rather than a physical one. <a href="#r14">↩</a></li>
+    <li id="fn15">Attwell, D. and Laughlin, S.B. "An energy budget for signaling in the grey matter of the brain," <em>Journal of Cerebral Blood Flow &amp; Metabolism</em> 21(10), 1133–1145 (2001). doi:10.1097/00004647-200110000-00001. The neural energy budget underpinning the roughly 20&nbsp;W whole-brain figure; most of that energy restores ion gradients after signaling (action potentials about 47%, postsynaptic effects about 34%) rather than paying the Landauer-irreducible cost of the information moved. <a href="https://journals.sagepub.com/doi/10.1097/00004647-200110000-00001">journals.sagepub.com</a> <a href="#r15">↩</a></li>
+    <li id="fn16">Hong, G., Lieber, C.M., and colleagues, "Syringe-injectable mesh electronics integrate seamlessly with minimal chronic immune response in the brain," <em>Proceedings of the National Academy of Sciences USA</em> 114(23), 5894–5899 (2017). Ultra-flexible injected mesh probes form a gliosis-free interface tracking individual neurons stably for eight months to a year with minimal chronic immune response, evidence that the foreign-body limit of the read-only rung is an engineering target rather than a hard biological ceiling. doi:10.1073/pnas.1705509114. <a href="https://www.pnas.org/doi/10.1073/pnas.1705509114">pnas.org/doi/10.1073/pnas.1705509114</a> <a href="#r16">↩</a></li>
+    <li id="fn17">Bennett, C.H. "The Thermodynamics of Computation — a Review," <em>International Journal of Theoretical Physics</em> 21(12), 905–940 (1982). doi:10.1007/BF02084158. Logically reversible computation can in principle approach zero dissipation per operation, circumventing the Landauer erasure cost, though only in the limit of vanishing speed, which is why the pJ/bit floor is not even fixed. <a href="https://link.springer.com/article/10.1007/BF02084158">link.springer.com/article/10.1007/BF02084158</a> <a href="#r17">↩</a></li>
+    <li id="fn18">Zheng, J. and Meister, M. "The unbearable slowness of being: Why do we live at 10 bits/s?" <em>Neuron</em> (2024); arXiv:2408.10234. Human behavioral throughput is estimated at about 10 bits per second against a sensory intake near 10⁹ bits per second, a gap that separates the trivial bit rate of a behavior-riding interface from the torrential rate of one reconstructing the full sensory and motor periphery. <a href="https://arxiv.org/abs/2408.10234">arxiv.org/abs/2408.10234</a> <a href="#r18">↩</a></li>
+  </ol>
+
+  <div class="foot">
+    PREPRINT · DRAFT v0.5 · COMPANION PAPER · NEWTRIPOLI.XYZ/COGNITIVE-HUSBANDRY-BIONICS-FEASIBILITY<br>
+    CODE: MIT · PROSE: CC BY 4.0 · <a href="/sitemap.html" style="color:inherit">SITEMAP</a>
+  </div>
+
+</div>
+</body>
+</html>
