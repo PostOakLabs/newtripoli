@@ -80,8 +80,12 @@ than re-deriving it.
 > transmit it through the tissue at the stated efficiency, lands near 12 pJ/bit.
 > This is not a lone estimate. An independent low-power-BMI design study derives the
 > same figure from the identical 2 °C and 40 mW/cm² starting point, by exactly this
-> power-over-rate route.[^linkbudget] Two derivations from different directions
-> converging on one number is the reason it is treated as the spine. It remains an
+> power-over-rate route.[^linkbudget] The convergence is worth stating precisely
+> rather than overselling: the two derivations are independent in their device
+> assumptions and arithmetic, not in their premise, since both inherit the same 2 °C
+> and 40 mW/cm² ceiling from the implanted-device thermal literature. What agrees is
+> the step from thermal envelope to link budget, and that is the step being leaned
+> on. It remains an
 > order-of-magnitude budget, flagged with a tilde, and every input is exposed so it
 > can be revised.
 >
@@ -94,17 +98,21 @@ than re-deriving it.
 
 It helps to fix the scale the wall applies to. The human brain runs roughly 86
 billion neurons across on the order of 10¹⁴ synapses.[^herculano] The best
-interfaces in clinical hardware today sit six orders of magnitude short of that
+interfaces in clinical hardware today sit eight orders of magnitude short of that
 neuron count, and even that comparison flatters them, because a channel is not a
 neuron. Neuralink's N1 carries 1,024 channels on 64 threads of 16 electrodes
-each.[^bci2026] Paradromics' Connexus array reports on the order of 65,000 recording
-electrodes.[^bci2026] Against 86 billion neurons those figures are 10⁻⁵ to 10⁻⁶ of
+each.[^bci2026] Paradromics' Connexus, the first fully implantable wireless system to
+reach a human, carries 421 penetrating microelectrodes per module; the
+65,536-channel figure often quoted for the company belongs to Argo, a benchtop
+research rig used in rats and sheep and not implantable.[^bci2026] Against 86 billion
+neurons those figures are 10⁻⁶ to 10⁻⁸ of
 the count, and each channel samples a smear of nearby field potential rather than a
 single identified cell.
 
 The consequence is blunt. To interface the brain at whole-neuron density, an
-engineer would have to raise channel count by something like a factor of a million
-while moving all of the additional waste heat out of a skull that tolerates 2 °C. A
+engineer would have to raise channel count by something like a factor of a hundred
+million over the best implanted array, while moving all of the additional waste
+heat out of a skull that tolerates 2 °C. A
 whole-brain-density interface cannot be brute-powered inside living tissue. The race
 is not for more electrodes. It is for bits per picojoule per watt of waste heat, and
 every rung below is scored on it.
@@ -507,12 +515,14 @@ evidence that a fraction of a degree already perturbs the signal an interface re
 writes. doi:10.1016/j.celrep.2015.06.036.
 <https://www.cell.com/cell-reports/fulltext/S2211-1247(15)00648-8>
 
-[^linkbudget]: "A low-power communication scheme for wireless, 1000-channel
-brain-machine interfaces," bioRxiv 2022.03.11.483996. Derives the same roughly
+[^linkbudget]: Costello, J.T. and colleagues (2022), "A low-power communication
+scheme for wireless, 1000 channel brain–machine interfaces," *Journal of Neural
+Engineering* 19(3), 036037 (peer-reviewed version of bioRxiv 2022.03.11.483996).
+doi:10.1088/1741-2552/ac7352. Derives the same roughly
 12 pJ/bit transmission budget for a node monitoring a 50 by 50 μm² patch (about 8
 neurons at roughly 1 μW each) from the identical 2 °C and 40 mW/cm² thermal limit, and
 notes that prior implantable CMOS transceivers ran near 295 pJ/bit, far above the
-target. <https://www.biorxiv.org/content/10.1101/2022.03.11.483996.full.pdf>
+target. <https://doi.org/10.1088/1741-2552/ac7352>
 
 [^barrese]: Barrese, J.C., Rao, N., Paroo, K., Triebwasser, C., Vargas-Irwin, C.,
 Franquemont, L., and Donoghue, J.P., "Failure mode analysis of silicon-based
@@ -582,7 +592,8 @@ about 34 percent) rather than paying the Landauer-irreducible cost of the inform
 moved.
 
 [^slowness]: Zheng, J. and Meister, M., "The unbearable slowness of being: Why do we
-live at 10 bits/s?" *Neuron* (2024); arXiv:2408.10234. Human behavioral throughput is
+live at 10 bits/s?" *Neuron* 113(2), 192–204 (2025); published online 17 December
+2024; preprint arXiv:2408.10234. doi:10.1016/j.neuron.2024.11.008. Human behavioral throughput is
 estimated at about 10 bits per second against a sensory intake near 10⁹ bits per
 second, a gap that separates the trivial bit rate of a behavior-riding interface from
 the torrential rate of one reconstructing the full sensory and motor periphery.
@@ -592,10 +603,15 @@ the torrential rate of one reconstructing the full sensory and motor periphery.
 synapses (Herculano-Houzel and the standard neuroscience consensus).
 
 [^bci2026]: BCI state of the art, 2026: Neuralink N1 at 1,024 channels (64 threads of
-16 electrodes) across a dozen-plus experimental human implants; Paradromics Connexus
-at roughly 65,000 electrodes; Synchron's Stentrode leading on the safety and
-regulatory axis.
-<https://www.fiercebiotech.com/medtech/elon-musks-neuralink-kickstart-high-volume-production-brain-computer-interface-devices>
+16 electrodes) across a dozen-plus experimental human implants; Paradromics *Connexus*
+at 421 penetrating microelectrodes per module, first implanted in a human in 2025 at
+the University of Michigan, with a reported information transfer rate above
+200 bit/s; Synchron's Stentrode leading on the safety and regulatory axis. The
+65,536-channel number widely attributed to Paradromics is the *Argo* benchtop
+platform (791 spiking neurons in rat, >30,000 surface LFP channels in sheep), not an
+implantable device: Sahasrabuddhe and colleagues (2021), *Journal of Neural
+Engineering* 18(1), 015002, doi:10.1088/1741-2552/abd0ce.
+<https://doi.org/10.1088/1741-2552/abd0ce> · <https://www.paradromics.com/product>
 
 [^qbc]: Chatterjee, Nath, Kumar, Jayant, and Sen, "Biphasic quasistatic brain
 communication for energy-efficient wireless neural implants," *Nature Electronics* 6,
@@ -618,7 +634,9 @@ larval zebrafish full connectome expected around 2026.
 Technical Report #2008-3, Future of Humanity Institute, Oxford University (2008). The
 careful, explicit exemplar of 2000s roadmap optimism, framing WBE as reachable "by
 extrapolations of current technology," and the benchmark the §2 graveyard measures
-against. <https://www.fhi.ox.ac.uk/brain-emulation-roadmap-report.pdf>
+against. The FHI mirror is dead since the institute's 2024 closure; the durable copy
+is the Oxford Research Archive.
+<https://ora.ox.ac.uk/objects/uuid:a6880196-34c7-47a0-80f1-74d32ab98788>
 
 [^mammalproj]: Future projections for mammalian whole-brain simulations based on
 technological trends in related fields (mouse cellular-level simulation feasible in
@@ -633,7 +651,8 @@ position. <https://consc.net/papers/uploading.pdf>
 Qualia, Fading Qualia, Dancing Qualia" (1995), the gradual neuron-replacement thought
 experiment concluding that functional organization fixes conscious experience
 (<https://philpapers.org/rec/CHAAQF>); Mogensen, "How to Resist the Fading Qualia
-Argument," *Synthese* (2025) and related critiques, which contest the claim that a
+Argument," *Synthese* 206(5) (2025), doi:10.1007/s11229-025-05338-3, and related
+critiques, which contest the claim that a
 subtly-fading-but-self-certain mind is absurd
 (<https://www.globalprioritiesinstitute.org/wp-content/uploads/Andreas-Mogensen-How-to-Resist-the-Fading-Qualia-Argument.pdf>).
 Read as an engineering spec rather than a philosophical device, the same
@@ -641,7 +660,7 @@ one-unit-at-a-time procedure is gradual in-vivo replacement.
 
 [^aru]: Milinković, B. and Aru, J., "On biological and artificial consciousness: A
 case for biological computationalism," *Neuroscience & Biobehavioral Reviews* 181,
-106524 (2025). doi:10.1016/j.neubiorev.2025.106524. Argues that neural computation is
+106524 (online 2025, issue-dated 2026). doi:10.1016/j.neubiorev.2025.106524. Argues that neural computation is
 inseparable from the brain's physical, hybrid, and energy-constrained dynamics rather
 than an abstract algorithm running on hardware; if the position holds, upload-by-scanning
 is incoherent and only gradual in-vivo replacement preserves the computation.
