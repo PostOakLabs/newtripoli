@@ -111,7 +111,7 @@ sup a{border-bottom:none;font-size:11px}
   <div class="topbar">
     <span class="dot"></span>
     NEW TRIPOLI <span style="color:var(--dim)">// COMPANION PAPER</span>
-    <span class="tag">PREPRINT · DRAFT v0.9</span>
+    <span class="tag">PREPRINT · DRAFT v1.0</span>
   </div>
 
   <h1>The Science in Cognitive Husbandry: A Feasibility Audit of a Speculative Scenario</h1>
@@ -267,33 +267,42 @@ sup a{border-bottom:none;font-size:11px}
   <p><strong>Read and write asymmetry.</strong> Recording is hard, and writing coherent high-fidelity sensory input to the cortex without inducing seizure, adaptation, or perceptual distortion is substantially harder and remains unsolved at scale, yet the simulation has to write continuously. As a reference bandwidth, the human optic nerve carries on the order of 10 Mbit/s (Koch and colleagues, 2006, in <em>Current Biology</em>, "How much the eye tells the brain," which measured about 0.875 Mbit/s across roughly 100,000 guinea-pig ganglion cells and scaled that to near 10 Mbit/s for the roughly one-million-cell human retina),<sup><a href="#fn16" id="r16">[16]</a></sup> and a full-sensory feed is higher. No known physical law forbids high-channel bidirectional interfaces, and the barrier is materials, heat, and biocompatibility rather than physics. The <a href="/cognitive-husbandry-bionics-feasibility.html">bionics feasibility companion</a> takes this same interface problem from the hardware side and makes the heat barrier explicit: living tissue tolerates only about 2 °C of local rise, which caps sustainable areal dissipation near 40 mW/cm² and recasts the race from electrode count to energy moved per bit.<sup><a href="#fn17" id="r17">[17]</a></sup></p>
 
   <figure>
-    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale comparison of neuron count and implant channel count. Current best implants sample about ten to the three channels; the human brain has about 8.6 times ten to the ten neurons, roughly eight orders of magnitude more.">
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale comparison of implant channel counts against neuron count. Paradromics' Connexus implants 421 electrodes and Neuralink's N1 carries 1,024, about eight orders of magnitude short of the human brain's 8.6 times ten to the ten neurons. The non-implantable Argo benchtop rig reaches 65,536 channels, which closes the gap to about six orders.">
       <text class="fig-h" x="20" y="24">CHANNELS vs NEURONS — count, log scale</text>
-      <line class="fig-axis" x1="110" y1="130" x2="670" y2="130"/>
+      <path d="M263 58 L263 52 L668 52 L668 58" fill="none" stroke="var(--rim)" stroke-width="1"/>
+      <text class="fig-t" x="465" y="44" text-anchor="middle" style="font-size:11px">~8 orders of magnitude · implanted clinical hardware</text>
+      <path d="M356 84 L356 78 L668 78 L668 84" fill="none" stroke="var(--rim)" stroke-width="1"/>
+      <text class="fig-t" x="512" y="72" text-anchor="middle" style="font-size:11px">~6 orders · benchtop Argo, not implantable</text>
+      <rect x="110" y="90" width="246" height="70" fill="rgba(255,194,77,0.06)"/>
+      <rect x="356" y="90" width="312" height="70" fill="rgba(52,230,224,0.06)"/>
+      <line class="fig-axis" x1="110" y1="160" x2="670" y2="160"/>
       <g class="fig-k" text-anchor="middle">
-        <line class="fig-tick" x1="110" y1="130" x2="110" y2="136"/><text x="110" y="148">10⁰</text>
-        <line class="fig-tick" x1="212" y1="130" x2="212" y2="136"/><text x="212" y="148">10²</text>
-        <line class="fig-tick" x1="314" y1="130" x2="314" y2="136"/><text x="314" y="148">10⁴</text>
-        <line class="fig-tick" x1="416" y1="130" x2="416" y2="136"/><text x="416" y="148">10⁶</text>
-        <line class="fig-tick" x1="518" y1="130" x2="518" y2="136"/><text x="518" y="148">10⁸</text>
-        <line class="fig-tick" x1="620" y1="130" x2="620" y2="136"/><text x="620" y="148">10¹⁰</text>
+        <line class="fig-tick" x1="110" y1="160" x2="110" y2="166"/><text x="110" y="178">10⁰</text>
+        <line class="fig-tick" x1="212" y1="160" x2="212" y2="166"/><text x="212" y="178">10²</text>
+        <line class="fig-tick" x1="314" y1="160" x2="314" y2="166"/><text x="314" y="178">10⁴</text>
+        <line class="fig-tick" x1="416" y1="160" x2="416" y2="166"/><text x="416" y="178">10⁶</text>
+        <line class="fig-tick" x1="518" y1="160" x2="518" y2="166"/><text x="518" y="178">10⁸</text>
+        <line class="fig-tick" x1="620" y1="160" x2="620" y2="166"/><text x="620" y="178">10¹⁰</text>
       </g>
-      <rect x="110" y="70" width="153" height="60" fill="rgba(255,194,77,0.06)"/>
-      <rect x="263" y="70" width="394" height="60" fill="rgba(52,230,224,0.06)"/>
-      <circle cx="263" cy="130" r="5" class="fig-warn"/>
-      <line x1="263" y1="130" x2="263" y2="100" stroke="#ffc24d" stroke-width="1"/>
-      <text class="fig-t" x="263" y="92" text-anchor="middle">Neuralink N1 · ~10³ channels</text>
-      <circle cx="657" cy="130" r="5" class="fig-ok"/>
-      <line x1="657" y1="130" x2="657" y2="100" stroke="var(--teal)" stroke-width="1"/>
-      <text class="fig-t" x="657" y="92" text-anchor="end">human brain · 8.6×10¹⁰ neurons</text>
-      <path d="M263 62 L263 56 L657 56 L657 62" fill="none" stroke="var(--rim)" stroke-width="1"/>
-      <text class="fig-t" x="460" y="48" text-anchor="middle" style="font-size:11px">~7 to 8 orders of magnitude of channel scaling</text>
-      <text class="fig-k" x="460" y="176" text-anchor="middle" style="font-size:10px">and the write side, not shown, is the harder half of the gap</text>
+      <circle cx="244" cy="160" r="5" class="fig-warn"/>
+      <line x1="244" y1="160" x2="244" y2="128" stroke="#ffc24d" stroke-width="1"/>
+      <text class="fig-t" x="244" y="122" text-anchor="middle">Connexus · 421</text>
+      <circle cx="263" cy="160" r="5" class="fig-warn"/>
+      <line x1="263" y1="160" x2="263" y2="106" stroke="#ffc24d" stroke-width="1"/>
+      <text class="fig-t" x="263" y="100" text-anchor="middle">Neuralink N1 · 1,024</text>
+      <circle cx="356" cy="160" r="5" class="fig-warn"/>
+      <line x1="356" y1="160" x2="356" y2="144" stroke="#ffc24d" stroke-width="1"/>
+      <text class="fig-t" x="356" y="138" text-anchor="middle">Argo bench · 65,536</text>
+      <circle cx="668" cy="160" r="5" class="fig-ok"/>
+      <line x1="668" y1="160" x2="668" y2="106" stroke="var(--teal)" stroke-width="1"/>
+      <text class="fig-t" x="672" y="100" text-anchor="end">human brain · 8.6×10¹⁰ neurons</text>
+      <text class="fig-k" x="20" y="196" style="font-size:10px">Amber band spans every channel count yet demonstrated; only the two leftmost are implantable.</text>
+      <text class="fig-k" x="20" y="208" style="font-size:10px">The write side, not shown, is the harder half of the gap.</text>
     </svg>
-    <figcaption><b>Figure 3.</b> The interface gap. Recording from ~10³ electrodes against ~10¹¹ neurons is a shortfall of seven to eight orders of magnitude, and writing high-fidelity input back to the cortex is harder still. No physical law forbids closing it; the barrier is materials, heat, and biocompatibility.</figcaption>
+    <figcaption><b>Figure 3.</b> The interface gap, with the implanted and benchtop frontiers separated. Against 8.6×10¹⁰ neurons, clinical implants — Paradromics' Connexus at 421 electrodes, Neuralink's N1 at 1,024 — fall about eight orders of magnitude short. Argo reaches 65,536 channels and closes that to about six, but it is a benchtop rig run in rats and sheep, not an implant. Writing high-fidelity input back to the cortex is harder still. No physical law forbids closing the gap; the barrier is materials, heat, and biocompatibility.</figcaption>
   </figure>
   <blockquote>
-    <p><strong>Epistemic status:</strong> Merely-early, with the write side as the dominant unsolved sub-problem, requiring roughly seven to eight orders of magnitude of channel scaling.</p>
+    <p><strong>Epistemic status:</strong> Merely-early, with the write side as the dominant unsolved sub-problem, requiring about eight orders of magnitude of channel scaling measured from implanted clinical hardware, or about six measured from the benchtop Argo frontier.</p>
     <p><strong>Falsifier:</strong> a proof that stable high-fidelity write-side stimulation to large cortical fractions is bounded, thermodynamically or biologically, below simulation-fidelity thresholds would bar the interface premise.</p>
   </blockquote>
 
@@ -310,7 +319,7 @@ sup a{border-bottom:none;font-size:11px}
   <p>The ceilings by augmentation stage, restated from the world bible, run as follows: a pure biological vat reaches about 1.5 to 2 times; a sensory-interface-augmented vat about 2 to 4 times; a metabolically augmented vat about 3 to 6 times; a synaptically augmented vat about 10 to 50 times, which is speculative; and a hybrid or uploaded configuration is substrate-limited, with identity continuity contested.</p>
 
   <figure>
-    <svg viewBox="0 0 700 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Subjective-acceleration ceiling by augmentation stage on a log scale. Pure biological reaches about 1.5 to 2 times, sensory-augmented 2 to 4, metabolically augmented 3 to 6, synaptically augmented 10 to 50 which is speculative, and hybrid or upload is substrate-limited.">
+    <svg viewBox="0 0 700 244" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Subjective-acceleration ceiling by augmentation stage on a log scale. Pure biological reaches about 1.5 to 2 times, sensory-augmented 2 to 4, metabolically augmented 3 to 6, synaptically augmented 10 to 50 which is speculative, and hybrid or upload is substrate-limited.">
       <text class="fig-h" x="20" y="24">SUBJECTIVE-ACCELERATION CEILING BY STAGE — ×, log scale</text>
       <g class="fig-tick">
         <line x1="180" y1="44" x2="180" y2="190"/><line x1="252" y1="44" x2="252" y2="190"/>
@@ -335,14 +344,15 @@ sup a{border-bottom:none;font-size:11px}
         <text x="258" y="64">×1.5–2</text>
         <text x="331" y="92">×2–4</text>
         <text x="373" y="120">×3–6</text>
-        <text x="594" y="148">×10–50 · speculative</text>
-        <text x="588" y="158" style="font-size:9.5px">substrate-limited</text>
+        <text x="590" y="148" style="font-size:9px">×10–50 · speculative</text>
+        <text x="580" y="176" text-anchor="end" style="font-size:9.5px">substrate-limited</text>
       </g>
       <g class="fig-k" text-anchor="middle">
         <text x="180" y="204">1×</text><text x="252" y="204">2×</text><text x="348" y="204">5×</text>
         <text x="420" y="204">10×</text><text x="492" y="204">20×</text><text x="588" y="204">50×</text><text x="660" y="204">100×</text>
       </g>
-      <text class="fig-k" x="20" y="226" style="font-size:10px">Hard floors: alpha sampling ~10 Hz · synaptic delay 0.5–5 ms · thermal wall 20→100 W. The jump past ×10 requires replacing synapses (a §5 identity problem).</text>
+      <text class="fig-k" x="20" y="222" style="font-size:10px">Hard floors: alpha sampling ~10 Hz · synaptic delay 0.5–5 ms · thermal wall 20→100 W.</text>
+      <text class="fig-k" x="20" y="236" style="font-size:10px">The jump past ×10 requires replacing synapses (a §5 identity problem).</text>
     </svg>
     <figcaption><b>Figure 4.</b> Acceleration is cheap in the biological regime and expensive past it. A pure vat buys roughly ×2; every higher tier trades away more of the original substrate, and the ×10-and-up range depends on synapse replacement, whose identity cost is not a physics question.</figcaption>
   </figure>
@@ -400,13 +410,12 @@ sup a{border-bottom:none;font-size:11px}
   <p><strong>Variant B, continental clusters.</strong> A Sahara-to-Gobi span of about 10,000 km gives a one-way delay of about 33 ms, which is about a third of a 100 ms frame before any switching or compute jitter. A shared real-time simulation across continents is therefore marginal to unworkable, and independent per-cluster simulations avoid the problem but then diverge, which is a narrative feature. This is consistent with the world bible's stated Variant B tension.</p>
 
   <figure>
-    <svg viewBox="0 0 700 156" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One-way signal latency against the roughly 100 millisecond conscious frame budget. A centralized 100 km cluster adds 0.33 milliseconds, about 0.3 percent of the budget; a continental Sahara-to-Gobi span adds 33 milliseconds, about a third of the budget, before any switching or compute jitter.">
+    <svg viewBox="0 0 700 176" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One-way signal latency against the roughly 100 millisecond conscious frame budget. A centralized 100 km cluster adds 0.33 milliseconds, about 0.3 percent of the budget; a continental Sahara-to-Gobi span adds 33 milliseconds, about a third of the budget, before any switching or compute jitter.">
       <text class="fig-h" x="20" y="24">ONE-WAY LATENCY vs ~100 ms FRAME BUDGET</text>
       <text class="fig-t" x="650" y="44" text-anchor="end">frame budget ~100 ms (alpha ~10 Hz)</text>
       <rect x="130" y="52" width="520" height="34" rx="3" fill="rgba(52,230,224,0.06)" stroke="var(--rim)"/>
       <rect x="130" y="52" width="172" height="34" fill="rgba(35,255,136,0.22)"/>
       <rect x="130" y="52" width="3" height="34" fill="var(--green)"/>
-      <text class="fig-t" x="310" y="44">Variant B · Sahara↔Gobi 10,000 km · 33 ms · ~⅓ of budget</text>
       <g class="fig-k" text-anchor="middle">
         <line class="fig-tick" x1="130" y1="86" x2="130" y2="92"/><text x="130" y="104">0</text>
         <line class="fig-tick" x1="260" y1="86" x2="260" y2="92"/><text x="260" y="104">25</text>
@@ -414,8 +423,10 @@ sup a{border-bottom:none;font-size:11px}
         <line class="fig-tick" x1="520" y1="86" x2="520" y2="92"/><text x="520" y="104">75</text>
         <line class="fig-tick" x1="650" y1="86" x2="650" y2="92"/><text x="650" y="104">100 ms</text>
       </g>
-      <text class="fig-ok fig-k" x="130" y="128">Variant A · 100 km cluster · 0.33 ms · 0.3% of budget — the green sliver at the far left</text>
-      <text class="fig-k" x="130" y="144" style="font-size:10px">Variant B leaves under two-thirds of a frame for switching and compute jitter, so a shared real-time world is marginal.</text>
+      <text class="fig-t" x="130" y="122" style="fill:var(--teal)">Variant B · Sahara↔Gobi 10,000 km · 33 ms · ~⅓ of budget — the shaded block</text>
+      <text class="fig-k" x="130" y="138" style="fill:var(--green)">Variant A · 100 km cluster · 0.33 ms · 0.3% of budget — the bright sliver at the far left edge</text>
+      <text class="fig-k" x="130" y="158" style="font-size:10px">Variant B leaves under two-thirds of a frame for switching and compute jitter,</text>
+      <text class="fig-k" x="130" y="170" style="font-size:10px">so a shared real-time world is marginal.</text>
     </svg>
     <figcaption><b>Figure 6.</b> Physical proximity is not a flourish. A co-located cluster spends 0.3 percent of a conscious frame on light-travel; a continental split spends a third of it before any other delay, which is why a shared real-time world favours one site over Variant B's scattered clusters.</figcaption>
   </figure>
@@ -454,7 +465,8 @@ sup a{border-bottom:none;font-size:11px}
         <line class="fig-tick" x1="483" y1="193" x2="483" y2="199"/><text x="483" y="211">10⁶</text>
         <line class="fig-tick" x1="594" y1="193" x2="594" y2="199"/><text x="594" y="211">10⁸</text>
       </g>
-      <text class="fig-k" x="150" y="234" style="font-size:10px">Above ~122× dilation, a single wall-clock year accrues more subjective life than any brain is known to sustain, so every series past New Ganymede forces rejuvenation or upload.</text>
+      <text class="fig-k" x="20" y="230" style="font-size:10px">Above ~122× dilation, a single wall-clock year accrues more subjective life than any brain is</text>
+      <text class="fig-k" x="20" y="242" style="font-size:10px">known to sustain, so every series past New Ganymede forces rejuvenation or upload.</text>
     </svg>
     <figcaption><b>Figure 7.</b> The long arc outruns the tissue. Only the two slowest series keep a year of wall-clock time inside a single demonstrated neuronal lifespan; from New Pluto onward the biological substrate is exhausted almost immediately, which is what forces the upload branch and its identity problem back into the story.</figcaption>
   </figure>
@@ -493,7 +505,7 @@ sup a{border-bottom:none;font-size:11px}
       <tr><td>C-D1 Delivery</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td>Barred for passive relativistic impact, Merely-early with staged deceleration</td><td>Hypervelocity impact-plasma literature; osmium enthalpy; gravity-assist velocity bound</td><td>Covert far-out primary brake plus inner-system assist and aerocapture cascade to about 1 km/s (in canon)</td></tr>
       <tr><td>C-D2 Replication</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">○</td><td>Merely-early</td><td>Freitas and Merkle; von Neumann 1966; RepRap</td><td>Full manufacturing closure</td></tr>
       <tr><td>C-D3 Vat substrate</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">◐</td><td>Contested to merely-early</td><td>Xie 2013; Vrselja 2019 BrainEx</td><td>Indefinite integrated conscious maintenance</td></tr>
-      <tr><td>C-D4 BCI write</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">◐</td><td>Merely-early, write-side dominant</td><td>Neuralink N1 (1,024 ch); Paradromics Connexus (421 ch implanted) and Argo (65,536 ch benchtop); optic-nerve rate</td><td>Channel scaling of about 10⁷ to 10⁸, plus stable write</td></tr>
+      <tr><td>C-D4 BCI write</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td class="sym">●</td><td class="sym">◐</td><td>Merely-early, write-side dominant</td><td>Neuralink N1 (1,024 ch); Paradromics Connexus (421 ch implanted) and Argo (65,536 ch benchtop); optic-nerve rate</td><td>Channel scaling of about 10⁸ from implanted hardware, 10⁶ from the Argo bench, plus stable write</td></tr>
       <tr><td>C-D5 Acceleration</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">◐</td><td>Permitted at or below 2 times, contested at or above 10 times</td><td>Alpha sampling ~10 Hz; thermal 20 W</td><td>Whether the alpha sampling cadence is an irreducible floor</td></tr>
       <tr><td>C-D6 Energy and siting</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td class="sym">●</td><td>Permitted, robust, about 290 times margin</td><td>Saharan irradiance; 20 W per brain</td><td>None material</td></tr>
       <tr><td>C-D7 Computronium and identity</td><td class="sym">◐</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td class="sym">○</td><td>Unfalsifiable, philosophy</td><td>Ship of Theseus; substrate independence</td><td>Not a physics claim; see Section 5</td></tr>
@@ -508,7 +520,7 @@ sup a{border-bottom:none;font-size:11px}
   <p>The audit sorts the scenario into three tiers. One premise is barred as originally written, one cluster is permitted with room to spare, a broad middle is merely-early, and two premises sit outside physics entirely.</p>
   <p>Only one premise fails on physics, and it fails in a specific and repairable way. Passive survival of a relativistic impact is barred, because the specific kinetic energy at 0.1c exceeds osmium's vaporization enthalpy by about eight orders of magnitude, which vaporizes the probe deterministically. The repair is a staged deceleration that ends near 1 km/s, and it costs the scenario nothing narratively, since the surviving-probe lottery moves intact from the moment of impact to the success of the deceleration cascade. This is the audit's clearest single result, and it has been fed back into canon.</p>
   <p>At the opposite end, the energy and siting premise is the most secure part of the scenario. The Saharan budget closes with roughly 290 times margin, and no plausible revision of per-unit power breaks it. The latency argument for physical proximity is also sound, and it argues against the distributed Variant B for any design that needs a shared real-time world.</p>
-  <p>The broad middle is where most of the scenario actually sits. Self-replication, indefinite brain support, neural interface bandwidth, and modest temporal acceleration are all unbounded by any known physical law. Only engineering distance separates them from us, though for the write-side interface that distance spans seven to eight orders of magnitude of channel scaling. Two constraints in this middle tier are real design pressure, not mere difficulty. The alpha-band sampling cadence near 10 Hz may be a hard floor on subjective acceleration, and post-mitotic neuronal aging almost certainly caps indefinite biological preservation, which forces the late high-dilation arcs onto either rejuvenation or upload.</p>
+  <p>The broad middle is where most of the scenario actually sits. Self-replication, indefinite brain support, neural interface bandwidth, and modest temporal acceleration are all unbounded by any known physical law. Only engineering distance separates them from us, though for the write-side interface that distance spans about eight orders of magnitude of channel scaling from implanted hardware. Two constraints in this middle tier are real design pressure, not mere difficulty. The alpha-band sampling cadence near 10 Hz may be a hard floor on subjective acceleration, and post-mitotic neuronal aging almost certainly caps indefinite biological preservation, which forces the late high-dilation arcs onto either rejuvenation or upload.</p>
   <p>The one open scientific question is the same hinge the Omega Centauri Society papers turn on, which is the direction of mature intelligence. Cognitive Husbandry and the OCS corpus share a physics, namely the Landauer bound and the thermodynamics of computation, and they share the transcension premise that advanced civilizations move inward toward denser computation rather than outward across space. They differ in where the bottleneck sits. For OCS the limiting resource is an astrophysical entropy sink, a cold place to dump the waste heat of computation, and the papers propose to look for its traces at Omega Centauri. OCS Paper E is the closest methodological sibling to this audit. It runs the same feasibility-then-adjudication move on engineered black-hole infrastructure, deriving an allowed envelope for a fiducial 2×10⁴-solar-mass hole in the Omega Centauri core, forward-modelling a Landauer-limited waste-heat technosignature, the same computation-thermodynamics floor this audit prices minds against in §4.6, and grading a candidate detection against explicit astrophysical nulls; on current data those nulls are still favored. For Cognitive Husbandry the limiting resource is the bandwidth and endurance of a biological receiver, which is why this paper's hardest numbers are about synapses and neurons rather than black holes. The two projects are the same question asked at opposite ends of the same physics.</p>
   <p>One last point on the firewall. A scenario can be rigorous in its physics and still rest on premises that no experiment can test, and Cognitive Husbandry does exactly that. Its hardware is mostly permitted or merely-early, its one barred step is repairable, and its deepest commitments, about personal identity and about the goals of an alien mind, are unfalsifiable by construction. None of that counts against it. The audit was never meant to certify the story as likely. It was meant to mark where the physics stops and the philosophy takes over, so the two are not confused for each other.</p>
 
@@ -567,7 +579,7 @@ sup a{border-bottom:none;font-size:11px}
   </ul>
 
   <div class="foot">
-    PREPRINT · DRAFT v0.9 · COMPANION PAPER · NEWTRIPOLI.XYZ/COGNITIVE-HUSBANDRY-FEASIBILITY<br>
+    PREPRINT · DRAFT v1.0 · COMPANION PAPER · NEWTRIPOLI.XYZ/COGNITIVE-HUSBANDRY-FEASIBILITY<br>
     CODE: MIT · PROSE: CC BY 4.0 · <a href="/sitemap.html" style="color:inherit">SITEMAP</a>
   </div>
 
