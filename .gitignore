@@ -15,3 +15,7 @@ ch-sims/palette-compare.html
 
 # Node, if tooling is ever added
 node_modules/
+
+# Local-only drafts, not for the live site
+content/**/*(Brainstorm Notes).md
+content/**/*(Outline).md
