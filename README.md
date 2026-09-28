@@ -14,9 +14,8 @@
 ```
 repo/
 ├── ch-sims/        Sim Terminal portal app (sims/, demos/, data/canon.js, about.html, mcp.html)
-├── manifest.json   frozen content-corpus manifest (corpus maintained off-repo)
 ├── scripts/        QA + build scripts (chaingraph/kernel/SVG checks; build-manifest.py)
-├── manifest.json   navigation index for the portal
+├── manifest.json   frozen content-corpus manifest + navigation index (corpus maintained off-repo)
 ├── chaingraph.json machine-readable tool/chain graph (OCG catalog v0.8.0)
 ├── llms.txt         discovery doc for AI agents/crawlers
 └── index.html       site home
