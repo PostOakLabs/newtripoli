@@ -29,6 +29,6 @@ repo/
 
 ## License
 
-- **Code:** MIT
-- **Prose:** CC BY 4.0
-- **Data:** CC0
+- **Code:** MIT — [`LICENSE`](LICENSE)
+- **Prose:** CC BY 4.0 — [`LICENSE-content.md`](LICENSE-content.md)
+- **Data:** CC0 — [`LICENSE-data.md`](LICENSE-data.md)
